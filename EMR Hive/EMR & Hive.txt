@@ -1,0 +1,47 @@
+1 EMR Add Step
+
+Step Type : Hive Program
+Name : Process Logs
+s3 script : s3://us-west-2.elasticmapreduce.samples/cloudfront/code/Hive_CloudFront.q
+input s3 location : s3://us-west-2.elasticmapreduce.samples
+output s3: s3://hadoop123456
+Arguments : -hiveconf hive.support.sql11.reserved.keywords=false
+
+
+2. Create Hive Table
+CREATE EXTERNAL TABLE IF NOT EXISTS cloudfront_logs (
+DateObject Date,
+Time STRING,
+Location STRING,
+Bytes INT,
+RequestIP STRING,
+Method STRING,
+Host STRING,
+Uri STRING,
+Status INT,
+Referrer STRING,
+OS String,
+Browser String,
+BrowserVersion String
+)
+
+
+3. Hive code that parse log files using RegEx Sererlize/Deserialize
+
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.RegexSerDe'
+WITH SERDEPROPERTIES (
+  "input.regex" = "^(?!#)([^ ]+)\\s+([^ ]+)\\s+([^ ]+)\\s+([^ ]+)\\s+([^ ]+)\\s+([^ ]+)\\s+([^ ]+)\\s+([^ ]+)\\s+([^ ]+)\\s+([^ ]+)\\s+[^\(]+[\(](https://s3-us-west-2.amazonaws.com/us-west-2-aws-training/awsu-spl/spl-166/1.0.7.prod/instructions/en_us/[^\;]+).*\%20([^\/]+)[\/](https://s3-us-west-2.amazonaws.com/us-west-2-aws-training/awsu-spl/spl-166/1.0.7.prod/instructions/en_us/.*)$"
+) LOCATION '${INPUT}/cloudfront/data/';
+
+4. HiveQL query to calculate requests by operating system
+
+INSERT OVERWRITE DIRECTORY '${OUTPUT}/os_requests/'
+SELECT
+  os,
+  COUNT(*) count
+FROM cloudfront_logs
+WHERE dateobject
+BETWEEN '2014-07-05' AND '2014-08-05'
+GROUP BY os;
+
+

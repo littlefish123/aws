@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://run.qwiklabs.com/focuses/10906?parent=catalog -->
+<html lang="en" class="mdl-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta content="[]" name="active-experiments">
+<meta content="{&quot;userId&quot;:743665}" name="help-api-product-data">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="kJahvUzrGqoKf9Hl01wK9g4eMSft+BwkyuL9k6XwMrC1BU/81bhXFlGEzp8gZfJXSodGk3lRTYTu93+GyXdTLA==">
+<title>Analyze Big Data with Hadoop | Qwiklabs</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+<meta content="In this lab, you will deploy a fully functional Hadoop cluster, ready to analyze log data in just a few minutes. You will start by launching an Amazon EMR cluster and then use a HiveQL script to process sample log data stored in an Amazon S3 bucket. HiveQL is a SQL-like scripting language for data warehousing and analysis. You can then use a similar setup to analyze your own log files." name="description">
+<meta content="Qwiklabs" name="author">
+<meta content="1rRsY0INj8RvwB5EF5pwdxt2A2P9aDgAlsICaJ0d5w0" name="google-site-verification">
+<meta content="Analyze Big Data with Hadoop | Qwiklabs" property="og:title">
+<meta content="website" property="og:type">
+<meta content="/favicon-144.png" property="og:image">
+<meta content="Qwiklabs" property="og:site_name">
+<meta content="In this lab, you will deploy a fully functional Hadoop cluster, ready to analyze log data in just a few minutes. You will start by launching an Amazon EMR cluster and then use a HiveQL script to process sample log data stored in an Amazon S3 bucket. HiveQL is a SQL-like scripting language for data warehousing and analysis. You can then use a similar setup to analyze your own log files." property="og:description">
+<meta content="/qwiklabs_logo_900x887.png" property="og:logo" size="900x887">
+<meta content="/qwiklabs_logo_994x187.png" property="og:logo" size="994x187">
+<meta content="#3681E4" property="msapplication-TileColor">
+<meta content="/favicon-144.png" property="msapplication-TileImage">
+<link href="https://run.qwiklabs.com/favicon-32.png" rel="shortcut icon">
+<link color="#3681E4" href="https://run.qwiklabs.com/favicon-svg.svg" rel="mask-icon">
+<link href="https://run.qwiklabs.com/favicon-180.png" rel="apple-touch-icon-precomposed">
+<link rel="stylesheet" media="screen" href="./Analyze Big Data with Hadoop _ Qwiklabs_files/css">
+
+
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+<![endif]-->
+<!--[endif]>  <![endif]-->
+<script type="text/javascript" async="" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/js"></script><script type="text/javascript" async="" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/analytics.js.download"></script><script type="text/javascript" async="" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/analytics.min.js.download"></script><script type="text/javascript" id="www-widgetapi-script" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/www-widgetapi.js.download" async=""></script><script>
+//<![CDATA[
+window.gon={};gon.current_user={"firstname":"Selina","lastname":"Ng","fullname":"Selina Ng","company":"Capgemini","email":"n.selina@ymail.com","origin":"google-run, direct","subscriptions":1,"id":"1c340942b6e43ad7908d196db2da6728","qlCreatedAt":"2018-01-21 06:49:32 UTC","optIn":false};gon.segment="j4Im8pqIko0Lxq4wVVZWMPMM0EroHUvb";gon.deployment="run";
+//]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.qwiklabs.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.qwiklabs.com/catalog?keywords={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script id="ze-snippet" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/snippet.js.download"></script>
+
+
+
+<link rel="stylesheet" media="all" href="./Analyze Big Data with Hadoop _ Qwiklabs_files/application-162ab3877b3a481e7c5b49bf8be464f433c15a21bd2c4d9c870d4197793c85fe.css">
+<script>
+  EVENT_SOURCE_BASE_URL = "https://run.qwiklabs.com/nchan-sub?id=";
+</script>
+<script src="./Analyze Big Data with Hadoop _ Qwiklabs_files/webcomponents-loader.js.download"></script><script src="./Analyze Big Data with Hadoop _ Qwiklabs_files/webcomponents-hi.js.download"></script>
+<script src="./Analyze Big Data with Hadoop _ Qwiklabs_files/hallofmirrors-d8d44acdb268858ff41d169894134efe6aef227326bbd58449c52a66aa3bf8d0.js.download"></script><script async="" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/lazy.min.js.download"></script>
+<script src="./Analyze Big Data with Hadoop _ Qwiklabs_files/iframe_api"></script>
+<script src="./Analyze Big Data with Hadoop _ Qwiklabs_files/vendor-45d462772c30000424907184f70c7157e95fb6227698d1671c5051818a6f60d8.js.download"></script>
+<script src="./Analyze Big Data with Hadoop _ Qwiklabs_files/application-b8f24b563e7f6b4a399091631f253a394e419e33d6c909ef27e223b366f52750.js.download"></script>
+<script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script></head>
+<body class="focuses focuses-show lab-show l-full no-nav">
+<div class="header-container light-theme">
+<div class="header">
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect header__button header__button--nav header__nav-panel-button js-nav-toggle" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">menu</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header__title">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--nav" href="https://run.qwiklabs.com/quests/5" data-upgraded=",MaterialButton,MaterialRipple"><ql-icon>arrow_back</ql-icon><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
+<h1 class="headline-5">
+Analyze Big Data with Hadoop
+</h1>
+</div>
+<div class="header__actions">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--action header__button--search js-header-search-bar-button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">search</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="toggle-lab-control-panel" href="javascript:;" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">description</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" data-mdl-for="toggle-lab-control-panel" data-upgraded=",MaterialTooltip">
+Toggle Lab Panel
+</div>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-favorite-button favorite-button" id="CatalogItem-10906-favorite-button" data-type="CatalogItem" data-id="10906" data-name="Analyze Big Data with Hadoop" href="https://run.qwiklabs.com/favorite.json?item_id=10906&amp;item_type=CatalogItem" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">favorite_border</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" for="CatalogItem-10906-favorite-button" data-upgraded=",MaterialTooltip">
+Add to favorites
+</div>
+
+
+<ql-help context="lab" productdata="{&quot;userId&quot;:743665}" data-analytics-action="opened_help" data-analytics-label="lab"></ql-help>
+<a class="header-my-account-button mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-my-account-button" data-upgraded=",MaterialButton,MaterialRipple">
+<img class="avatar " alt="avatar image" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header-my-account-menu js-my-account-menu">
+<div class="card elevation-2 no-padding">
+<div class="my-account-menu__top">
+<img class="avatar " alt="avatar image" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<div class="my-account-menu__info">
+<h4 class="subtitle-headline-1">
+Selina Ng
+</h4>
+<p class="body-2 text--gray">
+<span>n.selina@ymail.com</span>
+</p>
+<a class="button" href="https://run.qwiklabs.com/my_account/profile">My Account</a>
+</div>
+</div>
+<div class="my-account-menu__bottom">
+<a class="text--green subtitle-headline-2" href="https://run.qwiklabs.com/my_account/credits">Monthly Subscription
+</a><a data-analytics-action="clicked_sign_out" class="button button--hairline" rel="nofollow" data-method="delete" href="https://run.qwiklabs.com/users/sign_out">Sign Out</a>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="header__search-bar js-header-search-bar">
+<form id="catalog-search-mobile" onsubmit="ql.catalogSearchFilter(); return false;" action="https://run.qwiklabs.com/searches/elasticsearch" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="kJahvUzrGqoKf9Hl01wK9g4eMSft+BwkyuL9k6XwMrC1BU/81bhXFlGEzp8gZfJXSodGk3lRTYTu93+GyXdTLA==">
+<input type="text" name="keywords" id="keywords" placeholder="Search" maxlength="255" aria-label="catalog search bar">
+</form>
+
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">close</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+</div>
+
+<nav class="nav-bar">
+<a class="nav-bar__item js-navigation-button" href="https://run.qwiklabs.com/"><ql-icon class="nav-bar__item__icon">
+home
+</ql-icon>
+<span class="nav-bar__item__label">
+Home
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button  active" aria-current="page" href="https://run.qwiklabs.com/catalog"><ql-icon class="nav-bar__item__icon">
+school
+</ql-icon>
+<span class="nav-bar__item__label">
+Catalog
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button" href="https://run.qwiklabs.com/my_learning"><ql-icon class="nav-bar__item__icon">
+event_note
+</ql-icon>
+<span class="nav-bar__item__label">
+My Learning
+</span>
+</a>
+</nav>
+
+<nav class="nav-panel js-nav-panel">
+<div class="nav-panel__logo">
+<div class="logo logo--blue"></div>
+</div>
+<a title="Home" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/"><ql-icon class="nav-panel__item__icon">
+home
+</ql-icon>
+<div class="nav-panel__item__label">
+Home
+</div>
+</a>
+<a title="Catalog" tabindex="-1" class="nav-panel__item js-navigation-button active" aria-current="page" href="https://run.qwiklabs.com/catalog"><ql-icon class="nav-panel__item__icon">
+school
+</ql-icon>
+<div class="nav-panel__item__label">
+Catalog
+</div>
+</a>
+<a title="My Learning" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_learning"><ql-icon class="nav-panel__item__icon">
+event_note
+</ql-icon>
+<div class="nav-panel__item__label">
+My Learning
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a title="Profile" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/profile"><ql-icon class="nav-panel__item__icon">
+account_circle
+</ql-icon>
+<div class="nav-panel__item__label">
+Profile
+</div>
+</a>
+<a title="Credits &amp; Subscriptions" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/credits"><ql-icon class="nav-panel__item__icon">
+money
+</ql-icon>
+<div class="nav-panel__item__label">
+Credits &amp; Subscriptions
+</div>
+</a>
+<a title="Security" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/security"><ql-icon class="nav-panel__item__icon">
+security
+</ql-icon>
+<div class="nav-panel__item__label">
+Security
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a class="nav-panel__item" tabindex="-1" href="https://run.qwiklabs.com/focuses/10906?parent=catalog#"><ql-help>
+<div class="nav-panel__help-item">
+<ql-icon class="nav-panel__item__icon">help</ql-icon>
+<div class="nav-panel__item__label">Help</div>
+</div>
+</ql-help>
+</a><div class="nav-panel__small-links">
+<a tabindex="-1" href="https://run.qwiklabs.com/privacy_policy">Privacy</a>
+<a tabindex="-1" href="https://run.qwiklabs.com/terms_of_service">Terms</a>
+</div>
+</nav>
+<div class="nav-panel__overlay js-nav-toggle"></div>
+
+<main class="js-main">
+<span class="hidden" id="flash-sibling-before"></span>
+
+<div class="l-main-wrapper" id="main-wrapper">
+
+
+
+
+
+
+
+<div class="js-lab-state" data-analytics-payload="{&quot;label&quot;:&quot;Analyze Big Data with Hadoop&quot;,&quot;lab_name&quot;:&quot;Analyze Big Data with Hadoop&quot;,&quot;classroom_name&quot;:null,&quot;deployment&quot;:&quot;run&quot;}" data-focus-id="10906" data-lab-billing-limit="0.0" data-lab-duration="3600" data-parent="catalog" data-payment-required=""></div>
+<ql-lab-control-panel class="js-lab-control-panel l-lab-control-panel" connectiondetails="[]" connectionfiles="[]" labcontrolbutton="{&quot;disabled&quot;:false,&quot;pending&quot;:false,&quot;running&quot;:false}" labtimer="{&quot;ticking&quot;:false,&quot;secondsRemaining&quot;:3600}" studentresources="[]"></ql-lab-control-panel>
+<div class="l-lab-main-body">
+<div class="js-lab-content lab-content">
+<div class="alert alert--fake js-alert">
+<p class="alert__message js-alert-message"></p>
+<a class="alert__close js-alert-close">
+<i class="fa fa-times"></i>
+</a>
+<iframe class="l-ie-iframe-fix" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/saved_resource.html"></iframe>
+</div>
+<div class="lab-content__markdown-wrapper">
+<div class="lab-preamble">
+<h1 class="lab-preamble__title">
+Analyze Big Data with Hadoop
+</h1>
+<div class="lab-preamble__details subtitle-headline-1">
+<span>1 hour </span>
+<span>1 Credit</span>
+<div class="lab__rating">
+<a href="https://run.qwiklabs.com/focuses/10906/reviews?parent=catalog"><div class="rateit" data-rateit-readonly="true" data-rateit-value="4.241"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 67.856px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+
+</a><a data-target="#lab-review-modal" data-toggle="modal">
+Rate Lab
+</a>
+</div>
+</div>
+</div>
+
+<div class="lab-content__inner-wrapper">
+<div class="js-markdown-instructions lab-content__markdown markdown-lab-instructions no-select" id="markdown-lab-instructions">
+<p><img src="./Analyze Big Data with Hadoop _ Qwiklabs_files/aws-logo.png" alt=""></p>
+
+
+
+<p><strong>SPL-166 - Version 1.0.7</strong></p>
+
+<p>© 2020 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.</p>
+
+<p>Errors or corrections? Email us at <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a>.</p>
+
+<p>Other questions? Contact us at <a href="https://aws.amazon.com/contact-us/aws-training/" target="_blank">https://aws.amazon.com/contact-us/aws-training/</a></p>
+
+<h2 id="step1">Overview</h2>
+
+<p><strong>Amazon EMR</strong> is a managed service that makes it fast, easy, and cost-effective to run Apache Hadoop and Spark to process vast amounts of data. Amazon EMR also supports powerful and proven Hadoop tools such as Presto, Hive, Pig, HBase, and more.</p>
+
+<p>In this lab, you will deploy a fully functional Hadoop cluster, ready to analyze log data in just a few minutes. You will start by launching an Amazon EMR cluster and then use a HiveQL script to process sample log data stored in an Amazon S3 bucket. <strong>HiveQL</strong> is a SQL-like scripting language for data warehousing and analysis. You can then use a similar setup to analyze your own log files.</p>
+
+<p>This lab is based on the <a href="https://aws.amazon.com/getting-started/projects/analyze-big-data/" target="_blank">Analyze Big Data with Hadoop</a> project.</p>
+
+<p><strong>Topics Covered</strong></p>
+
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Launch a fully functional Hadoop cluster using <strong>Amazon EMR</strong>
+</li>
+<li>Define the schema and create a table for sample log data stored in Amazon S3</li>
+<li>Analyze the data using a <strong>HiveQL</strong> script and write the results back to Amazon S3</li>
+<li>Download and view the results on your computer</li>
+</ul>
+<p><strong>Lab Pre-requisites</strong></p>
+<ul>
+<li>
+<strong>IT Experience:</strong> Prior experience with Hadoop is recommended, but not required, to complete this lab</li>
+<li>
+<strong>AWS Experience:</strong> Basic familiarity with Amazon S3 and Amazon EC2 key pairs is suggested, but not required, to complete this project</li>
+</ul>
+<p><strong>Duration</strong></p>
+
+<p>The lab will take approximately <strong>20 minutes</strong> to complete.</p>
+
+<h2 id="step2">Start Lab</h2>
+<ol start="1">
+<li>At the top of your screen, launch your lab by clicking <span style="background-color:#34A853;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#34A853;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Start Lab</span>
+</li>
+</ol>
+<p>This will start the process of provisioning your lab resources. An estimated amount of time to provision your lab resources will be displayed. You must wait for your resources to be provisioned before continuing.</p>
+
+<p><i class="fas fa-info-circle"></i> If you are prompted for a token, use the one distributed to you (or credits you have purchased). </p>
+<ol start="2">
+<li>Open your lab by clicking <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span>
+</li>
+</ol>
+<p>This will automatically log you into the AWS Management Console. </p>
+
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Please do not change the Region unless instructed</strong>.</p>
+
+
+
+<h3>Common login errors</h3>
+
+<p><strong>Error : Federated login credentials</strong></p>
+
+<p><img src="./Analyze Big Data with Hadoop _ Qwiklabs_files/federatedloginerror.png" alt=""></p>
+
+<p>If you see this message:</p>
+<ul>
+<li>Close the browser tab to return to your initial lab window</li>
+<li>Wait a few seconds</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+<p>You should now be able to access the AWS Management Console.</p>
+
+
+
+<p><strong>Error: You must first log out</strong></p>
+
+<p><img src="./Analyze Big Data with Hadoop _ Qwiklabs_files/logouterror.png" alt=""></p>
+
+<p>If you see the message, <strong>You must first log out before logging into a different AWS account:</strong> </p>
+<ul>
+<li>Click <strong>click here</strong>
+</li>
+<li>Close your browser tab to return to your initial Qwiklabs window</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+
+
+<h2 id="step3">Task 1: Create an Amazon S3 bucket</h2>
+
+<p>In this task, you will create a bucket to store your log files and output data.</p>
+<ol start="3">
+<li><p>In the <strong>AWS Management Console</strong>, on the <strong>Services</strong> menu, click <strong>S3</strong>.</p></li>
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create bucket</span> and then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Bucket name:</strong> <input readonly="" class="copyable-inline-input" size="12" type="text" value="hadoopNUMBER">
+</li>
+<li>Replace <strong>NUMBER</strong> with a random number</li>
+<li>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"> Create bucket</span>
+</li>
+</ul>
+<p>You now have a bucket you can use to store your log files and output data.</p>
+
+<h2 id="step4">Task 2: Launch an Amazon EMR cluster</h2>
+
+<p>In this task, you will launch a Hadoop cluster that will be used to process data.</p>
+<ol start="5">
+<li><p>On the <strong>Services</strong> menu, click <strong>EMR</strong>.</p></li>
+<li><p>Ensure the region located at the top of your screen matches the value of <strong>Region</strong> located to the left of these instructions. If your region does not match, change your region to the value of <strong>Region</strong>.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create cluster</span></p></li>
+<li><p>Click <span style="color:#1166bb;font-weight:bold;">Go to advanced options</span>.</p></li>
+<li><p>At the bottom of the screen, then click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span></p></li>
+<li><p>On the <strong>Hardware Configuration</strong> page, configure:</p></li>
+</ol><ul>
+<li>
+<strong>Network:</strong> <em>Lab VPC</em>
+</li>
+<li>In the <strong>Master</strong> and <strong>Core</strong> row, click the <i class="fas fa-pencil-alt"></i> next to the instance type and change it to <strong>m4.large</strong>.  If <strong>m4.large</strong> instance types are not available, you can instead use an m5.large instance. No other instance types are allowed.</li>
+<li>At the bottom of the page, click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span>
+</li>
+</ul>
+<p>This will configure the cluster to launch one <em>master</em> node and one <em>slave</em> ("core") node.</p>
+<ol start="11">
+<li>On the <strong>General Options</strong> page, configure:</li>
+</ol><ul>
+<li>
+<strong>Cluster name</strong>: <input readonly="" class="copyable-inline-input" size="10" type="text" value="My cluster">
+</li>
+<li>
+<p><strong>S3 folder</strong>:</p>
+<ul>
+<li>Click the folder <i class="fa fa-folder-open"></i> icon</li>
+<li>Click the Hadoop bucket that you created earlier</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Select</span>
+</li>
+</ul>
+</li>
+</ul><ol start="12">
+<li><p>De-select <i class="far fa-square"></i> <strong>Termination protection</strong>.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span></p></li>
+<li><p>On the <strong>Security Options</strong> page, configure:</p></li>
+</ol><ul>
+<li>
+<strong>Permissions:</strong> <i class="far fa-dot-circle"></i><em>Custom</em>
+</li>
+<li>
+<strong>EMR role:</strong> <em>EMR_DefaultRole</em>
+</li>
+<li>
+<strong>EC2 instance profile:</strong> <em>EMR_EC2_DefaultRole</em>
+</li>
+</ul>
+<p>These roles will assign permissions to your cluster to access AWS services.</p>
+<ol start="15">
+<li>At the bottom of the page, launch your EMR cluster by clicking <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create cluster</span>
+</li>
+</ol>
+<p>The cluster will take approximately five minutes to launch. Please continue reading while waiting for the cluster to launch.</p>
+
+<h3>Hadoop Applications</h3>
+
+<p>The default configuration will automatically install several default applications on the cluster:</p>
+<ul>
+<li><p><strong>Apache Hadoop</strong> is an open-source software project that can be used to efficiently process large datasets. Instead of using one large computer to process and store the data, Hadoop uses clusters of commodity hardware to analyze massive data sets in parallel.</p></li>
+<li><p>The <strong>Ganglia</strong> open-source project is a scalable, distributed system designed to monitor clusters and grids while minimizing the impact on their performance. Ganglia can generate reports and view the performance of the cluster as a whole, as well as inspect the performance of individual nodes.</p></li>
+<li><p><strong>Apache Tez</strong> is a framework for creating a complex directed acyclic graph (DAG) of tasks for processing data. In some cases, it is used as an alternative to Hadoop MapReduce. For example, Pig and Hive workflows can run using Hadoop MapReduce or they can use Tez as an execution engine.</p></li>
+<li><p><strong>Hive</strong> is an open-source data warehouse and analytic package that runs on top of a Hadoop cluster. Hive scripts use an SQL-like language called Hive QL (query language) that abstracts programming models and supports typical data warehouse interactions. Hive enables you to avoid the complexities of writing Tez jobs based on directed acyclic graphs (DAGs) or MapReduce programs in a lower level computer language, such as Java.</p></li>
+<li><p><strong>Hue</strong> (Hadoop User Experience) is an open-source, web-based, graphical user interface for use with Amazon EMR and Apache Hadoop. Hue groups together several different Hadoop ecosystem projects into a configurable interface for your Amazon EMR cluster.</p></li>
+<li><p><strong>Pig</strong> is an open-source Apache library that runs on top of Hadoop. The library takes SQL-like commands written in a language called Pig Latin and converts those commands into Tez jobs based on directed acyclic graphs (DAGs) or MapReduce programs. You do not have to write complex code using a lower level computer language, such as Java.</p></li>
+</ul>
+<h3>Data to be Processed</h3>
+
+<p>Once your cluster is ready, you will use the cluster to process log data from Amazon CloudFront.</p>
+
+<p><strong>Amazon CloudFront</strong> is a web service that speeds up distribution of static and dynamic web content, such as .html, .css, .php, and image files. CloudFront delivers content through a worldwide network of data centers called <em>edge locations</em>. When a user requests content through CloudFront, the user is routed to the edge location that provides the lowest latency (time delay), so that content is delivered with the best possible performance. If the content is already in the edge location with the lowest latency, CloudFront delivers it immediately. If the content is not in that edge location, CloudFront retrieves it from an Amazon S3 bucket or an HTTP server (for example, a web server) that you have identified as the source for the definitive version of your content.</p>
+
+<p>Amazon CloudFront can produce <em>access logs</em> that show all data requested by users. The log files can grow very large, so Hadoop is an ideal way to process and analyze the log files.</p>
+
+<p>Here is a sample of the log data:</p>
+<pre class="highlight plaintext"><code>2017-07-05  20:05:47    SEA4    4261    10.0.0.15   GET eabcd12345678.cloudfront.net    /test-image-2.jpeg  200 -   Mozilla/5.0%20(MacOS;%20U;%20Windows%20NT%205.1;%20en-US;%20rv:1.9.0.9)%20Gecko/2009040821%20Chrome/3.0.9
+</code><button class="button button--copy js-copy-button-0"><i class="fa fa-clipboard"></i></button></pre>
+<p>The data contains:</p>
+
+<table>
+<tbody><tr>
+<th>Field</th>
+<th>Sample data</th>
+<th>Definition</th>
+</tr>
+
+<tr>
+<td>Date</td>
+<td>2017-07-05</td>
+<td>The date on which the event occurred.</td>
+</tr>
+<tr>
+<td>Time</td>
+<td>20:05:47</td>
+<td>The time when the CloudFront server finished responding to the request (in UTC).</td>
+</tr>
+<tr>
+<td>Edge Location</td>
+<td>SEA4</td>
+<td>The edge location that served the request. Each edge location is identified by a three-letter code and an arbitrarily assigned number, for example, DFW3. The three-letter code typically corresponds with the International Air Transport Association airport code for an airport near the edge location.</td>
+</tr>
+<tr>
+<td>Bytes</td>
+<td>4261</td>
+<td>The total number of bytes that CloudFront served to the viewer in response to the request, including headers.</td>
+</tr>
+<tr>
+<td>IP</td>
+<td>10.0.0.15</td>
+<td>The IP address of the viewer that made the request.</td>
+</tr>
+<tr>
+<td>Method</td>
+<td>GET</td>
+<td>The HTTP access method: DELETE, GET, HEAD, OPTIONS, PATCH, POST, or PUT.</td>
+</tr>
+<tr>
+<td>Host</td>
+<td>abcd.cloudfront.net</td>
+<td>The domain name of the CloudFront distribution.</td>
+</tr>
+<tr>
+<td>URI</td>
+<td>/test-image-2.jpeg</td>
+<td>The portion of the URI that identifies the path and object</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>200</td>
+<td>An HTTP status code (eg 200 = success).</td>
+</tr>
+<tr>
+<td>Referrer</td>
+<td>-</td>
+<td>The name of the domain that originated the request.</td>
+</tr>
+<tr>
+<td>User Agent</td>
+<td>Mozilla/5.0...</td>
+<td>The User-Agent header identifies the source of the request, such as the type of device and browser that submitted the request and, if the request came from a search engine, which search engine.</td>
+</tr>
+</tbody></table>
+
+<p>You will run a Hive job on your cluster to analyze this data.</p>
+
+<h2 id="step5">Task 3: Process Your Sample Data by Running a Hive Script</h2>
+
+<p>In this task, you will run a Hive script in your cluster as a <em>step</em> in the Amazon EMR console to process your sample data. In Amazon EMR, a <strong>step</strong> is a unit of work that contains one or more Hadoop jobs. You can submit steps when you create the cluster or when the cluster is running (if it is a long-running cluster).</p>
+<ol start="16">
+<li>Wait until your cluster is showing a status of <span style="color:green;"><strong>Waiting</strong></span>.</li>
+</ol>
+<p><i class="fas fa-comment"></i> If your cluster is not yet in the <em>Waiting</em> state, wait a couple of minutes and click the refresh <i class="fas fa-sync"></i> icon. Try again every few minutes until the cluster status is <em>Waiting</em>.</p>
+<ol start="17">
+<li><p>Click the <strong>Steps</strong> tab.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Add step</span> then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Step type:</strong> <em>Hive program</em>
+</li>
+<li>
+<strong>Name:</strong> <input readonly="" class="copyable-inline-input" size="12" type="text" value="Process logs">
+</li>
+<li><strong>Script S3 location:</strong></li>
+</ul><pre class="highlight plaintext"><code>s3://us-west-2.elasticmapreduce.samples/cloudfront/code/Hive_CloudFront.q
+</code><button class="button button--copy js-copy-button-1"><i class="fa fa-clipboard"></i></button></pre><ul>
+<li>
+<strong>Input S3 location:</strong> <input readonly="" class="copyable-inline-input" size="39" type="text" value="s3://us-west-2.elasticmapreduce.samples">
+</li>
+<li>
+<strong>Output S3 location:</strong> Click the <i class="fas fa-folder-open"></i> folder icon, then select the Hadoop bucket you created earlier</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Select</span>
+</li>
+<li>
+<strong>Arguments:</strong> <input readonly="" class="copyable-inline-input" size="52" type="text" value="-hiveconf hive.support.sql11.reserved.keywords=false">
+</li>
+</ul>
+<p>This will allow column names that are the same as reserved words.</p>
+<ol start="19">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Add</span>
+</li>
+</ol>
+<p>The status of the step changes from <em>Pending</em> to <em>Running</em> to <em>Completed</em> as the step runs.</p>
+
+<p>The step takes approximately one minute to run.</p>
+
+<p><strong>What the script is doing</strong></p>
+
+<p>The Hive script does the following:</p>
+<ul>
+<li>Creates a <strong>Hive table</strong> named <em>cloudfront_logs</em>
+</li>
+<li>Reads the <strong>CloudFront log files</strong> from Amazon S3 and parses the files using the Regular Expression Serializer/Deserializer (<em>RegEx SerDe</em>).</li>
+<li>Writes the parsed results to the <em>cloudfront_logs</em> Hive table</li>
+<li>Submits a HiveQL query against the data to retrieve the <strong>total requests per operating system for a given time frame</strong>
+</li>
+<li>Writes the query results to your Amazon S3 output bucket</li>
+</ul>
+<p>The Hive code that creates the table is:</p>
+<pre class="highlight sql"><code><span class="k">CREATE</span> <span class="k">EXTERNAL</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">cloudfront_logs</span> <span class="p">(</span>
+<span class="n">DateObject</span> <span class="n">Date</span><span class="p">,</span>
+<span class="n">Time</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="k">Location</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="n">Bytes</span> <span class="n">INT</span><span class="p">,</span>
+<span class="n">RequestIP</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="k">Method</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="k">Host</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="n">Uri</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="n">Status</span> <span class="n">INT</span><span class="p">,</span>
+<span class="n">Referrer</span> <span class="n">STRING</span><span class="p">,</span>
+<span class="n">OS</span> <span class="n">String</span><span class="p">,</span>
+<span class="n">Browser</span> <span class="n">String</span><span class="p">,</span>
+<span class="n">BrowserVersion</span> <span class="n">String</span>
+<span class="p">)</span>
+</code><button class="button button--copy js-copy-button-2"><i class="fa fa-clipboard"></i></button></pre>
+<p>The Hive code that parses the log files using the RegEx SerDe looks like:</p>
+<pre class="highlight sql"><code><span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">SERDE</span> <span class="s1">'org.apache.hadoop.hive.serde2.RegexSerDe'</span>
+<span class="k">WITH</span> <span class="n">SERDEPROPERTIES</span> <span class="p">(</span>
+  <span class="nv">"input.regex"</span> <span class="o">=</span> <span class="nv">"^(?!#)([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+([^ ]+)</span><span class="se">\\</span><span class="nv">s+[^</span><span class="se">\(</span><span class="nv">]+[</span><span class="se">\(</span><span class="nv">](https://s3-us-west-2.amazonaws.com/us-west-2-aws-training/awsu-spl/spl-166/1.0.7.prod/instructions/en_us/[^</span><span class="se">\;</span><span class="nv">]+).*</span><span class="se">\%</span><span class="nv">20([^</span><span class="se">\/</span><span class="nv">]+)[</span><span class="se">\/</span><span class="nv">](https://s3-us-west-2.amazonaws.com/us-west-2-aws-training/awsu-spl/spl-166/1.0.7.prod/instructions/en_us/.*)$"</span>
+<span class="p">)</span> <span class="k">LOCATION</span> <span class="s1">'${INPUT}/cloudfront/data/'</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-3"><i class="fa fa-clipboard"></i></button></pre>
+<p>The HiveQL query that calculates <em>requests by operating system</em> is:</p>
+<pre class="highlight sql"><code><span class="k">INSERT</span> <span class="n">OVERWRITE</span> <span class="n">DIRECTORY</span> <span class="s1">'${OUTPUT}/os_requests/'</span>
+<span class="k">SELECT</span>
+  <span class="n">os</span><span class="p">,</span>
+  <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">count</span>
+<span class="k">FROM</span> <span class="n">cloudfront_logs</span>
+<span class="k">WHERE</span> <span class="n">dateobject</span>
+<span class="k">BETWEEN</span> <span class="s1">'2014-07-05'</span> <span class="k">AND</span> <span class="s1">'2014-08-05'</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">os</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-4"><i class="fa fa-clipboard"></i></button></pre>
+<p>The sample data set contains approximately 5000 rows of data. This same process, however, can be used to process <em>millions of rows of data</em> in parallel across multiple nodes.</p>
+<ol start="20">
+<li>Wait for the status of the step to change to <strong>Completed</strong>.</li>
+</ol>
+<p><i class="fas fa-comment"></i> To update the status, click the refresh <i class="fas fa-sync"></i> icon.</p>
+
+<p>Your results are now available for viewing.</p>
+
+<h2 id="step6">Task 4: View the Results</h2>
+
+<p>After the step completes successfully, the query output produced by the Hive script is stored in the Amazon S3 bucket that you specified when you submitted the step.</p>
+<ol start="21">
+<li><p>On the <strong>Services</strong> menu, click <strong>S3</strong>.</p></li>
+<li><p>Click your <em>Hadoop</em> bucket.</p></li>
+<li><p>Click the <strong>os_requests</strong> folder.</p></li>
+</ol>
+<p>The Hive query results are stored in a text file.</p>
+<ol start="24">
+<li><p>Select <i class="far fa-check-square"></i> the <em>000000_0</em> file.</p></li>
+<li><p>Click <span style="background-color:white;font-weight:bold;font-size:90%;color:#329AD6;border-color:#329AD6;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Download</span> in the pop-up box and save the file to your computer.</p></li>
+<li><p>Open the file using a text editor such as WordPad (Windows), TextEdit (Mac OS), or gEdit (Linux).</p></li>
+</ol>
+<p>In the output file, you should see the number of access requests by operating system:</p>
+
+<table>
+<tbody><tr>
+<th>Operating System</th>
+<th>Count</th>
+</tr>
+
+<tr>
+<td>Android</td>
+<td>855</td>
+</tr>
+<tr>
+<td>Linux</td>
+<td>813</td>
+</tr>
+<tr>
+<td>MacOS</td>
+<td>852</td>
+</tr>
+<tr>
+<td>OSX</td>
+<td>799</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>883</td>
+</tr>
+<tr>
+<td>iOS</td>
+<td>794</td>
+</tr>
+</tbody></table>
+
+<p>This lab used a small sample of data. Normally, there would be significantly more rows of data in your CloudFront logs. Regardless of the size, the cluster automatically distributes the work across the cluster to complete the work required.</p>
+
+<h2 id="step7">Task 5: Terminate your Amazon EMR Cluster</h2>
+
+<p>The cluster can be used to process many more jobs and can also be used interactively instead of submitting pre-built jobs. However, the cluster is no longer required for this lab and you can now <em>terminate</em> the cluster.</p>
+<ol start="27">
+<li><p>On the <strong>Services</strong> menu, click <strong>EMR</strong>.</p></li>
+<li><p>Select <i class="far fa-check-square"></i> <strong>My cluster</strong>.</p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Terminate</span></p></li>
+<li><p>In the <strong>Terminate cluster</strong> dialog, click <span style="background-color:#D90000;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Terminate</span></p></li>
+</ol>
+<h2 id="step8">Conclusion</h2>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You now have successfully learned how to:</p>
+<ul>
+<li>Launch a fully functional Hadoop cluster using <strong>Amazon EMR</strong>
+</li>
+<li>Define the schema and create a table for sample log data stored in Amazon S3</li>
+<li>Analyze the data using a <strong>HiveQL</strong> script and write the results back to Amazon S3</li>
+<li>Download and view the results on your computer</li>
+</ul>
+<h2 id="step9">End Lab</h2>
+
+<p>Follow these steps to close the console, end your lab, and evaluate the experience.</p>
+<ol start="31">
+<li><p>Return to the AWS Management Console.</p></li>
+<li><p>On the navigation bar, click <strong>awsstudent@&lt;AccountNumber&gt;</strong>, and then click <strong>Sign Out</strong>.</p></li>
+<li><p>Click <span style="background-color:#D93025;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#D93025;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">End Lab</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-family:Google Sans;font-weight:bold;font-size:90%;color:#444;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">OK</span></p></li>
+<li><p>(Optional):</p></li>
+</ol><ul>
+<li>Select the applicable number of stars <i class="far fa-star"></i>
+</li>
+<li>Type a comment</li>
+<li>
+<p>Click <strong>Submit</strong></p>
+<ul>
+<li>1 star = Very dissatisfied</li>
+<li>2 stars = Dissatisfied</li>
+<li>3 stars = Neutral</li>
+<li>4 stars = Satisfied</li>
+<li>5 stars = Very satisfied</li>
+</ul>
+</li>
+</ul>
+<p>You may close the dialog if you don't want to provide feedback.</p>
+
+<h2 id="step10">Additional Resources</h2>
+<ul>
+<li><a href="https://aws.amazon.com/big-data/" target="_blank">AWS Big Data</a></li>
+<li><a href="https://aws.amazon.com/emr/" target="_blank">AWS EMR</a></li>
+<li><p><a href="https://aws.amazon.com/getting-started/" target="_blank">Getting Started Resource Center</a></p></li>
+<li><p>For more information about AWS Training and Certification, see <a href="http://aws.amazon.com/training/" target="_blank"><em>http://aws.amazon.com/training/</em></a>.</p></li>
+<li><p>For more AWS Self-Paced Labs, see <a href="http://amazon.qwiklabs.com/" target="_blank"><em>http://amazon.qwiklabs.com</em></a>.</p></li>
+</ul>
+<p>For feedback, suggestions, or corrections, please email us at <a href="mailto:aws-course-feedback+spl@amazon.com" target="_blank"><em>aws-course-feedback@amazon.com</em></a>.</p>
+
+</div>
+<div class="js-lab-content-outline lab-content__outline">
+<a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step1">Overview</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step2">Start Lab</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step3">Task 1: Create an Amazon S3 bucket</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step4">Task 2: Launch an Amazon EMR cluster</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step5">Task 3: Process Your Sample Data by Running a Hive Script</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step6">Task 4: View the Results</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step7">Task 5: Terminate your Amazon EMR Cluster</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step8">Conclusion</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step9">End Lab</a><a href="https://run.qwiklabs.com/focuses/10906?parent=catalog#step10">Additional Resources</a>
+</div>
+</div>
+
+</div>
+
+<div class="lab-content__markdown-wrapper">
+<div class="lab-content__markdown">
+<div class="lab-content__recommendation">
+<!-- # TODO: Change classes so that this doesn't stack vertically -->
+<section class="upcoming-cards">
+<h2 class="headline-3">Continue questing</h2>
+<div class="content-card-grid">
+<div class="card-content-wrapper js-content-card" data-id="2573" data-level="Expert" data-name="Exploring Google Ngrams with Amazon EMR" data-type="Lab">
+<a class="card card--content elevation-0 content-lab" href="https://run.qwiklabs.com/focuses/10601?parent=catalog"><div class="card__image">
+<div class="card__image__inner" style="background-image: url(https://cdn.qwiklabs.com/assets/fractal4-1d205807c54d90fe4382315dbfc0dd665ddb825bbc90f3ca5db7d7170fa0df1b.jpg)"></div>
+</div>
+<div class="card__body">
+<div class="overline card--content__type">
+Hands-On Lab
+</div>
+<h3 class="card--content__title">
+Exploring Google Ngrams with Amazon EMR
+</h3>
+<p class="card--content__description body-1">
+This lab demonstrates how to launch an Amazon Elastic MapReduce (EMR) cluster for Big Data processing and use Hive with SQL-style queries to analyze data. You will create a Hadoop cluster using Amazon EMR which will allow to run interactive Hive queries against data stored in Amazon S3. You will use Hive to normalize the data in a more useful way, and you will run queries to analyze the data.
+</p>
+</div>
+<div class="card__footer">
+<div class="card__footer__left">
+<span>Expert</span>
+</div>
+<div class="card__footer__right">
+<div class="rateit" data-rateit-readonly="true" data-rateit-value="3.6535"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 58.456px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+</div>
+</div>
+</a></div>
+
+</div>
+</section>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="lab-introduction js-lab-introduction is-hidden">
+<div class="lab-introduction__inner">
+<h1 class="headline-1">Welcome to Your First Lab!</h1>
+<ql-icon-button class="js-skip-button">close</ql-icon-button>
+<div class="lab-introduction__video">
+<iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" id="lab-introduction" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/yF7EDXKTmoQ.html"></iframe>
+</div>
+<a class="js-skip-button button button--outline">Skip this video</a>
+</div>
+</div>
+
+
+
+</div>
+</main>
+<div class="modal fade" id="lab-details-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<div class="modal-body">
+<p class="l-mbm">
+In this lab, you will deploy a fully functional Hadoop cluster, ready to analyze log data in just a few minutes. You will start by launching an Amazon EMR cluster and then use a HiveQL script to process sample log data stored in an Amazon S3 bucket. HiveQL is a SQL-like scripting language for data warehousing and analysis. You can then use a similar setup to analyze your own log files.
+</p>
+<p>
+This lab is included in the quest
+<a href="https://run.qwiklabs.com/quests/5">Big Data on AWS</a>.
+If you complete this lab you'll receive credit for it when you enroll in this quest.
+</p>
+<p class="small-label l-mbs">
+<strong>
+Duration:
+</strong>
+1m setup
+·
+60m access
+·
+60m completion
+</p>
+<p class="small-label l-mbs">
+<strong>AWS Region:</strong>
+[us-west-2] <strong>US West (Oregon)</strong>
+</p>
+<p class="small-label l-mbs">
+
+</p>
+<p class="small-label">
+<strong>
+Permalink:
+</strong>
+<a href="https://run.qwiklabs.com/catalog_lab/2594">https://run.qwiklabs.com/catalog_lab/2594</a>
+</p>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Got It
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/saved_resource(1).html"></iframe>
+</div>
+<div class="modal fade" id="lab-review-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<form class="simple_form js-lab-review-form" id="edit_lab_review_5914629" action="https://run.qwiklabs.com/lab_reviews/5914629" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="patch"><div class="modal-body">
+<p class="label">
+How satisfied are you with this lab?*
+</p>
+<div class="rateit js-rateit" data-rateit-max="5" data-rateit-min="0" data-rateit-resetable="false" data-rateit-step="1" data-rateit-value="1"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 16px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+<div class="l-mtm">
+
+<div class="control-group hidden lab_review_user_id"><div class="controls"><input class="hidden" type="hidden" value="743665" name="lab_review[user_id]" id="lab_review_user_id"></div></div>
+<div class="control-group hidden lab_review_classroom_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[classroom_id]" id="lab_review_classroom_id"></div></div>
+<div class="control-group hidden lab_review_lab_id"><div class="controls"><input class="hidden" type="hidden" value="2594" name="lab_review[lab_id]" id="lab_review_lab_id"></div></div>
+<div class="control-group hidden lab_review_focus_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[focus_id]" id="lab_review_focus_id"></div></div>
+<div class="control-group hidden lab_review_rating"><div class="controls"><input class="hidden js-rating-input" type="hidden" value="-2" name="lab_review[rating]" id="lab_review_rating"></div></div>
+<div class="control-group text optional lab_review_comment"><label class="text optional control-label" for="lab_review_comment">Comment</label><div class="controls"><textarea class="text optional" name="lab_review[comment]" id="lab_review_comment"></textarea></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Cancel
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<input type="submit" name="commit" value="Submit" disabled="disabled" class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary" id="submit" data-disabled="false" data-disable-with="Submit" data-upgraded=",MaterialButton,MaterialRipple"><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></input>
+</div>
+</form>
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/saved_resource(2).html"></iframe>
+</div>
+<div class="modal fade" id="lab-access-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<a class="lab-access-modal-close" data-analytics-action="dismissed_lab_payment_modal" data-dismiss="modal">
+<i class="material-icons">close</i>
+</a>
+<form class="js-lab-access-form" action="https://run.qwiklabs.com/lab_onetime_coupons/activate?parent=catalog" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓">
+<div class="modal-body">
+<div class="lab-access-modal">
+<input type="hidden" name="id" id="id" value="10906">
+<input type="hidden" name="user_id" id="user_id" value="743665">
+<input type="hidden" name="launch_with_credits" id="launch_with_credits" value="0" class="js-launch-with-credits-input">
+<input type="hidden" name="launch_with_subs" id="launch_with_subs" value="0" class="js-launch-with-subscription-input">
+<div class="lab-access-modal__method">
+<p>
+This lab costs
+1 Credit.
+</p>
+<p>
+You have a valid subscription package. Would you like to charge this lab to your subscription?
+
+</p>
+<a class="button js-launch-with-subscription-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_subscription_button">
+Use Subscription
+</a>
+</div>
+<div class="lab-access-modal__method">
+<p>
+Enter Lab Access Code:
+</p>
+<div class="lab-access-modal__code js-access-code">
+<input type="text" name="uuid_1" id="uuid_1" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_2" id="uuid_2" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_3" id="uuid_3" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_4" id="uuid_4" value="" maxlength="4" placeholder="1234">
+</div>
+<a class="button js-launch-with-access-code-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_access_code_button">
+Launch with Access Code
+</a>
+</div>
+</div>
+</div>
+</form>
+
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/saved_resource(3).html"></iframe>
+</div>
+
+<script>
+  $( function() {
+    ql.initMaterialInputs();
+    initChosen();
+    initSearch();
+    initTabs();
+    ql.list.init();
+    ql.favoriting.init();
+    ql.header.myAccount.init();
+    initTooltips();
+    ql.autocomplete.init();
+    ql.modals.init();
+    ql.toggleButtons.init();
+    ql.analytics.init();
+    initLabContent( );
+  ql.labOutline.links.init();
+  ql.labOutline.layout.init();
+  initLabReviewModal();
+  initLabAccessModal();
+  ql.labAssessment.init();
+  ql.labData.init();
+  initLabTranslations( {"are_you_sure":"All done? If you end this lab, you will lose all your work. You may not be able to restart the lab if there is a quota limit. Are you sure you want to end this lab?\n","in_progress":"*In Progress*","ending":"*Ending*","starting":"*Starting, please wait*","end_concurrent_labs":"Sorry, you can only run one lab at a time. To start this lab, please confirm that you want all of your existing labs to end.\n","copied":"Copied","no_resource":"Error retrieving resource.","no_support":"No Support","mac_press":"Press ⌘-C to copy","thanks_review":"Thanks for reviewing this lab.","windows_press":"Press Ctrl-C to copy","days":"days"} );
+  ql.labRun.init();
+  ql.initHeader();
+  ql.navigation.init();
+  ql.navPanel.init();
+  ql.navigation.init();
+  
+  });
+</script>
+<style>
+  .mdl-layout__container {
+    position: static
+  }
+</style>
+
+
+<iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/saved_resource(4).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 1; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px; width: 111px;width: 111px;width: 111px;" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/saved_resource(5).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px; visibility: hidden;" src="./Analyze Big Data with Hadoop _ Qwiklabs_files/saved_resource(6).html"></iframe></div></body></html>

@@ -1,0 +1,116 @@
+1. type hive in EMR master node:
+
+2. create ngrams table in HIVE
+
+CREATE EXTERNAL TABLE ngrams
+(gram string, year int, occurrences bigint, pages bigint, books bigint)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t'
+STORED AS SEQUENCEFILE
+LOCATION 's3://datasets.elasticmapreduce/ngrams/books/20090715/eng-1M/1gram/';
+
+
+3. 
+
+DESCRIBE ngrams;
+
+
+SELECT * FROM ngrams LIMIT 10;
+
+4. Normalize datasets
+
+a) exclude words under three characters long
+b) exclude words that contains non-alphabetical characters (hyhens and apostrophes are acceptable)
+c) convert all words to lowercase
+
+CREATE TABLE normalized
+(gram string, year int, occurrences bigint);
+
+INSERT OVERWRITE TABLE normalized
+SELECT lower(gram), year, occurrences
+FROM ngrams
+WHERE year BETWEEN 1990 AND 2005
+AND gram REGEXP "^[A-Za-z+\'-]{3,}$";
+
+
+SELECT * FROM normalized LIMIT 20;
+
+
+-- Display the 50 most-used words
+SELECT
+  gram,
+  sum(occurrences) as total_occurrences
+FROM normalized
+GROUP BY gram
+ORDER BY total_occurrences DESC
+LIMIT 50;
+
+
+-- Display the 50 most-used words longer than 10 characters
+SELECT
+  gram,
+  sum(occurrences) as total_occurrences
+FROM normalized
+WHERE length(gram) > 10
+GROUP BY gram
+ORDER BY total_occurrences DESC
+LIMIT 50;
+
+5. Calculate word usage ratios
+
+CREATE TABLE ratios
+(gram string, year int, occurrences bigint, ratio double);
+
+
+INSERT OVERWRITE TABLE ratios
+SELECT
+  a.gram,
+  a.year,
+  sum(a.occurrences) AS occurrences,
+  sum(a.occurrences) / b.total AS ratio
+FROM normalized a
+JOIN (SELECT year, sum(occurrences) AS total
+      FROM normalized
+      GROUP BY year) b ON (a.year = b.year)
+GROUP BY a.gram, a.year, b.total;
+
+
+-- Words that most increased in popularity each year
+SELECT year, gram, occurrences, CONCAT(CAST(increase AS INT), 'x increase') as increase FROM
+(
+  SELECT
+    y2.gram,
+    y2.year,
+    y2.occurrences,
+    y2.ratio / y1.ratio as increase,
+    rank() OVER (PARTITION BY y2.year ORDER BY y2.ratio / y1.ratio DESC) AS rank
+  FROM ratios y2
+  JOIN ratios y1 ON y1.gram = y2.gram and y2.year = y1.year + 1
+  WHERE
+      y2.year BETWEEN 1991 and 2005
+  AND y1.occurrences > 1000
+  AND y2.occurrences > 1000
+) grams
+WHERE rank = 1
+ORDER BY year;
+
+
+-- Occurrences of 'internet' in books by year?
+SELECT
+  year,
+  occurrences
+FROM ratios
+WHERE gram = 'internet'
+ORDER BY year;
+
+-- Most popular words of each length
+SELECT DISTINCT length, gram
+FROM
+(
+  SELECT length(gram) AS length,
+  gram,
+  rank() OVER (partition by length(gram) order by occurrences desc) AS rank
+  FROM ratios
+) x
+WHERE rank = 1
+ORDER BY length;
+

@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://run.qwiklabs.com/focuses/10601?parent=catalog -->
+<html lang="en" class="mdl-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta content="[]" name="active-experiments">
+<meta content="{&quot;userId&quot;:743665}" name="help-api-product-data">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="9m+lZlTvPeWmffzFVGow8/do1DK/eXvUB3RQcZKtetXT/EsnzbxwWf2G47+nU8hSs/GjhivQKnQjYdJk/iobSQ==">
+<title>Exploring Google Ngrams with Amazon EMR | Qwiklabs</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+<meta content="This lab demonstrates how to launch an Amazon Elastic MapReduce (EMR) cluster for Big Data processing and use Hive with SQL-style queries to analyze data. You will create a Hadoop cluster using Amazon EMR which will allow to run interactive Hive queries against data stored in Amazon S3. You will use Hive to normalize the data in a more useful way, and you will run queries to analyze the data." name="description">
+<meta content="Qwiklabs" name="author">
+<meta content="1rRsY0INj8RvwB5EF5pwdxt2A2P9aDgAlsICaJ0d5w0" name="google-site-verification">
+<meta content="Exploring Google Ngrams with Amazon EMR | Qwiklabs" property="og:title">
+<meta content="website" property="og:type">
+<meta content="/favicon-144.png" property="og:image">
+<meta content="Qwiklabs" property="og:site_name">
+<meta content="This lab demonstrates how to launch an Amazon Elastic MapReduce (EMR) cluster for Big Data processing and use Hive with SQL-style queries to analyze data. You will create a Hadoop cluster using Amazon EMR which will allow to run interactive Hive queries against data stored in Amazon S3. You will use Hive to normalize the data in a more useful way, and you will run queries to analyze the data." property="og:description">
+<meta content="/qwiklabs_logo_900x887.png" property="og:logo" size="900x887">
+<meta content="/qwiklabs_logo_994x187.png" property="og:logo" size="994x187">
+<meta content="#3681E4" property="msapplication-TileColor">
+<meta content="/favicon-144.png" property="msapplication-TileImage">
+<link href="https://run.qwiklabs.com/favicon-32.png" rel="shortcut icon">
+<link color="#3681E4" href="https://run.qwiklabs.com/favicon-svg.svg" rel="mask-icon">
+<link href="https://run.qwiklabs.com/favicon-180.png" rel="apple-touch-icon-precomposed">
+<link rel="stylesheet" media="screen" href="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/css">
+
+
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+<![endif]-->
+<!--[endif]>  <![endif]-->
+<script type="text/javascript" async="" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/js"></script><script type="text/javascript" async="" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/analytics.js.download"></script><script type="text/javascript" async="" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/analytics.min.js.download"></script><script type="text/javascript" id="www-widgetapi-script" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/www-widgetapi.js.download" async=""></script><script>
+//<![CDATA[
+window.gon={};gon.current_user={"firstname":"Selina","lastname":"Ng","fullname":"Selina Ng","company":"Capgemini","email":"n.selina@ymail.com","origin":"google-run, direct","subscriptions":1,"id":"1c340942b6e43ad7908d196db2da6728","qlCreatedAt":"2018-01-21 06:49:32 UTC","optIn":false};gon.segment="j4Im8pqIko0Lxq4wVVZWMPMM0EroHUvb";gon.deployment="run";
+//]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.qwiklabs.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.qwiklabs.com/catalog?keywords={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script id="ze-snippet" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/snippet.js.download"></script>
+
+
+
+<link rel="stylesheet" media="all" href="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/application-162ab3877b3a481e7c5b49bf8be464f433c15a21bd2c4d9c870d4197793c85fe.css">
+<script>
+  EVENT_SOURCE_BASE_URL = "https://run.qwiklabs.com/nchan-sub?id=";
+</script>
+<script src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/webcomponents-loader.js.download"></script><script src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/webcomponents-hi.js.download"></script>
+<script src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/hallofmirrors-d8d44acdb268858ff41d169894134efe6aef227326bbd58449c52a66aa3bf8d0.js.download"></script><script async="" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/lazy.min.js.download"></script>
+<script src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/iframe_api"></script>
+<script src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/vendor-45d462772c30000424907184f70c7157e95fb6227698d1671c5051818a6f60d8.js.download"></script>
+<script src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/application-b8f24b563e7f6b4a399091631f253a394e419e33d6c909ef27e223b366f52750.js.download"></script>
+<script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script></head>
+<body class="focuses focuses-show lab-show l-full no-nav" style="">
+<div class="header-container light-theme">
+<div class="header">
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect header__button header__button--nav header__nav-panel-button js-nav-toggle" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">menu</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header__title">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--nav" href="https://run.qwiklabs.com/quests/5" data-upgraded=",MaterialButton,MaterialRipple"><ql-icon>arrow_back</ql-icon><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
+<h1 class="headline-5">
+Exploring Google Ngrams with Amazon EMR
+</h1>
+</div>
+<div class="header__actions">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--action header__button--search js-header-search-bar-button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">search</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="toggle-lab-control-panel" href="javascript:;" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">description</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" data-mdl-for="toggle-lab-control-panel" data-upgraded=",MaterialTooltip">
+Toggle Lab Panel
+</div>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-favorite-button favorite-button" id="CatalogItem-10601-favorite-button" data-type="CatalogItem" data-id="10601" data-name="Exploring Google Ngrams with Amazon EMR" href="https://run.qwiklabs.com/favorite.json?item_id=10601&amp;item_type=CatalogItem" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">favorite_border</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" for="CatalogItem-10601-favorite-button" data-upgraded=",MaterialTooltip">
+Add to favorites
+</div>
+
+
+<ql-help context="lab" productdata="{&quot;userId&quot;:743665}" data-analytics-action="opened_help" data-analytics-label="lab"></ql-help>
+<a class="header-my-account-button mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-my-account-button" data-upgraded=",MaterialButton,MaterialRipple">
+<img class="avatar " alt="avatar image" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header-my-account-menu js-my-account-menu">
+<div class="card elevation-2 no-padding">
+<div class="my-account-menu__top">
+<img class="avatar " alt="avatar image" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<div class="my-account-menu__info">
+<h4 class="subtitle-headline-1">
+Selina Ng
+</h4>
+<p class="body-2 text--gray">
+<span>n.selina@ymail.com</span>
+</p>
+<a class="button" href="https://run.qwiklabs.com/my_account/profile">My Account</a>
+</div>
+</div>
+<div class="my-account-menu__bottom">
+<a class="text--green subtitle-headline-2" href="https://run.qwiklabs.com/my_account/credits">Monthly Subscription
+</a><a data-analytics-action="clicked_sign_out" class="button button--hairline" rel="nofollow" data-method="delete" href="https://run.qwiklabs.com/users/sign_out">Sign Out</a>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="header__search-bar js-header-search-bar">
+<form id="catalog-search-mobile" onsubmit="ql.catalogSearchFilter(); return false;" action="https://run.qwiklabs.com/searches/elasticsearch" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="9m+lZlTvPeWmffzFVGow8/do1DK/eXvUB3RQcZKtetXT/EsnzbxwWf2G47+nU8hSs/GjhivQKnQjYdJk/iobSQ==">
+<input type="text" name="keywords" id="keywords" placeholder="Search" maxlength="255" aria-label="catalog search bar">
+</form>
+
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">close</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+</div>
+
+<nav class="nav-bar">
+<a class="nav-bar__item js-navigation-button" href="https://run.qwiklabs.com/"><ql-icon class="nav-bar__item__icon">
+home
+</ql-icon>
+<span class="nav-bar__item__label">
+Home
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button  active" aria-current="page" href="https://run.qwiklabs.com/catalog"><ql-icon class="nav-bar__item__icon">
+school
+</ql-icon>
+<span class="nav-bar__item__label">
+Catalog
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button" href="https://run.qwiklabs.com/my_learning"><ql-icon class="nav-bar__item__icon">
+event_note
+</ql-icon>
+<span class="nav-bar__item__label">
+My Learning
+</span>
+</a>
+</nav>
+
+<nav class="nav-panel js-nav-panel">
+<div class="nav-panel__logo">
+<div class="logo logo--blue"></div>
+</div>
+<a title="Home" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/"><ql-icon class="nav-panel__item__icon">
+home
+</ql-icon>
+<div class="nav-panel__item__label">
+Home
+</div>
+</a>
+<a title="Catalog" tabindex="-1" class="nav-panel__item js-navigation-button active" aria-current="page" href="https://run.qwiklabs.com/catalog"><ql-icon class="nav-panel__item__icon">
+school
+</ql-icon>
+<div class="nav-panel__item__label">
+Catalog
+</div>
+</a>
+<a title="My Learning" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_learning"><ql-icon class="nav-panel__item__icon">
+event_note
+</ql-icon>
+<div class="nav-panel__item__label">
+My Learning
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a title="Profile" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/profile"><ql-icon class="nav-panel__item__icon">
+account_circle
+</ql-icon>
+<div class="nav-panel__item__label">
+Profile
+</div>
+</a>
+<a title="Credits &amp; Subscriptions" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/credits"><ql-icon class="nav-panel__item__icon">
+money
+</ql-icon>
+<div class="nav-panel__item__label">
+Credits &amp; Subscriptions
+</div>
+</a>
+<a title="Security" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/security"><ql-icon class="nav-panel__item__icon">
+security
+</ql-icon>
+<div class="nav-panel__item__label">
+Security
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a class="nav-panel__item" tabindex="-1" href="https://run.qwiklabs.com/focuses/10601?parent=catalog#"><ql-help>
+<div class="nav-panel__help-item">
+<ql-icon class="nav-panel__item__icon">help</ql-icon>
+<div class="nav-panel__item__label">Help</div>
+</div>
+</ql-help>
+</a><div class="nav-panel__small-links">
+<a tabindex="-1" href="https://run.qwiklabs.com/privacy_policy">Privacy</a>
+<a tabindex="-1" href="https://run.qwiklabs.com/terms_of_service">Terms</a>
+</div>
+</nav>
+<div class="nav-panel__overlay js-nav-toggle"></div>
+
+<main class="js-main">
+<span class="hidden" id="flash-sibling-before"></span>
+
+<div class="l-main-wrapper" id="main-wrapper">
+
+
+
+
+
+
+
+<div class="js-lab-state" data-analytics-payload="{&quot;label&quot;:&quot;Exploring Google Ngrams with Amazon EMR&quot;,&quot;lab_name&quot;:&quot;Exploring Google Ngrams with Amazon EMR&quot;,&quot;classroom_name&quot;:null,&quot;deployment&quot;:&quot;run&quot;}" data-focus-id="10601" data-lab-billing-limit="0.0" data-lab-duration="4200" data-parent="catalog" data-payment-required=""></div>
+<ql-lab-control-panel class="js-lab-control-panel l-lab-control-panel" connectiondetails="[]" connectionfiles="[]" labcontrolbutton="{&quot;disabled&quot;:false,&quot;pending&quot;:false,&quot;running&quot;:false}" labtimer="{&quot;ticking&quot;:false,&quot;secondsRemaining&quot;:4200}" studentresources="[]"></ql-lab-control-panel>
+<div class="l-lab-main-body">
+<div class="js-lab-content lab-content">
+<div class="alert alert--fake js-alert">
+<p class="alert__message js-alert-message"></p>
+<a class="alert__close js-alert-close">
+<i class="fa fa-times"></i>
+</a>
+<iframe class="l-ie-iframe-fix" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/saved_resource.html"></iframe>
+</div>
+<div class="lab-content__markdown-wrapper">
+<div class="lab-preamble">
+<h1 class="lab-preamble__title">
+Exploring Google Ngrams with Amazon EMR
+</h1>
+<div class="lab-preamble__details subtitle-headline-1">
+<span>1 hour 10 minutes</span>
+<span>15 Credits</span>
+<div class="lab__rating">
+<a href="https://run.qwiklabs.com/focuses/10601/reviews?parent=catalog"><div class="rateit" data-rateit-readonly="true" data-rateit-value="3.6535"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 58.456px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+
+</a><a data-target="#lab-review-modal" data-toggle="modal">
+Rate Lab
+</a>
+</div>
+</div>
+</div>
+
+<div class="lab-content__inner-wrapper">
+<div class="js-markdown-instructions lab-content__markdown markdown-lab-instructions no-select" id="markdown-lab-instructions">
+<p><img src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/aws-logo.png" alt=""></p>
+
+
+
+<p><strong>SPL-31 Version 4.0.7</strong></p>
+
+<p>© 2020 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.</p>
+
+<p>Errors or corrections? Email us at <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a>.</p>
+
+<p>Other questions? Contact us at <a href="https://aws.amazon.com/contact-us/aws-training/" target="_blank">https://aws.amazon.com/contact-us/aws-training/</a></p>
+
+<h2 id="step1">Overview</h2>
+
+<p>In this lab, you will use Amazon EMR to analyze Ngrams from Google Books. An <em>n-gram</em> is a contiguous sequence of <em>n</em> items from a given sequence of text or speech. For example, consider this sentence:</p>
+
+<p><input readonly="" class="copyable-inline-input" size="47" type="text" value="The sun rises in the East and sets in the West."></p>
+
+<p>Some <em>2-grams</em> from this sentence are "the sun", "in the" and "sets in". A sample <em>3-gram</em> is "sets in the" and a sample <em>4-gram</em> is "rises in the east".</p>
+
+<p>N-grams are used to predict the probability of certain words appearing in a sequence. This can be useful for providing typing suggestions on web pages and mobile phones.</p>
+
+<p>The steps in this lab are very similar to the activities that a <strong>Data Scientist</strong> would perform when analyzing a new set of data. This includes loading the data, examining the data attributes and writing SQL to analyze the data. You will run SQL against publicly available Ngrams data stored in Amazon S3 to gain interesting insights.</p>
+
+<h3>Objectives</h3>
+
+<p>After completing this lab, you will be able to:</p>
+<ul>
+<li>Create an Amazon EMR cluster running Hive</li>
+<li>Use Hive statements to create tables from Google Ngram input data stored in Amazon S3</li>
+<li>Run Hive queries to drill-down and analyze data</li>
+</ul>
+<h2 id="step2">Start Lab</h2>
+<ol start="1">
+<li>At the top of your screen, launch your lab by clicking <span style="background-color:#34A853;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#34A853;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Start Lab</span>
+</li>
+</ol>
+<p>This will start the process of provisioning your lab resources. An estimated amount of time to provision your lab resources will be displayed. You must wait for your resources to be provisioned before continuing.</p>
+
+<p><i class="fas fa-info-circle"></i> If you are prompted for a token, use the one distributed to you (or credits you have purchased). </p>
+<ol start="2">
+<li>Open your lab by clicking <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span>
+</li>
+</ol>
+<p>This will automatically log you into the AWS Management Console. </p>
+
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Please do not change the Region unless instructed</strong>.</p>
+
+
+
+<h3>Common login errors</h3>
+
+<p><strong>Error : Federated login credentials</strong></p>
+
+<p><img src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/federatedloginerror.png" alt=""></p>
+
+<p>If you see this message:</p>
+<ul>
+<li>Close the browser tab to return to your initial lab window</li>
+<li>Wait a few seconds</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+<p>You should now be able to access the AWS Management Console.</p>
+
+
+
+<p><strong>Error: You must first log out</strong></p>
+
+<p><img src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/logouterror.png" alt=""></p>
+
+<p>If you see the message, <strong>You must first log out before logging into a different AWS account:</strong> </p>
+<ul>
+<li>Click <strong>click here</strong>
+</li>
+<li>Close your browser tab to return to your initial Qwiklabs window</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+
+
+
+
+<h2 id="step3">Task 1: Launch an Amazon EMR cluster</h2>
+
+<p>In this task, you will launch an Amazon EMR cluster to process the Ngrams data.</p>
+
+<p><strong>Amazon EMR</strong> is a web service that makes it easy to process large amounts of data efficiently. Amazon EMR uses Hadoop processing combined with several AWS products to do such tasks as web indexing, data mining, log file analysis, machine learning, scientific simulation, and data warehousing.</p>
+
+<p>You will configure the cluster to run <strong>Apache Hive</strong>, an open-source data warehouse and analytics package that uses a SQL-based query language to query large data sets. Hive allows users to structure, summarize, and query data sources without requiring in-depth knowledge of Amazon EMR. Hive adds support for Amazon EMR functions and for complex, extensible, user-defined data types like JSON and Thrift. This capability allows processing of complex and even unstructured data sources, such as text documents and log files.</p>
+<ol start="3">
+<li><p>In the <strong>AWS Management Console</strong>, on the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>EMR</strong>.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create cluster</span></p></li>
+<li><p>Click <span style="color:#1166bb;font-weight:bold;">Go to advanced options</span>.</p></li>
+<li><p>Scroll to the bottom of the screen, then click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span></p></li>
+<li><p>On <strong>Step 2</strong>, for <strong>Network</strong>, select <em>Lab VPC</em>.</p></li>
+<li><p>In section below, choose your instance type for your <em>Master</em> and <em>Core</em> instances by,</p></li>
+</ol><ul>
+<li>Clicking the <i class="fas fa-pencil-alt"></i> next to your <em>Master</em> instance type, then selecting <em>m4.large</em>, or <em>m5.large</em>
+</li>
+<li>Clicking the <i class="fas fa-pencil-alt"></i> next to your <em>Core</em> instance type, then selecting <em>m4.large</em>, or <em>m5.large</em>
+</li>
+</ul>
+<p>You will not be allowed to use any other instance types in this lab.</p>
+<ol start="9">
+<li><p>In the row where the <strong>Node type</strong> is <em>Core</em>, set the <strong>Instance count</strong> to <input readonly="" class="copyable-inline-input" size="1" type="text" value="2"></p></li>
+<li><p>Scroll to the bottom, then click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span></p></li>
+<li><p>On <strong>Step 3</strong>, configure:</p></li>
+</ol><ul>
+<li>
+<strong>Cluster name:</strong> <input readonly="" class="copyable-inline-input" size="13" type="text" value="Ngram cluster">
+</li>
+<li>De-select <i class="far fa-square"></i> <strong>Logging</strong>
+</li>
+<li>Scroll to the bottom, then click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span>
+</li>
+</ul><ol start="12">
+<li><p>On <strong>Step 4</strong> for <strong>EC2 key pair</strong> <em>Select the key pair that you see</em>.</p></li>
+<li><p>Below <strong>Permissions</strong>, select <i class="far fa-dot-circle"></i> <strong>Custom</strong>.</p></li>
+<li><p>Scroll to the bottom of the screen, then click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create cluster</span></p></li>
+</ol>
+<p>This will launch an Amazon EMR cluster with one Master Node and two Core Nodes. The Master Node controls the cluster, while the actual processing work is performed on the Core Nodes.</p>
+
+<p>Default software will be loaded onto the cluster including Hadoop and Hive.</p>
+
+<p><i class="fas fa-info-circle"></i> Your cluster will take approximately <strong>seven minutes</strong> until it is ready for use, but there is no need to wait - <strong>please continue with the next steps</strong>.</p>
+
+
+
+<h2 id="step4">Task 2: Connect to Your Cluster</h2>
+
+<p>In this task, you will login to your Master Node to run Hive commands. You will need to wait until the cluster is ready before connecting.</p>
+<ol start="15">
+<li><p>On the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>EMR</strong>.</p></li>
+<li><p>Click the name of your <strong>Ngram cluster</strong>.</p></li>
+</ol>
+<p><i class="fas fa-info-circle"></i> If there are multiple clusters with the same name, your cluster will be the topmost.</p>
+
+<p>Your cluster will go through <strong>Starting, Bootstrapping, and Running</strong> states before the status changes to <em>WAITING</em>.</p>
+<ol start="17">
+<li><p>Wait until the cluster is in the <strong>Waiting</strong> state. Click the refresh icon in the top-right every 30 seconds until the state changes.</p></li>
+<li><p>Copy the <strong>Master public DNS</strong> value to your text editor.</p></li>
+</ol>
+<p>You will use this value later in the lab.</p>
+
+<p><i class="fas fa-comment"></i> While you are waiting, feel free to explore the <a href="https://books.google.com/ngrams" target="_blank">Google Ngram Viewer</a> to see an interactive version of the Ngram data. Some sample phrases to search for are <input readonly="" class="copyable-inline-input" size="6" type="text" value="best *"> and <input readonly="" class="copyable-inline-input" size="13" type="text" value="sets in the *">.</p>
+
+<p>Here are some additional resources you can view while waiting for your cluster:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Google_Ngram_Viewer" target="_blank">Wikipedia: Google Ngram Viewer</a></li>
+<li><a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html" target="_blank">Google Books Ngram documentation</a></li>
+<li><a href="https://aws.amazon.com/datasets/google-books-ngrams/" target="_blank">Google Books Ngrams data in Amazon S3</a></li>
+</ul>
+<p>Once the cluster status changes to <em>WAITING</em>, you can login to the master node and begin an interactive Hive session.</p>
+
+<h3>
+<i class="fab fa-windows"></i> Windows Users: Using SSH to Connect</h3>
+
+<p><i class="fas fa-comment"></i> These instructions are for Windows users only.</p>
+
+<p>If you are using Mac or Linux, <a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#ssh-MACLinux">skip to the next section</a>.</p>
+<ol start="19">
+<li><p>To the left of the instructions you are currently reading, click <span style="color:blue;"><i class="fas fa-download"></i></span> <strong>Download PPK</strong>.</p></li>
+<li><p>Save the file to the directory of your choice.</p></li>
+</ol>
+<p>You will use PuTTY and Pageant to SSH to your JumpHost.  You will then use SSH from your JumpHost to SSH to your EMR Master node.</p>
+
+<p>If you do not have PuTTY or Pageant installed on your computer, <a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html" target="_blank">download both here</a>.</p>
+<ol start="21">
+<li>Open Pageant.exe.</li>
+</ol>
+<p>This will cause the Pageant program to run in the lower left-hand of your screen.</p>
+<ol start="22">
+<li><p>Right-click Pageant, then click <strong>Add Key</strong>.</p></li>
+<li><p>Select the PPK key that you downloaded earlier.</p></li>
+<li><p>Open PuTTY.exe</p></li>
+<li><p>Configure the PuTTY to not timeout:</p></li>
+</ol><ul>
+<li>Click <strong>Connection</strong>
+</li>
+<li>Set <strong>Seconds between keepalives</strong> to <input readonly="" class="copyable-inline-input" size="2" type="text" value="30">
+</li>
+</ul>
+<p>This allows you to keep the PuTTY session open for a longer period of time.</p>
+<ol start="26">
+<li>Configure your PuTTY session:</li>
+</ol><ul>
+<li>Click <strong>Session</strong>
+</li>
+<li>
+<strong>Host Name (or IP address):</strong> Paste the value of <strong>JumpHost</strong> located to the left of these instructions</li>
+<li>In the <strong>Connection</strong> list, expand <i class="far fa-plus-square"></i> <strong>SSH</strong>
+</li>
+<li>Click <strong>Auth</strong> (don't expand it)</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Browse</span>
+</li>
+<li>Browse to and select the PPK file that you downloaded</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Open</span> to select it</li>
+<li>Select <i class="far fa-check-square"></i> <strong>Allow agent forwarding</strong>
+</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Open</span>
+</li>
+</ul><ol start="27">
+<li><p>Click <strong>Yes</strong>, to trust the host and connect to it.</p></li>
+<li><p>When prompted <strong>login as</strong>, enter: <input readonly="" class="copyable-inline-input" size="8" type="text" value="ec2-user"></p></li>
+</ol>
+<p>This will connect to your EC2 instance.</p>
+<ol start="29">
+<li>In your EC2 instance, enter <input readonly="" class="copyable-inline-input" size="17" type="text" value="ssh hadoop@EMRDNS">
+</li>
+</ol><ul>
+<li>Replace <strong>EMRDNS</strong> with the Master Public DNS value of your cluster.</li>
+<li>Press <strong>Enter</strong>.</li>
+</ul><ol start="30">
+<li>When prompted if you want to continue connecting:</li>
+</ol><ul>
+<li>Enter <input readonly="" class="copyable-inline-input" size="3" type="text" value="yes">
+</li>
+<li>Press <strong>Enter</strong>.</li>
+</ul><ol start="31">
+<li><a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#ssh-after">Windows Users: Click here to skip ahead to the next task.</a></li>
+</ol>
+<p><a id="ssh-MACLinux"></a></p>
+
+<h3>Mac <i class="fab fa-apple"></i> and Linux <i class="fab fa-linux"></i> Users</h3>
+
+<p>These instructions are for Mac/Linux users only. If you are a Windows user, <a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#ssh-after">skip ahead to the next task.</a></p>
+<ol start="32">
+<li><p>To the left of the instructions you are currently reading, click <span style="color:blue;"><i class="fas fa-download"></i></span> <strong>Download PEM</strong>.</p></li>
+<li><p>Save the file to the directory of your choice.</p></li>
+<li><p>Copy this command to a text editor:</p></li>
+</ol><pre class="highlight plaintext"><code>chmod 400 KEYPAIR.pem
+
+ssh -i KEYPAIR.pem -Ao "ProxyCommand ssh -W %h:%p -i KEYPAIR.pem ec2-user@JumpHost" hadoop@EMRDNS
+</code><button class="button button--copy js-copy-button-0"><i class="fa fa-clipboard"></i></button></pre><ol start="35">
+<li><p>Replace <em>KEYPAIR.pem</em> with the path to the PEM file you downloaded.</p></li>
+<li><p>Replace <em>JumpHost</em> with the value of <em>JumpHost</em> located to the left of these instructions.</p></li>
+<li><p>Replace <em>EMRDNS</em> with the <strong>Master public DNS</strong> value that you copied to your text editor.</p></li>
+<li><p>Paste the updated command into the Terminal window and run it.</p></li>
+<li><p>Type <input readonly="" class="copyable-inline-input" size="3" type="text" value="yes"> when prompted to allow a first connection to this remote SSH server.</p></li>
+</ol>
+<p>Because you are using a key pair for authentication, you will not be prompted for a password.</p>
+
+<p><a id="ssh-after"></a></p>
+
+
+
+<h2 id="step5">Task 3: Analyze Data</h2>
+
+<p>You are now ready to analyze the Ngrams data.</p>
+
+<p>To start an interactive Hive session on the master node:</p>
+<ol start="40">
+<li>In your SSH client, type <input readonly="" class="copyable-inline-input" size="4" type="text" value="hive">
+</li>
+</ol>
+<p>After a few seconds you should see this prompt: <em>hive&gt;</em></p>
+
+<h3>Examine the Raw Data</h3>
+
+<p>In this section, you will access the raw Ngrams data. You will be accessing data about <em>1-grams</em>, which provides a count of the <em>single words</em> found in all the books. This data has 261 million entries, occupying 2.6 GB of disk storage.</p>
+
+<p>The Ngram data is accessible from Amazon S3 and can be directly accessed from Amazon EMR by creating an <em>external table</em>. This definition tells Amazon EMR how the data is formatted and where it is located.</p>
+<ol start="41">
+<li>Copy and paste this statement to create the data structure and identify the input data location:</li>
+</ol><pre class="highlight sql"><code><span class="k">CREATE</span> <span class="k">EXTERNAL</span> <span class="k">TABLE</span> <span class="n">ngrams</span>
+<span class="p">(</span><span class="n">gram</span> <span class="n">string</span><span class="p">,</span> <span class="k">year</span> <span class="n">int</span><span class="p">,</span> <span class="n">occurrences</span> <span class="n">bigint</span><span class="p">,</span> <span class="n">pages</span> <span class="n">bigint</span><span class="p">,</span> <span class="n">books</span> <span class="n">bigint</span><span class="p">)</span>
+<span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span> <span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">'</span><span class="se">\t</span><span class="s1">'</span>
+<span class="n">STORED</span> <span class="k">AS</span> <span class="n">SEQUENCEFILE</span>
+<span class="k">LOCATION</span> <span class="s1">'s3://datasets.elasticmapreduce/ngrams/books/20090715/eng-1M/1gram/'</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-1"><i class="fa fa-clipboard"></i></button></pre>
+<p>The output should look similar to this:</p>
+<pre class="highlight plaintext"><code>OK
+Time taken: 6.365 seconds
+</code><button class="button button--copy js-copy-button-2"><i class="fa fa-clipboard"></i></button></pre>
+<p>The <strong>ngrams</strong> table has been created. A good first step is to view the structure of the table.</p>
+<ol start="42">
+<li>Copy and paste this statement to describe the table structure:</li>
+</ol><pre class="highlight sql"><code><span class="k">DESCRIBE</span> <span class="n">ngrams</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-3"><i class="fa fa-clipboard"></i></button></pre>
+<p>Output:</p>
+<pre class="highlight plaintext"><code>gram                    string
+year                    int
+occurrences             bigint
+pages                   bigint
+books                   bigint
+</code><button class="button button--copy js-copy-button-4"><i class="fa fa-clipboard"></i></button></pre><ul>
+<li>
+<strong>gram</strong> is the word (or set of words) in the n-gram</li>
+<li>
+<strong>year</strong> is the year that the n-gram appeared in publication</li>
+<li>
+<strong>occurrences</strong> is a count of the number of times the n-gram appeared in the given year</li>
+<li>
+<strong>pages</strong> is the number of pages on which the n-gram appeared in the given year</li>
+<li>
+<strong>books</strong> is the number of books in which the n-gram appeared in the given year</li>
+</ul>
+<p>A data scientist normally wants to see a sample of the data. This can be done by using the SQL SELECT statement.</p>
+<ol start="43">
+<li>Copy and paste this statement to display the first 10 records from the table:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">ngrams</span> <span class="k">LIMIT</span> <span class="mi">10</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-5"><i class="fa fa-clipboard"></i></button></pre>
+<p>Output:</p>
+<pre class="highlight plaintext"><code>#   1574    1   1   1
+#   1584    6   6   1
+#   1614    1   1   1
+#   1631    115 100 1
+#   1632    3   3   1
+#   1635    1   1   1
+#   1640    1   1   1
+#   1641    1   1   1
+#   1642    5   5   1
+#   1644    234 193 1
+</code><button class="button button--copy js-copy-button-6"><i class="fa fa-clipboard"></i></button></pre>
+<p>Unfortunately, it appears that the data in its current form is very raw. The first column (<em>gram</em>) contains punctuation marks and other special characters (eg #) and has both uppercase and lowercase characters. This makes it very difficult to analyze.</p>
+
+<p>Data scientists frequently face similar <em>data quality problems</em>. Before they can analyze the data, they need to <em>normalize</em> it into a clean format.</p>
+
+<h3>Normalize the Data</h3>
+
+<p>To cleanse the data, you will:</p>
+<ul>
+<li>Exclude words under three characters long</li>
+<li>Exclude words that contain non-alphabetical characters (but hyphens and apostrophes are acceptable)</li>
+<li>Convert all characters to lowercase</li>
+</ul>
+<p>First, you will create a new table to store the results of the normalized data.</p>
+<ol start="44">
+<li>Copy and paste this statement to create a table to store the results of the normalization (with just the columns of interest):</li>
+</ol><pre class="highlight sql"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">normalized</span>
+<span class="p">(</span><span class="n">gram</span> <span class="n">string</span><span class="p">,</span> <span class="k">year</span> <span class="n">int</span><span class="p">,</span> <span class="n">occurrences</span> <span class="n">bigint</span><span class="p">);</span>
+</code><button class="button button--copy js-copy-button-7"><i class="fa fa-clipboard"></i></button></pre>
+<p>Output:</p>
+<pre class="highlight plaintext"><code>OK
+Time taken: 1.382 seconds
+</code><button class="button button--copy js-copy-button-8"><i class="fa fa-clipboard"></i></button></pre>
+<p>Next, you will SELECT the data from the <em>ngrams</em> table and then INSERT it into the new <em>normalized</em> table. The query will:</p>
+<ul>
+<li>Only use data between 1990 and 2005</li>
+<li>Convert the n-grams to lowercase</li>
+<li>Only include words of three or more characters</li>
+<li>Only include words that contain alphabetical characters, apostrophes and hyphens</li>
+</ul><ol start="45">
+<li>Copy and paste this statement to select data from the <em>ngrams</em> table and insert it into the <em>normalized</em> table:</li>
+</ol><pre class="highlight sql"><code><span class="k">INSERT</span> <span class="n">OVERWRITE</span> <span class="k">TABLE</span> <span class="n">normalized</span>
+<span class="k">SELECT</span> <span class="k">lower</span><span class="p">(</span><span class="n">gram</span><span class="p">),</span> <span class="k">year</span><span class="p">,</span> <span class="n">occurrences</span>
+<span class="k">FROM</span> <span class="n">ngrams</span>
+<span class="k">WHERE</span> <span class="k">year</span> <span class="k">BETWEEN</span> <span class="mi">1990</span> <span class="k">AND</span> <span class="mi">2005</span>
+<span class="k">AND</span> <span class="n">gram</span> <span class="n">REGEXP</span> <span class="nv">"^[A-Za-z+</span><span class="se">\'</span><span class="nv">-]{3,}$"</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-9"><i class="fa fa-clipboard"></i></button></pre>
+<p>This query will take a few minutes to complete. While it is running, Hive provides details of how many processes are executing on the Amazon EMR cluster.</p>
+
+<p><i class="fas fa-info-circle"></i> While the statement is processing, continue to the next section. <strong>There is no need to wait.</strong></p>
+
+<h3>Examine the Normalized Data</h3>
+
+<p>Your Hive job should now be complete. A <em>clean</em> version of the data will now be available in the <em>normalized</em> table. You will now examine the data.</p>
+<ol start="46">
+<li>Copy and paste this statement to view the first 20 rows of data:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">normalized</span> <span class="k">LIMIT</span> <span class="mi">20</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-10"><i class="fa fa-clipboard"></i></button></pre>
+<p>You can see that words are displayed, together with the year that they appeared in books and the number of occurrences of the word in that year.</p>
+
+<p>A data scientist would next be interested in viewing the most popular words in all books.</p>
+<ol start="47">
+<li>Copy and paste this statement to view the 50 most-used words in all books across all years:</li>
+</ol><pre class="highlight sql"><code><span class="c1">-- Display the 50 most-used words</span>
+<span class="k">SELECT</span>
+  <span class="n">gram</span><span class="p">,</span>
+  <span class="k">sum</span><span class="p">(</span><span class="n">occurrences</span><span class="p">)</span> <span class="k">as</span> <span class="n">total_occurrences</span>
+<span class="k">FROM</span> <span class="n">normalized</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">gram</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">total_occurrences</span> <span class="k">DESC</span>
+<span class="k">LIMIT</span> <span class="mi">50</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-11"><i class="fa fa-clipboard"></i></button></pre>
+<p>Output:</p>
+<pre class="highlight plaintext"><code>the  600731810
+and  269591500
+that 94084329
+for  80649257
+with 61620362
+was  57843905
+this 45202579
+are  44749547
+...
+</code><button class="button button--copy js-copy-button-12"><i class="fa fa-clipboard"></i></button></pre>
+<p>These short words would be expected to appear often, but longer words are likely to be more interesting.</p>
+<ol start="48">
+<li>Copy and paste this statement to view the 50 most-used words longer than 10 characters:</li>
+</ol><pre class="highlight sql"><code><span class="c1">-- Display the 50 most-used words longer than 10 characters</span>
+<span class="k">SELECT</span>
+  <span class="n">gram</span><span class="p">,</span>
+  <span class="k">sum</span><span class="p">(</span><span class="n">occurrences</span><span class="p">)</span> <span class="k">as</span> <span class="n">total_occurrences</span>
+<span class="k">FROM</span> <span class="n">normalized</span>
+<span class="k">WHERE</span> <span class="k">length</span><span class="p">(</span><span class="n">gram</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">gram</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">total_occurrences</span> <span class="k">DESC</span>
+<span class="k">LIMIT</span> <span class="mi">50</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-13"><i class="fa fa-clipboard"></i></button></pre>
+<p>Output:</p>
+<pre class="highlight plaintext"><code>development   4584319
+information   4419750
+international 2731441
+relationship  2013252
+significant   1762598
+particularly  1709008
+performance   1669887
+...
+</code><button class="button button--copy js-copy-button-14"><i class="fa fa-clipboard"></i></button></pre>
+<p>Each of these queries is analyzing over 20 million records!</p>
+
+<h3>Calculate Word Usage Ratios</h3>
+
+<p>A data scientist might now be interested in how word usage varies between years. The easiest way to examine this is to create a new table that contains a <strong>ratio</strong> of the relative occurrence of each word, compared to the total number of words stored for the year.</p>
+
+<p>For example, if the word <em>cloud</em> appears 10,000 times in one year and 13,000 times the next year, it is unclear whether this is because the word became more popular or whether more books were included in the database. By calculating a <em>ratio</em>, it is possible to compare the <em>relative frequency</em> of a word compared to all other words in a given year.</p>
+<ol start="49">
+<li>Copy and paste this Hive statement to create the <em>ratios</em> table:</li>
+</ol><pre class="highlight sql"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">ratios</span>
+<span class="p">(</span><span class="n">gram</span> <span class="n">string</span><span class="p">,</span> <span class="k">year</span> <span class="n">int</span><span class="p">,</span> <span class="n">occurrences</span> <span class="n">bigint</span><span class="p">,</span> <span class="n">ratio</span> <span class="n">double</span><span class="p">);</span>
+</code><button class="button button--copy js-copy-button-15"><i class="fa fa-clipboard"></i></button></pre><ol start="50">
+<li>Copy and paste this statement to populate the ratios table with data calculated from the <em>normalized</em> table:</li>
+</ol><pre class="highlight sql"><code><span class="k">INSERT</span> <span class="n">OVERWRITE</span> <span class="k">TABLE</span> <span class="n">ratios</span>
+<span class="k">SELECT</span>
+  <span class="n">a</span><span class="p">.</span><span class="n">gram</span><span class="p">,</span>
+  <span class="n">a</span><span class="p">.</span><span class="k">year</span><span class="p">,</span>
+  <span class="k">sum</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">occurrences</span><span class="p">)</span> <span class="k">AS</span> <span class="n">occurrences</span><span class="p">,</span>
+  <span class="k">sum</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">occurrences</span><span class="p">)</span> <span class="o">/</span> <span class="n">b</span><span class="p">.</span><span class="n">total</span> <span class="k">AS</span> <span class="n">ratio</span>
+<span class="k">FROM</span> <span class="n">normalized</span> <span class="n">a</span>
+<span class="k">JOIN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="k">year</span><span class="p">,</span> <span class="k">sum</span><span class="p">(</span><span class="n">occurrences</span><span class="p">)</span> <span class="k">AS</span> <span class="n">total</span>
+      <span class="k">FROM</span> <span class="n">normalized</span>
+      <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">year</span><span class="p">)</span> <span class="n">b</span> <span class="k">ON</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="k">year</span> <span class="o">=</span> <span class="n">b</span><span class="p">.</span><span class="k">year</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">a</span><span class="p">.</span><span class="n">gram</span><span class="p">,</span> <span class="n">a</span><span class="p">.</span><span class="k">year</span><span class="p">,</span> <span class="n">b</span><span class="p">.</span><span class="n">total</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-16"><i class="fa fa-clipboard"></i></button></pre>
+<p>This statement is using an <em>inner join</em> to calculate the ratio of word occurrences relative to all words used in the same year.</p>
+
+<p><i class="fas fa-info-circle"></i> This statement will take approximately <strong>three minutes</strong> to execute.</p>
+
+<p>You are now able to query, for each year and word, the change in the ratio from the previous year. This is done by joining the ratios table to itself to compare values between years.</p>
+<ol start="51">
+<li>Copy and paste this statement to calculate the difference of ratios year over year. The statement filters out all words with less than 1000 occurrences to avoid having extreme increases for very rare words.</li>
+</ol><pre class="highlight sql"><code><span class="c1">-- Words that most increased in popularity each year</span>
+<span class="k">SELECT</span> <span class="k">year</span><span class="p">,</span> <span class="n">gram</span><span class="p">,</span> <span class="n">occurrences</span><span class="p">,</span> <span class="n">CONCAT</span><span class="p">(</span><span class="k">CAST</span><span class="p">(</span><span class="n">increase</span> <span class="k">AS</span> <span class="n">INT</span><span class="p">),</span> <span class="s1">'x increase'</span><span class="p">)</span> <span class="k">as</span> <span class="n">increase</span> <span class="k">FROM</span>
+<span class="p">(</span>
+  <span class="k">SELECT</span>
+    <span class="n">y2</span><span class="p">.</span><span class="n">gram</span><span class="p">,</span>
+    <span class="n">y2</span><span class="p">.</span><span class="k">year</span><span class="p">,</span>
+    <span class="n">y2</span><span class="p">.</span><span class="n">occurrences</span><span class="p">,</span>
+    <span class="n">y2</span><span class="p">.</span><span class="n">ratio</span> <span class="o">/</span> <span class="n">y1</span><span class="p">.</span><span class="n">ratio</span> <span class="k">as</span> <span class="n">increase</span><span class="p">,</span>
+    <span class="n">rank</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">(</span><span class="n">PARTITION</span> <span class="k">BY</span> <span class="n">y2</span><span class="p">.</span><span class="k">year</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">y2</span><span class="p">.</span><span class="n">ratio</span> <span class="o">/</span> <span class="n">y1</span><span class="p">.</span><span class="n">ratio</span> <span class="k">DESC</span><span class="p">)</span> <span class="k">AS</span> <span class="n">rank</span>
+  <span class="k">FROM</span> <span class="n">ratios</span> <span class="n">y2</span>
+  <span class="k">JOIN</span> <span class="n">ratios</span> <span class="n">y1</span> <span class="k">ON</span> <span class="n">y1</span><span class="p">.</span><span class="n">gram</span> <span class="o">=</span> <span class="n">y2</span><span class="p">.</span><span class="n">gram</span> <span class="k">and</span> <span class="n">y2</span><span class="p">.</span><span class="k">year</span> <span class="o">=</span> <span class="n">y1</span><span class="p">.</span><span class="k">year</span> <span class="o">+</span> <span class="mi">1</span>
+  <span class="k">WHERE</span>
+      <span class="n">y2</span><span class="p">.</span><span class="k">year</span> <span class="k">BETWEEN</span> <span class="mi">1991</span> <span class="k">and</span> <span class="mi">2005</span>
+  <span class="k">AND</span> <span class="n">y1</span><span class="p">.</span><span class="n">occurrences</span> <span class="o">&gt;</span> <span class="mi">1000</span>
+  <span class="k">AND</span> <span class="n">y2</span><span class="p">.</span><span class="n">occurrences</span> <span class="o">&gt;</span> <span class="mi">1000</span>
+<span class="p">)</span> <span class="n">grams</span>
+<span class="k">WHERE</span> <span class="n">rank</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">year</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-17"><i class="fa fa-clipboard"></i></button></pre>
+<p><strong>Question:</strong> What word increased in popularity the most in 1999?</p>
+
+<p>How about the increase in popularity of the word <em>internet</em>?</p>
+<ol start="52">
+<li>Copy and paste this statement:</li>
+</ol><pre class="highlight sql"><code><span class="c1">-- Occurrences of 'internet' in books by year?</span>
+<span class="k">SELECT</span>
+  <span class="k">year</span><span class="p">,</span>
+  <span class="n">occurrences</span>
+<span class="k">FROM</span> <span class="n">ratios</span>
+<span class="k">WHERE</span> <span class="n">gram</span> <span class="o">=</span> <span class="s1">'internet'</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">year</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-18"><i class="fa fa-clipboard"></i></button></pre>
+<p>The results show the explosion in use of the Internet around 1994/1995 when the World Wide Web was invented. (The Internet itself has been around a lot longer than that.)</p>
+
+<p>Finally, for a bit of fun, the following query finds the most popular words of each length for the year 2000.</p>
+<ol start="53">
+<li>Copy and paste this statement:</li>
+</ol><pre class="highlight sql"><code><span class="c1">-- Most popular words of each length</span>
+<span class="k">SELECT</span> <span class="k">DISTINCT</span> <span class="k">length</span><span class="p">,</span> <span class="n">gram</span>
+<span class="k">FROM</span>
+<span class="p">(</span>
+  <span class="k">SELECT</span> <span class="k">length</span><span class="p">(</span><span class="n">gram</span><span class="p">)</span> <span class="k">AS</span> <span class="k">length</span><span class="p">,</span>
+  <span class="n">gram</span><span class="p">,</span>
+  <span class="n">rank</span><span class="p">()</span> <span class="n">OVER</span> <span class="p">(</span><span class="n">partition</span> <span class="k">by</span> <span class="k">length</span><span class="p">(</span><span class="n">gram</span><span class="p">)</span> <span class="k">order</span> <span class="k">by</span> <span class="n">occurrences</span> <span class="k">desc</span><span class="p">)</span> <span class="k">AS</span> <span class="n">rank</span>
+  <span class="k">FROM</span> <span class="n">ratios</span>
+<span class="p">)</span> <span class="n">x</span>
+<span class="k">WHERE</span> <span class="n">rank</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">length</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-19"><i class="fa fa-clipboard"></i></button></pre>
+<p>These queries provide an idea of the capabilities of Amazon EMR and Hive to analyze massive quantities of data.</p>
+
+<h2 id="step6">Achievements</h2>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You completed this lab and you are now able to:</p>
+<ul>
+<li>Create an Amazon EMR cluster running Hive</li>
+<li>Use Hive statements to create tables from Google Ngram input data stored in Amazon S3</li>
+<li>Run Hive queries to drill-down and analyze data</li>
+</ul>
+<h2 id="step7">End Lab</h2>
+
+<p>Follow these steps to close the console, end your lab, and evaluate the experience.</p>
+<ol start="54">
+<li><p>Return to the AWS Management Console.</p></li>
+<li><p>On the navigation bar, click <strong>awsstudent@&lt;AccountNumber&gt;</strong>, and then click <strong>Sign Out</strong>.</p></li>
+<li><p>Click <span style="background-color:#D93025;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#D93025;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">End Lab</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-family:Google Sans;font-weight:bold;font-size:90%;color:#444;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">OK</span></p></li>
+<li><p>(Optional):</p></li>
+</ol><ul>
+<li>Select the applicable number of stars <i class="far fa-star"></i>
+</li>
+<li>Type a comment</li>
+<li>
+<p>Click <strong>Submit</strong></p>
+<ul>
+<li>1 star = Very dissatisfied</li>
+<li>2 stars = Dissatisfied</li>
+<li>3 stars = Neutral</li>
+<li>4 stars = Satisfied</li>
+<li>5 stars = Very satisfied</li>
+</ul>
+</li>
+</ul>
+<p>You may close the dialog if you don't want to provide feedback.</p>
+<ul>
+<li>For more information about AWS Training and Certification, see <a href="http://aws.amazon.com/training/" target="_blank"><em>http://aws.amazon.com/training/</em></a>.</li>
+<li>For more AWS Self-Paced Labs, see <a href="http://amazon.qwiklabs.com/" target="_blank"><em>http://amazon.qwiklabs.com</em></a>.</li>
+</ul>
+<p>For feedback, suggestions, or corrections, please email us at <a href="mailto:aws-course-feedback+spl@amazon.com" target="_blank"><em>aws-course-feedback@amazon.com</em></a>.</p>
+
+<h2 id="step8">References</h2>
+
+<p>For more information on the topics covered in this lab, consult the following references.</p>
+
+<p>Amazon Elastic MapReduce:</p>
+<ul>
+<li><a href="http://aws.amazon.com/elasticmapreduce/" target="_blank">http://aws.amazon.com/elasticmapreduce/</a></li>
+<li><a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/" target="_blank">http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/</a></li>
+</ul>
+<p>Apache Hadoop:</p>
+<ul>
+<li><a href="https://hadoop.apache.org/" target="_blank">https://hadoop.apache.org/</a></li>
+<li><a href="http://wiki.apache.org/hadoop/FrontPage" target="_blank">http://wiki.apache.org/hadoop/FrontPage</a></li>
+</ul>
+<p>Apache Hive:</p>
+<ul>
+<li><a href="http://hive.apache.org/" target="_blank">http://hive.apache.org/</a></li>
+<li><a href="https://cwiki.apache.org/Hive/languagemanual-cli.html" target="_blank">https://cwiki.apache.org/Hive/languagemanual-cli.html</a></li>
+</ul>
+</div>
+<div class="js-lab-content-outline lab-content__outline is-stuck">
+<a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#step1" class="">Overview</a><a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#step2" class="">Start Lab</a><a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#step3" class="is-active">Task 1: Launch an Amazon EMR cluster</a><a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#step4">Task 2: Connect to Your Cluster</a><a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#step5">Task 3: Analyze Data</a><a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#step6">Achievements</a><a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#step7">End Lab</a><a href="https://run.qwiklabs.com/focuses/10601?parent=catalog#step8">References</a>
+</div>
+</div>
+
+</div>
+
+<div class="lab-content__markdown-wrapper">
+<div class="lab-content__markdown">
+<div class="lab-content__recommendation">
+<!-- # TODO: Change classes so that this doesn't stack vertically -->
+<section class="upcoming-cards">
+<h2 class="headline-3">Continue questing</h2>
+<div class="content-card-grid">
+<div class="card-content-wrapper js-content-card" data-id="2573" data-level="Expert" data-name="Exploring Google Ngrams with Amazon EMR" data-type="Lab">
+<a class="card card--content elevation-0 content-lab" href="https://run.qwiklabs.com/focuses/10601?parent=catalog"><div class="card__image">
+<div class="card__image__inner" style="background-image: url(https://cdn.qwiklabs.com/assets/fractal4-1d205807c54d90fe4382315dbfc0dd665ddb825bbc90f3ca5db7d7170fa0df1b.jpg)"></div>
+</div>
+<div class="card__body">
+<div class="overline card--content__type">
+Hands-On Lab
+</div>
+<h3 class="card--content__title">
+Exploring Google Ngrams with Amazon EMR
+</h3>
+<p class="card--content__description body-1">
+This lab demonstrates how to launch an Amazon Elastic MapReduce (EMR) cluster for Big Data processing and use Hive with SQL-style queries to analyze data. You will create a Hadoop cluster using Amazon EMR which will allow to run interactive Hive queries against data stored in Amazon S3. You will use Hive to normalize the data in a more useful way, and you will run queries to analyze the data.
+</p>
+</div>
+<div class="card__footer">
+<div class="card__footer__left">
+<span>Expert</span>
+</div>
+<div class="card__footer__right">
+<div class="rateit" data-rateit-readonly="true" data-rateit-value="3.6535"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 58.456px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+</div>
+</div>
+</a></div>
+
+</div>
+</section>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="lab-introduction js-lab-introduction is-hidden">
+<div class="lab-introduction__inner">
+<h1 class="headline-1">Welcome to Your First Lab!</h1>
+<ql-icon-button class="js-skip-button">close</ql-icon-button>
+<div class="lab-introduction__video">
+<iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" id="lab-introduction" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/yF7EDXKTmoQ.html"></iframe>
+</div>
+<a class="js-skip-button button button--outline">Skip this video</a>
+</div>
+</div>
+
+
+
+</div>
+</main>
+<div class="modal fade" id="lab-details-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<div class="modal-body">
+<p class="l-mbm">
+This lab demonstrates how to launch an Amazon Elastic MapReduce (EMR) cluster for Big Data processing and use Hive with SQL-style queries to analyze data. You will create a Hadoop cluster using Amazon EMR which will allow to run interactive Hive queries against data stored in Amazon S3. You will use Hive to normalize the data in a more useful way, and you will run queries to analyze the data.
+</p>
+<p>
+This lab is included in the quest
+<a href="https://run.qwiklabs.com/quests/5">Big Data on AWS</a>.
+If you complete this lab you'll receive credit for it when you enroll in this quest.
+</p>
+<p class="small-label l-mbs">
+<strong>
+Duration:
+</strong>
+1m setup
+·
+70m access
+·
+70m completion
+</p>
+<p class="small-label l-mbs">
+<strong>AWS Region:</strong>
+[us-east-1] <strong>US East (N. Virginia)</strong>
+</p>
+<p class="small-label l-mbs">
+<span><strong>Levels: </strong>expert</span>
+</p>
+<p class="small-label">
+<strong>
+Permalink:
+</strong>
+<a href="https://run.qwiklabs.com/catalog_lab/2573">https://run.qwiklabs.com/catalog_lab/2573</a>
+</p>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Got It
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/saved_resource(1).html"></iframe>
+</div>
+<div class="modal fade" id="lab-review-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<form class="simple_form js-lab-review-form" id="new_lab_review" action="https://run.qwiklabs.com/lab_reviews" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><div class="modal-body">
+<p class="label">
+How satisfied are you with this lab?*
+</p>
+<div class="rateit js-rateit" data-rateit-max="5" data-rateit-min="0" data-rateit-resetable="false" data-rateit-step="1" data-rateit-value="0"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 0px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+<div class="l-mtm">
+
+<div class="control-group hidden lab_review_user_id"><div class="controls"><input class="hidden" type="hidden" value="743665" name="lab_review[user_id]" id="lab_review_user_id"></div></div>
+<div class="control-group hidden lab_review_classroom_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[classroom_id]" id="lab_review_classroom_id"></div></div>
+<div class="control-group hidden lab_review_lab_id"><div class="controls"><input class="hidden" type="hidden" value="2573" name="lab_review[lab_id]" id="lab_review_lab_id"></div></div>
+<div class="control-group hidden lab_review_focus_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[focus_id]" id="lab_review_focus_id"></div></div>
+<div class="control-group hidden lab_review_rating"><div class="controls"><input class="hidden js-rating-input" type="hidden" name="lab_review[rating]" id="lab_review_rating"></div></div>
+<div class="control-group text optional lab_review_comment"><label class="text optional control-label" for="lab_review_comment">Comment</label><div class="controls"><textarea class="text optional" name="lab_review[comment]" id="lab_review_comment"></textarea></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Cancel
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<input type="submit" name="commit" value="Submit" disabled="disabled" class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary" id="submit" data-disabled="false" data-disable-with="Submit" data-upgraded=",MaterialButton,MaterialRipple"><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></input>
+</div>
+</form>
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/saved_resource(2).html"></iframe>
+</div>
+<div class="modal fade" id="lab-access-modal" style="display: none;">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<a class="lab-access-modal-close" data-analytics-action="dismissed_lab_payment_modal" data-dismiss="modal">
+<i class="material-icons">close</i>
+</a>
+<form class="js-lab-access-form" action="https://run.qwiklabs.com/lab_onetime_coupons/activate?parent=catalog" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓">
+<div class="modal-body">
+<div class="lab-access-modal">
+<input type="hidden" name="id" id="id" value="10601">
+<input type="hidden" name="user_id" id="user_id" value="743665">
+<input type="hidden" name="launch_with_credits" id="launch_with_credits" value="0" class="js-launch-with-credits-input">
+<input type="hidden" name="launch_with_subs" id="launch_with_subs" value="1" class="js-launch-with-subscription-input">
+<div class="lab-access-modal__method">
+<p>
+This lab costs
+15 Credits.
+</p>
+<p>
+You have a valid subscription package. Would you like to charge this lab to your subscription?
+
+</p>
+<a class="button js-launch-with-subscription-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_subscription_button">
+Use Subscription
+</a>
+</div>
+<div class="lab-access-modal__method">
+<p>
+Enter Lab Access Code:
+</p>
+<div class="lab-access-modal__code js-access-code">
+<input type="text" name="uuid_1" id="uuid_1" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_2" id="uuid_2" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_3" id="uuid_3" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_4" id="uuid_4" value="" maxlength="4" placeholder="1234">
+</div>
+<a class="button js-launch-with-access-code-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_access_code_button">
+Launch with Access Code
+</a>
+</div>
+</div>
+</div>
+</form>
+
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/saved_resource(3).html"></iframe>
+</div>
+
+<script>
+  $( function() {
+    ql.initMaterialInputs();
+    initChosen();
+    initSearch();
+    initTabs();
+    ql.list.init();
+    ql.favoriting.init();
+    ql.header.myAccount.init();
+    initTooltips();
+    ql.autocomplete.init();
+    ql.modals.init();
+    ql.toggleButtons.init();
+    ql.analytics.init();
+    initLabContent( );
+  ql.labOutline.links.init();
+  ql.labOutline.layout.init();
+  initLabReviewModal();
+  initLabAccessModal();
+  ql.labAssessment.init();
+  ql.labData.init();
+  initLabTranslations( {"are_you_sure":"All done? If you end this lab, you will lose all your work. You may not be able to restart the lab if there is a quota limit. Are you sure you want to end this lab?\n","in_progress":"*In Progress*","ending":"*Ending*","starting":"*Starting, please wait*","end_concurrent_labs":"Sorry, you can only run one lab at a time. To start this lab, please confirm that you want all of your existing labs to end.\n","copied":"Copied","no_resource":"Error retrieving resource.","no_support":"No Support","mac_press":"Press ⌘-C to copy","thanks_review":"Thanks for reviewing this lab.","windows_press":"Press Ctrl-C to copy","days":"days"} );
+  ql.labRun.init();
+  ql.initHeader();
+  ql.navigation.init();
+  ql.navPanel.init();
+  ql.navigation.init();
+  
+  });
+</script>
+<style>
+  .mdl-layout__container {
+    position: static
+  }
+</style>
+
+
+<iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/saved_resource(4).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 1; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px; width: 111px;width: 111px;width: 111px;" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/saved_resource(5).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px; visibility: hidden;" src="./Exploring Google Ngrams with Amazon EMR _ Qwiklabs_files/saved_resource(6).html"></iframe></div></body></html>

@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://www.qwiklabs.com/focuses/11804?parent=catalog -->
+<html lang="en" class="mdl-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta content="[]" name="active-experiments">
+<meta content="{&quot;userId&quot;:743665}" name="help-api-product-data">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="V/xR1PNAuTpsJekC7j08Hw2h12xgnavqeSTaJlVhON4JdELQVO2Haqo94DS5spJSEhFGyybecxWkiL3M7rCAWw==">
+<title>Using Tableau Desktop with Amazon Redshift | Qwiklabs</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+<meta content="In this hands-on lab, you&#39;ll learn how to load data from Amazon S3 into an Amazon Redshift cluster and use Tableau Desktop for creating visualizations from that dataset. Note: registration and providing your personal contact information to Tableau is required for access to the trial version of Tableau Desktop needed for this lab.  You may be contacted by Tableau as per their license agreements, which are provided during installation." name="description">
+<meta content="Qwiklabs" name="author">
+<meta content="1rRsY0INj8RvwB5EF5pwdxt2A2P9aDgAlsICaJ0d5w0" name="google-site-verification">
+<meta content="Using Tableau Desktop with Amazon Redshift | Qwiklabs" property="og:title">
+<meta content="website" property="og:type">
+<meta content="/favicon-144.png" property="og:image">
+<meta content="Qwiklabs" property="og:site_name">
+<meta content="In this hands-on lab, you&#39;ll learn how to load data from Amazon S3 into an Amazon Redshift cluster and use Tableau Desktop for creating visualizations from that dataset. Note: registration and providing your personal contact information to Tableau is required for access to the trial version of Tableau Desktop needed for this lab.  You may be contacted by Tableau as per their license agreements, which are provided during installation." property="og:description">
+<meta content="/qwiklabs_logo_900x887.png" property="og:logo" size="900x887">
+<meta content="/qwiklabs_logo_994x187.png" property="og:logo" size="994x187">
+<meta content="#3681E4" property="msapplication-TileColor">
+<meta content="/favicon-144.png" property="msapplication-TileImage">
+<link href="https://www.qwiklabs.com/favicon-32.png" rel="shortcut icon">
+<link color="#3681E4" href="https://www.qwiklabs.com/favicon-svg.svg" rel="mask-icon">
+<link href="https://www.qwiklabs.com/favicon-180.png" rel="apple-touch-icon-precomposed">
+<link rel="stylesheet" media="screen" href="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/css">
+
+
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+<![endif]-->
+<!--[endif]>  <![endif]-->
+<script type="text/javascript" async="" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/js"></script><script type="text/javascript" async="" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/analytics.js.download"></script><script type="text/javascript" async="" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/analytics.min.js.download"></script><script type="text/javascript" id="www-widgetapi-script" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/www-widgetapi.js.download" async=""></script><script>
+//<![CDATA[
+window.gon={};gon.current_user={"firstname":"Selina","lastname":"Ng","fullname":"Selina Ng","company":"Capgemini","email":"n.selina@ymail.com","origin":"google-run, direct","subscriptions":1,"id":"1c340942b6e43ad7908d196db2da6728","qlCreatedAt":"2018-01-21 06:49:32 UTC","optIn":false};gon.segment="j4Im8pqIko0Lxq4wVVZWMPMM0EroHUvb";gon.deployment="run";
+//]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.qwiklabs.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.qwiklabs.com/catalog?keywords={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script id="ze-snippet" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/snippet.js.download"></script>
+
+
+
+<link rel="stylesheet" media="all" href="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/application-162ab3877b3a481e7c5b49bf8be464f433c15a21bd2c4d9c870d4197793c85fe.css">
+<script>
+  EVENT_SOURCE_BASE_URL = "https://run.qwiklabs.com/nchan-sub?id=";
+</script>
+<script src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/webcomponents-loader.js.download"></script><script src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/webcomponents-hi.js.download"></script>
+<script src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/hallofmirrors-d8d44acdb268858ff41d169894134efe6aef227326bbd58449c52a66aa3bf8d0.js.download"></script><script async="" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/lazy.min.js.download"></script>
+<script src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/iframe_api"></script>
+<script src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/vendor-45d462772c30000424907184f70c7157e95fb6227698d1671c5051818a6f60d8.js.download"></script>
+<script src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/application-b8f24b563e7f6b4a399091631f253a394e419e33d6c909ef27e223b366f52750.js.download"></script>
+<script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script></head>
+<body class="focuses focuses-show lab-show l-full no-nav" style="">
+<div class="header-container light-theme">
+<div class="header">
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect header__button header__button--nav header__nav-panel-button js-nav-toggle" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">menu</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header__title">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--nav" href="https://www.qwiklabs.com/" data-upgraded=",MaterialButton,MaterialRipple"><ql-icon>arrow_back</ql-icon><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
+<h1 class="headline-5">
+Using Tableau Desktop with Amazon Redshift
+</h1>
+</div>
+<div class="header__actions">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--action header__button--search js-header-search-bar-button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">search</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="toggle-lab-control-panel" href="javascript:;" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">description</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" data-mdl-for="toggle-lab-control-panel" data-upgraded=",MaterialTooltip">
+Toggle Lab Panel
+</div>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-favorite-button favorite-button" id="CatalogItem-11804-favorite-button" data-type="CatalogItem" data-id="11804" data-name="Using Tableau Desktop with Amazon Redshift" href="https://www.qwiklabs.com/unfavorite.json?item_id=11804&amp;item_type=CatalogItem" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">favorite</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" for="CatalogItem-11804-favorite-button" data-upgraded=",MaterialTooltip">
+Remove from favorites
+</div>
+
+
+<ql-help context="lab" productdata="{&quot;userId&quot;:743665}" data-analytics-action="opened_help" data-analytics-label="lab"></ql-help>
+<a class="header-my-account-button mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-my-account-button" data-upgraded=",MaterialButton,MaterialRipple">
+<img class="avatar " alt="avatar image" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header-my-account-menu js-my-account-menu">
+<div class="card elevation-2 no-padding">
+<div class="my-account-menu__top">
+<img class="avatar " alt="avatar image" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<div class="my-account-menu__info">
+<h4 class="subtitle-headline-1">
+Selina Ng
+</h4>
+<p class="body-2 text--gray">
+<span>n.selina@ymail.com</span>
+</p>
+<a class="button" href="https://www.qwiklabs.com/my_account/profile">My Account</a>
+</div>
+</div>
+<div class="my-account-menu__bottom">
+<a class="text--green subtitle-headline-2" href="https://www.qwiklabs.com/my_account/credits">Monthly Subscription
+</a><a data-analytics-action="clicked_sign_out" class="button button--hairline" rel="nofollow" data-method="delete" href="https://www.qwiklabs.com/users/sign_out">Sign Out</a>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="header__search-bar js-header-search-bar">
+<form id="catalog-search-mobile" onsubmit="ql.catalogSearchFilter(); return false;" action="https://www.qwiklabs.com/searches/elasticsearch" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="V/xR1PNAuTpsJekC7j08Hw2h12xgnavqeSTaJlVhON4JdELQVO2Haqo94DS5spJSEhFGyybecxWkiL3M7rCAWw==">
+<input type="text" name="keywords" id="keywords" placeholder="Search" maxlength="255" aria-label="catalog search bar">
+</form>
+
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">close</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+</div>
+
+<nav class="nav-bar">
+<a class="nav-bar__item js-navigation-button" href="https://www.qwiklabs.com/"><ql-icon class="nav-bar__item__icon">
+home
+</ql-icon>
+<span class="nav-bar__item__label">
+Home
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button  active" aria-current="page" href="https://www.qwiklabs.com/catalog"><ql-icon class="nav-bar__item__icon">
+school
+</ql-icon>
+<span class="nav-bar__item__label">
+Catalog
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button" href="https://www.qwiklabs.com/my_learning"><ql-icon class="nav-bar__item__icon">
+event_note
+</ql-icon>
+<span class="nav-bar__item__label">
+My Learning
+</span>
+</a>
+</nav>
+
+<nav class="nav-panel js-nav-panel">
+<div class="nav-panel__logo">
+<div class="logo logo--blue"></div>
+</div>
+<a title="Home" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/"><ql-icon class="nav-panel__item__icon">
+home
+</ql-icon>
+<div class="nav-panel__item__label">
+Home
+</div>
+</a>
+<a title="Catalog" tabindex="-1" class="nav-panel__item js-navigation-button active" aria-current="page" href="https://www.qwiklabs.com/catalog"><ql-icon class="nav-panel__item__icon">
+school
+</ql-icon>
+<div class="nav-panel__item__label">
+Catalog
+</div>
+</a>
+<a title="My Learning" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_learning"><ql-icon class="nav-panel__item__icon">
+event_note
+</ql-icon>
+<div class="nav-panel__item__label">
+My Learning
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a title="Profile" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/profile"><ql-icon class="nav-panel__item__icon">
+account_circle
+</ql-icon>
+<div class="nav-panel__item__label">
+Profile
+</div>
+</a>
+<a title="Credits &amp; Subscriptions" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/credits"><ql-icon class="nav-panel__item__icon">
+money
+</ql-icon>
+<div class="nav-panel__item__label">
+Credits &amp; Subscriptions
+</div>
+</a>
+<a title="Security" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/security"><ql-icon class="nav-panel__item__icon">
+security
+</ql-icon>
+<div class="nav-panel__item__label">
+Security
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a class="nav-panel__item" tabindex="-1" href="https://www.qwiklabs.com/focuses/11804?parent=catalog#"><ql-help>
+<div class="nav-panel__help-item">
+<ql-icon class="nav-panel__item__icon">help</ql-icon>
+<div class="nav-panel__item__label">Help</div>
+</div>
+</ql-help>
+</a><div class="nav-panel__small-links">
+<a tabindex="-1" href="https://www.qwiklabs.com/privacy_policy">Privacy</a>
+<a tabindex="-1" href="https://www.qwiklabs.com/terms_of_service">Terms</a>
+</div>
+</nav>
+<div class="nav-panel__overlay js-nav-toggle"></div>
+
+<main class="js-main">
+<span class="hidden" id="flash-sibling-before"></span>
+
+<div class="l-main-wrapper" id="main-wrapper">
+
+
+
+
+
+
+
+<div class="js-lab-state" data-analytics-payload="{&quot;label&quot;:&quot;Using Tableau Desktop with Amazon Redshift&quot;,&quot;lab_name&quot;:&quot;Using Tableau Desktop with Amazon Redshift&quot;,&quot;classroom_name&quot;:null,&quot;deployment&quot;:&quot;run&quot;}" data-focus-id="11804" data-lab-billing-limit="0.0" data-lab-duration="4200" data-parent="catalog" data-payment-required=""></div>
+<ql-lab-control-panel class="js-lab-control-panel l-lab-control-panel" connectiondetails="[]" connectionfiles="[]" labcontrolbutton="{&quot;disabled&quot;:false,&quot;pending&quot;:false,&quot;running&quot;:false}" labtimer="{&quot;ticking&quot;:false,&quot;secondsRemaining&quot;:4200}" studentresources="[]"></ql-lab-control-panel>
+<div class="l-lab-main-body">
+<div class="js-lab-content lab-content">
+<div class="alert alert--fake js-alert">
+<p class="alert__message js-alert-message"></p>
+<a class="alert__close js-alert-close">
+<i class="fa fa-times"></i>
+</a>
+<iframe class="l-ie-iframe-fix" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/saved_resource.html"></iframe>
+</div>
+<div class="lab-content__markdown-wrapper">
+<div class="lab-preamble">
+<h1 class="lab-preamble__title">
+Using Tableau Desktop with Amazon Redshift
+</h1>
+<div class="lab-preamble__details subtitle-headline-1">
+<span>1 hour 10 minutes</span>
+<span>8 Credits</span>
+<div class="lab__rating">
+<a href="https://www.qwiklabs.com/focuses/11804/reviews?parent=catalog"><div class="rateit" data-rateit-readonly="true" data-rateit-value="4.5263"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 72.4208px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+
+</a><a data-target="#lab-review-modal" data-toggle="modal">
+Rate Lab
+</a>
+</div>
+</div>
+</div>
+
+<div class="lab-content__inner-wrapper">
+<div class="js-markdown-instructions lab-content__markdown markdown-lab-instructions no-select" id="markdown-lab-instructions">
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/aws-logo.png" alt=""></p>
+
+
+
+<p><strong>SPL-114 - Version 1.2.1</strong></p>
+
+<p>© 2020 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.</p>
+
+<p>Errors or corrections? Email us at <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a>.</p>
+
+<p>Other questions? Contact us at <a href="https://aws.amazon.com/contact-us/aws-training/" target="_blank">https://aws.amazon.com/contact-us/aws-training/</a></p>
+
+<h2 id="step1">Overview</h2>
+
+<p>This lab will give you a basic understanding of using Tableau with Amazon Redshift for visualizing data. In this lab, you will build a dashboard using Tableau Desktop by connecting it to Amazon Redshift, and using the data to create a visualization.</p>
+
+<p><strong>Note: registration and providing your personal contact information to Tableau is required for access to the trial version of Tableau Desktop needed for this lab. You may be contacted by Tableau as per their license agreements, which are provided during installation.</strong></p>
+
+<h3>Topics covered</h3>
+
+<p>By the end of this lab you will learn how to:</p>
+<ul>
+<li>Load data into Amazon Redshift from Amazon S3</li>
+<li>Connect to an Amazon Redshift cluster from Tableau</li>
+<li>Create a dashboard using Tableau</li>
+</ul>
+<h2 id="step2">Lab Prerequisites</h2>
+
+<p>Familiarity with Data-Warehousing and Business-intelligence concepts and basic knowledge of Amazon Redshift is required for this lab. If you’re not familiar with Amazon Redshift, then you can take the introductory lab “Introduction to Amazon Redshift”. You should also be comfortable using a Windows Server environment via Remote Desktop.</p>
+
+<p>If you are running Windows on your local machine, you can use Remote Desktop Connection to access your Amazon EC2 instance. If you are on a Mac and do not have a Remote Desktop client installed, you can install from either of these links:</p>
+<ul>
+<li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=18140" target="_blank">Remote Desktop Client Connection for Macintosh</a></li>
+<li><a href="http://cord.sourceforge.net/" target="_blank">CoRD for Macintosh (preferred)</a></li>
+</ul>
+<h2 id="step3">Start Lab</h2>
+<ol start="1">
+<li>At the top of your screen, launch your lab by clicking <span style="background-color:#34A853;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#34A853;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Start Lab</span>
+</li>
+</ol>
+<p>This will start the process of provisioning your lab resources. An estimated amount of time to provision your lab resources will be displayed. You must wait for your resources to be provisioned before continuing.</p>
+
+<p><i class="fas fa-info-circle"></i> If you are prompted for a token, use the one distributed to you (or credits you have purchased). </p>
+<ol start="2">
+<li>Open your lab by clicking <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span>
+</li>
+</ol>
+<p>This will automatically log you into the AWS Management Console. </p>
+
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Please do not change the Region unless instructed</strong>.</p>
+
+
+
+<h3>Common login errors</h3>
+
+<p><strong>Error : Federated login credentials</strong></p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/federatedloginerror.png" alt=""></p>
+
+<p>If you see this message:</p>
+<ul>
+<li>Close the browser tab to return to your initial lab window</li>
+<li>Wait a few seconds</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+<p>You should now be able to access the AWS Management Console.</p>
+
+
+
+<p><strong>Error: You must first log out</strong></p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/logouterror.png" alt=""></p>
+
+<p>If you see the message, <strong>You must first log out before logging into a different AWS account:</strong> </p>
+<ul>
+<li>Click <strong>click here</strong>
+</li>
+<li>Close your browser tab to return to your initial Qwiklabs window</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+
+
+<h2 id="step4">Task 1: Connect to Your Amazon EC2 instance</h2>
+
+<p><i class="fas fa-info-circle"></i> Amazon Elastic Compute Cloud (Amazon EC2) provides scalable computing capacity in the Amazon Web Services (AWS) cloud. Using Amazon EC2 eliminates your need to invest in hardware up front, so you can develop and deploy applications faster. You can use Amazon EC2 to launch as many or as few virtual servers as you need, configure security and networking, and manage storage. Amazon EC2 enables you to scale up or down to handle changes in requirements or spikes in popularity, reducing your need to forecast traffic.</p>
+<ol start="3">
+<li><p>In the <strong>AWS Management Console</strong>, on the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>EC2</strong>.</p></li>
+<li><p>In the left navigation pane, click <strong>Instances</strong>.</p></li>
+</ol>
+<p>You should have one instance <em>running</em> in your account.</p>
+<ol start="5">
+<li><p>Wait until the status checks have passed before continuing.</p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Connect</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Download Remote Desktop File</span></p></li>
+</ol>
+<p>Save the file to your computer and make a note of its location.</p>
+<ol start="8">
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Close</span></p></li>
+<li><p>Open the .rdp file that you downloaded.</p></li>
+<li><p>In the <strong>Remote Desktop Connection</strong> dialog box, click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Connect</span> then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Password:</strong> Paste the value of <strong>Password</strong> located to the left of these instructions</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">OK</span>
+</li>
+</ul><ol start="11">
+<li>When prompted <strong>Do you want to connect despite these certificate errors?</strong>, click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Yes</span>
+</li>
+</ol>
+<h2 id="step5">Task 2: Load data in Amazon Redshift from Amazon S3</h2>
+
+<p><i class="fas fa-info-circle"></i> <strong>Amazon Redshift:</strong> Amazon Redshift is a fast, scalable data warehouse that makes it simple and cost-effective to analyze all your data across your data warehouse and data lake. Redshift delivers ten times faster performance than other data warehouses by using machine learning, massively parallel query execution, and columnar storage on high-performance disk. You can setup and deploy a new data warehouse in minutes, and run queries across petabytes of data in your Redshift data warehouse, and exabytes of data in your data lake built on Amazon S3. You can start small for just $0.25 per hour and scale to $250 per terabyte per year, less than one-tenth the cost of other solutions.</p>
+
+<p><i class="fas fa-info-circle"></i> <strong>Amazon S3:</strong> Amazon Simple Storage Service (Amazon S3) is storage for the Internet. You can use Amazon S3 to store and retrieve any amount of data at any time, from anywhere on the web. You can accomplish these tasks using the simple and intuitive web interface of the AWS Management Console.</p>
+
+<p>The data we will use for this lab is about the commercial flights in the United States between Years 1998-2008 from FAA. The data is split into these 3 tables</p>
+<ul>
+<li>
+<strong>fact_flights</strong> – gives you information about every flights including its origin and destination airports, and scheduled and actual times</li>
+<li>
+<strong>dim_airports</strong> – gives you information about the airports, and has two columns origin_airport_code and destination_airport_code</li>
+<li>
+<strong>dim_carriers</strong> – gives you information about the Airlines, like carrier name</li>
+</ul>
+<p>You will load these tables with the data available in Amazon S3 as objects.</p>
+
+<p>On the Windows server desktop, you should see a power-shell script - <strong>run-sql</strong>. This PowerShell scripts internally runs two SQL scripts – create-table.sql and load-data.sql to create the tables and load the data from Amazon S3 into these tables. You will use the PowerShell scripts and the ODBC interface here to connect to Amazon Redshift, and run the SQL commands. You can also use a tool like – Aginity Workbench for Amazon Redshift or SQL Workbench/J to connect to Amazon Redshift.</p>
+<ol start="12">
+<li><p>Right-click on the <strong>run-sql</strong> icon, and select <strong>Run with PowerShell</strong>.</p></li>
+<li><p>If prompted, <strong>Do you want to change the execution policy?</strong></p></li>
+</ol><ul>
+<li>Enter <input readonly="" class="copyable-inline-input" size="1" type="text" value="A">
+</li>
+<li>Press <strong>Enter</strong>
+</li>
+</ul>
+<p>The script will start running in a new window and will print successful message once the tables are created and data has been loaded. This script may take a few minutes to load data into Redshift, since it needs to insert around 40 Million rows from Amazon S3 into the Redshift table. While the script is loading, you can start with the next steps to install and activate Tableau.</p>
+
+<h2 id="step6">Task 3: Install and Activate Tableau trial for use with the lab</h2>
+<ol start="14">
+<li><p>Double-click the <strong>Tableau installation package</strong> on the Windows Server desktop.</p></li>
+<li><p>At the <strong>Setup</strong> window, configure:</p></li>
+</ol><ul>
+<li>Select <i class="far fa-check-square"></i> <strong>I have read and accept the license agreement</strong>
+</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Install</span>
+</li>
+</ul><ol start="16">
+<li><p>Once the installation is complete, click <strong>Start trial now</strong>.</p></li>
+<li><p>Fill in the registration information, then:</p></li>
+</ol><ul>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Register</span>
+</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Continue</span>
+</li>
+</ul>
+<p>The main Tableau screen will be displayed.</p>
+
+<h2 id="step7">Task 4: Connect to Amazon Redshift from Tableau</h2>
+<ol start="18">
+<li><p>In the Tableau Desktop, in the left navigation pane, click <strong>Amazon Redshift</strong>.</p></li>
+<li><p>In the <strong>Server Connection</strong> window, configure:</p></li>
+</ol><ul>
+<li>
+<strong>Server:</strong> Paste the value of <strong>RedshiftEndpoint</strong> located to the left of these instructions</li>
+<li>
+<strong>Database:</strong> <input readonly="" class="copyable-inline-input" size="3" type="text" value="faa">
+</li>
+<li>
+<strong>Username:</strong> <input readonly="" class="copyable-inline-input" size="13" type="text" value="administrator">
+</li>
+<li>
+<strong>Password:</strong> <input readonly="" class="copyable-inline-input" size="11" type="text" value="Redshift123">
+</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">OK</span>
+</li>
+</ul>
+<p>Tableau will connect to Amazon Redshift.</p>
+<ol start="20">
+<li>Click the <strong>Schema</strong> <i class="fas fa-caret-down"></i> drop-down and select <strong>public</strong>.</li>
+</ol>
+<p>This will show you the list of tables, created and loaded earlier.</p>
+<ol start="21">
+<li>Double-click the <strong>fact_flights</strong> table.</li>
+</ol>
+<p>The <strong>fact_flights</strong> table will appear in the middle of your screen.</p>
+<ol start="22">
+<li>Double-click the <strong>dim_carriers</strong> table.</li>
+</ol>
+<p>Tableau will automatically make a relationship between the tables based on columns name and define the right joins.</p>
+<ol start="23">
+<li>Double-click the <strong>dim_airports</strong> table.</li>
+</ol>
+<p>Since, Tableau cannot find the relationship between the tables here, it will present you with an option to define the right join.</p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/carriers.png" alt="carriers"></p>
+<ol start="24">
+<li><p>For <strong>Data Source</strong>, select <em>Origin Airport Code</em>.</p></li>
+<li><p>For <strong>dim_airports</strong>, select <em>Airport Code</em></p></li>
+</ol>
+<p>This will define the relationship between the tables.</p>
+<ol start="26">
+<li>At the bottom of your screen. click the <strong>Sheet 1</strong> tab.</li>
+</ol>
+<p>This will navigate you to the Tableau workbook designer pane.</p>
+
+<h2 id="step8">Task 5: Create a Dashboard in Tableau</h2>
+
+<p>You are now ready to create your visualizations. In the next steps you will create three visualizations or sheets in Tableau, to analyze and understand the delays in departure of flights by Airports, Time and Carriers.</p>
+
+<h3>Delay by Airports</h3>
+<ol start="27">
+<li>In the <strong>Measures</strong> section:</li>
+</ol><ul>
+<li>Right-click <strong>Latitude</strong>
+</li>
+<li>Click <strong>Convert to Dimension</strong>
+</li>
+</ul><ol start="28">
+<li>In the <strong>Measures</strong> section:</li>
+</ol><ul>
+<li>Right-click <strong>Longitude</strong>
+</li>
+<li>Click <strong>Convert to Dimension</strong>
+</li>
+</ul><ol start="29">
+<li>In the <strong>Dimensions</strong> section:</li>
+</ol><ul>
+<li>Double-click <strong>Latitude</strong>
+</li>
+<li>Double-click <strong>Longitude</strong>
+</li>
+</ul>
+<p>The visualization pane of United states, with all the cities displayed as a blue circle will appear.</p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/lat-lon.png" alt="lat-lon"></p>
+<ol start="30">
+<li>Below <strong>dim_airports</strong>, drag <strong>State</strong> to the <strong>Filters</strong> pane.</li>
+</ol>
+<p>This will allow you to filter using the states column to display the 48 contiguous states.</p>
+<ol start="31">
+<li>In the <strong>Filter</strong> window that appears, select:</li>
+</ol><ul>
+<li><i class="far fa-check-square"></i></li>
+<li>
+<i class="far fa-check-square"></i> <strong>AK</strong>
+</li>
+<li>
+<i class="far fa-check-square"></i> <strong>AS</strong>
+</li>
+<li>
+<i class="far fa-check-square"></i> <strong>CQ</strong>
+</li>
+<li>
+<i class="far fa-check-square"></i> <strong>GU</strong>
+</li>
+<li>
+<i class="far fa-check-square"></i> <strong>HI</strong>
+</li>
+<li>
+<i class="far fa-check-square"></i> <strong>VI</strong>
+</li>
+</ul><ol start="32">
+<li><p>Select <i class="far fa-check-square"></i> <strong>Exclude</strong></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">OK</span></p></li>
+</ol>
+<p>To make the map easier to understand, you will next change the size of the circle as per the number of the flights.</p>
+<ol start="34">
+<li>In the <strong>Measures</strong> section, drag the <strong>Number of Records</strong> to the <strong>Size</strong> card.</li>
+</ol>
+<p>The <strong>Size</strong> card is in the <strong>Marks</strong> panel.</p>
+
+<p>This will change the map, with the size of the circle related to the number of flights.</p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/number-of-flights.png" alt="number-of-flights"></p>
+<ol start="35">
+<li>Click on the <strong>Size</strong> card, then drag the slider to increase the size of circles.</li>
+</ol>
+<p>Next you will color the circles based on the number of flights delayed from the airport.</p>
+<ol start="36">
+<li>In the <strong>Measures</strong> section:</li>
+</ol><ul>
+<li>Right click <strong>Estimated Departure Time</strong>
+</li>
+<li>Click <strong>Create</strong> <i class="fas fa-caret-right"></i> <strong>Calculated Field</strong>
+</li>
+</ul><ol start="37">
+<li>In the dialog box:</li>
+</ol><ul>
+<li>Name it: <input readonly="" class="copyable-inline-input" size="14" type="text" value="Delayed Flight">
+</li>
+<li>Remove all of the text below and replace it with:</li>
+</ul><pre class="highlight plaintext"><code>IF ([Estimated Departure Time] &gt; [Scheduled Departure Time]) THEN 1 ELSE 0 END
+</code><button class="button button--copy js-copy-button-0"><i class="fa fa-clipboard"></i></button></pre><ol start="38">
+<li>Click <strong>OK</strong>
+</li>
+</ol>
+<p>Next, you will create another calculated field from <strong>Delayed Flight</strong>.</p>
+<ol start="39">
+<li><p>Right-click <strong>Delayed Flight</strong>.</p></li>
+<li><p>Select <strong>Create</strong> <i class="fas fa-caret-right"></i> <strong>Calculated Field</strong>, then:</p></li>
+</ol><ul>
+<li>Name it: <input readonly="" class="copyable-inline-input" size="17" type="text" value="% Delayed Flights">
+</li>
+<li>Remove all of the text below and replace it with:</li>
+</ul><pre class="highlight plaintext"><code>([Delayed Flight] / [Number of Records]) * 100.00
+</code><button class="button button--copy js-copy-button-1"><i class="fa fa-clipboard"></i></button></pre><ol start="41">
+<li><p>Click <strong>OK</strong>.</p></li>
+<li><p>Right-click <strong>% Delayed Flight</strong>, then, click <strong>Default Properties</strong> <i class="fas fa-caret-right"></i> <strong>Aggregation</strong> <i class="fas fa-caret-right"></i> <strong>Average</strong>.</p></li>
+</ol>
+<p>This will ensure that by default, Tableau is not adding the percentages as SUM.</p>
+<ol start="43">
+<li>Drag the <strong>% Delayed Flights</strong> onto the <strong>Color</strong> card.</li>
+</ol>
+<p>This will color every circle as green by default.</p>
+<ol start="44">
+<li><p>Click on the <strong>Color card</strong>.</p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Edit Colors</span> then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Palette:</strong> <em>Red-Blue Diverging</em>
+</li>
+<li>Select <i class="far fa-check-square"></i> <strong>Reversed</strong>
+</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">Advanced &gt;&gt;</span>
+</li>
+<li>Select <i class="far fa-check-square"></i> <strong>Start</strong>
+</li>
+<li>For <strong>Start</strong>, enter <input readonly="" class="copyable-inline-input" size="2" type="text" value="10">
+</li>
+<li>Select <i class="far fa-check-square"></i> <strong>End</strong>
+</li>
+<li>For <strong>End</strong>, enter <input readonly="" class="copyable-inline-input" size="2" type="text" value="75">
+</li>
+<li>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">OK</span>
+</li>
+</ul>
+<p>This will display the following visualization. On the map, it becomes easy to understand which airports have the highest delays in relation to the number of flights.</p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/color-map.png" alt="color-map"></p>
+<ol start="46">
+<li>Rename <strong>Sheet 1</strong>, by:</li>
+</ol><ul>
+<li>Right-clicking <strong>Sheet 1</strong>
+</li>
+<li>Selecting <strong>Rename Sheet</strong>
+</li>
+<li>Entering <input readonly="" class="copyable-inline-input" size="17" type="text" value="Delay by Airports">
+</li>
+</ul>
+<h3>Delay over time</h3>
+<ol start="47">
+<li>Create a new sheet by, clicking the <strong>New Worksheet</strong> button at the bottom of your screen.</li>
+</ol>
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/new-sheet.png" alt="new-sheet"></p>
+<ol start="48">
+<li>In the <strong>Dimensions</strong> section, double-click <strong>Flight Date</strong>
+</li>
+</ol>
+<p>Tableau automatically recognizes this as a Date, and rolls it up to the Year, displayed as <strong>YEAR(Flight Date)</strong>.</p>
+<ol start="49">
+<li>Drag the <strong>% Delayed Flights</strong> measure to <strong>Rows</strong>.</li>
+</ol>
+<p>It should now display a trend of delay over the years 1995-2008. Ensure the roll-up function is AVG here—in the <strong>Rows</strong> column it should now say AVG(% Delayed Flights).</p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/delay-flight.png" alt="delay-flight"></p>
+<ol start="50">
+<li>Right click on the chart area, then select <strong>Trend lines</strong> <i class="fas fa-caret-right"></i> <strong>Show Trend lines</strong>.</li>
+</ol>
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/trend-lines.png" alt="trend-lines"></p>
+<ol start="51">
+<li><p>Right-click on the chart area again, then select <strong>Trend lines <i class="fas fa-caret-right"></i> Edit Trend lines</strong>.</p></li>
+<li><p>In the dialog box, de-select <i class="far fa-square"></i> <strong>Show Confidence Bands</strong>.</p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">OK</span></p></li>
+<li><p>On the <strong>Marks</strong> pane, click the <strong>Label</strong> card, then select <i class="far fa-check-square"></i> <strong>Show mark labels</strong>.</p></li>
+</ol>
+<p>This will display the value at the years.</p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/year-value.png" alt="year-value"></p>
+
+<p>Rename <strong>Sheet 2</strong> to <input readonly="" class="copyable-inline-input" size="15" type="text" value="Delay over time"></p>
+
+<h3>Distribution of flights by Carriers</h3>
+
+<p>Next you will create a sheet to find the delay of flights by carriers.</p>
+<ol start="55">
+<li><p>Click the <strong>New Worksheet</strong> button.</p></li>
+<li><p>Drag the <strong>Number of Records</strong> measure onto Columns.</p></li>
+<li><p>Drag the <strong>% Delayed Flights</strong> measure onto Rows.</p></li>
+</ol>
+<p>This will display a chart with a single point.</p>
+
+<p>Next, you’ll break this chart by Carriers.</p>
+<ol start="58">
+<li><p>Drag the <strong>Carrier Name</strong> dimension onto the <strong>Label</strong> card.</p></li>
+<li><p>Drag the <strong>Flight Distance</strong> measure onto the <strong>Size</strong> card.</p></li>
+<li><p>Click on the <strong>Size</strong> card, then drag the slider to the right to increase the size of the circles.</p></li>
+</ol>
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/circles.png" alt="circles"></p>
+<ol start="61">
+<li><p>Right-click the <strong>% Delayed Flights</strong> axis, then select <strong>Add Reference Line</strong>.</p></li>
+<li><p>On the dialog box that appears, click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">OK</span></p></li>
+<li><p>Right-click the <strong>Number of Records</strong> axis, then select <strong>Add Reference Line</strong>.</p></li>
+<li><p>On the dialog box that appears, click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap_square;">OK</span></p></li>
+</ol>
+<p>This will divide the visualization into four quadrants.</p>
+
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/quardrents.png" alt="quadrants"></p>
+<ol start="65">
+<li>Rename the sheet to <input readonly="" class="copyable-inline-input" size="17" type="text" value="Delay by Carriers">
+</li>
+</ol>
+<h3>Building a dashboard</h3>
+<ol start="66">
+<li>Create a new dashboard, by clicking on the <strong>New Dashboard</strong> button.</li>
+</ol>
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/new-dashboard.png" alt="new-dashboard"></p>
+<ol start="67">
+<li>Double-click the <strong>Delay by Airports</strong> sheet on the left.</li>
+</ol>
+<p>This sheet should occupy the entire dashboard by default.</p>
+<ol start="68">
+<li>Drag the <strong>Delay over Time</strong> sheet to the bottom of the <strong>Delay by Airports</strong> sheet, so that they both split the dashboard into half.</li>
+</ol>
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/split.png" alt="split"></p>
+<ol start="69">
+<li>Drag the <strong>Delay by Carriers</strong> sheet next to the <strong>Delay over Time</strong> sheet, so that they both fit under the <strong>Delay by Airports</strong> sheet.</li>
+</ol>
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/three.png" alt="three"></p>
+
+<p>Next you will finish your dashboard, and make it interactive.</p>
+<ol start="70">
+<li><p>Click (once) on <strong>Delay by airports</strong> sheet to select it.</p></li>
+<li><p>In the <strong>Delay by Airports</strong> display, click the <i class="fas fa-caret-down"></i> then select <strong>Use as Filter</strong>.</p></li>
+</ol>
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/filter.png" alt="filter"></p>
+<ol start="72">
+<li>Now click any airport on the screen to see <strong>Delay over Time</strong> and <strong>Delay by Carriers</strong> for that airport.</li>
+</ol>
+<p><img src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/delays.png" alt="delays"></p>
+
+<h2 id="step9">End Lab</h2>
+
+<p>Follow these steps to close the console, end your lab, and evaluate the experience.</p>
+<ol start="73">
+<li><p>Return to the AWS Management Console.</p></li>
+<li><p>On the navigation bar, click <strong>awsstudent@&lt;AccountNumber&gt;</strong>, and then click <strong>Sign Out</strong>.</p></li>
+<li><p>Click <span style="background-color:#D93025;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#D93025;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">End Lab</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-family:Google Sans;font-weight:bold;font-size:90%;color:#444;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">OK</span></p></li>
+<li><p>(Optional):</p></li>
+</ol><ul>
+<li>Select the applicable number of stars <i class="far fa-star"></i>
+</li>
+<li>Type a comment</li>
+<li>
+<p>Click <strong>Submit</strong></p>
+<ul>
+<li>1 star = Very dissatisfied</li>
+<li>2 stars = Dissatisfied</li>
+<li>3 stars = Neutral</li>
+<li>4 stars = Satisfied</li>
+<li>5 stars = Very satisfied</li>
+</ul>
+</li>
+</ul>
+<p>You may close the dialog if you don't want to provide feedback.</p>
+
+<h2 id="step10">Conclusion</h2>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You have now successfully:</p>
+<ul>
+<li>Connected to an Amazon EC2 instance running Windows Server</li>
+<li>Loaded data into Amazon Redshift from Amazon S3</li>
+<li>Use Tableau to connect to Amazon Redshift</li>
+<li>Use Tableau to turn data into visual insight</li>
+</ul>
+<h2 id="step11">Additional Resources</h2>
+<ul>
+<li><a href="https://aws.amazon.com/redshift/" target="_blank">Amazon Redshift</a></li>
+<li><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html" target="_blank">What Is Amazon EC2?</a></li>
+<li><p><a href="https://aws.amazon.com/documentation/s3/" target="_blank">Amazon Simple Storage Service Documentation</a></p></li>
+<li><p>For more information about AWS Training and Certification, see <a href="http://aws.amazon.com/training/" target="_blank"><em>http://aws.amazon.com/training/</em></a>.</p></li>
+<li><p>For more AWS Self-Paced Labs, see <a href="http://amazon.qwiklabs.com/" target="_blank"><em>http://amazon.qwiklabs.com</em></a>.</p></li>
+</ul>
+<p>For feedback, suggestions, or corrections, please email us at <a href="mailto:aws-course-feedback+spl@amazon.com" target="_blank"><em>aws-course-feedback@amazon.com</em></a>.</p>
+
+</div>
+<div class="js-lab-content-outline lab-content__outline is-stuck">
+<a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step1" class="">Overview</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step2" class="">Lab Prerequisites</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step3" class="">Start Lab</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step4" class="is-active">Task 1: Connect to Your Amazon EC2 instance</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step5" class="">Task 2: Load data in Amazon Redshift from Amazon S3</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step6" class="">Task 3: Install and Activate Tableau trial for use with the lab</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step7" class="">Task 4: Connect to Amazon Redshift from Tableau</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step8" class="">Task 5: Create a Dashboard in Tableau</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step9" class="">End Lab</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step10" class="">Conclusion</a><a href="https://www.qwiklabs.com/focuses/11804?parent=catalog#step11" class="">Additional Resources</a>
+</div>
+</div>
+
+</div>
+
+<div class="lab-content__markdown-wrapper">
+<div class="lab-content__markdown">
+<div class="lab-content__recommendation">
+<h4 class="headline-3">
+Ready for more?
+<p>Here's another lab we think you'll like.</p>
+<div class="card-content-wrapper js-content-card" data-id="200" data-level="Introductory" data-name="Introduction to Amazon Virtual Private Cloud (VPC)" data-type="Lab">
+<a class="card card--content elevation-0 content-lab" href="https://www.qwiklabs.com/focuses/279?parent=catalog"><div class="card__image">
+<div class="card__image__inner" style="background-image: url(https://cdn.qwiklabs.com/assets/fractal4-1d205807c54d90fe4382315dbfc0dd665ddb825bbc90f3ca5db7d7170fa0df1b.jpg)"></div>
+</div>
+<div class="card__body">
+<div class="overline card--content__type">
+Hands-On Lab
+</div>
+<h3 class="card--content__title">
+Introduction to Amazon Virtual Private Cloud (VPC)
+</h3>
+<p class="card--content__description body-1">
+This lab introduces you to Amazon Virtual Private Cloud (Amazon VPC). In this lab you will use the Amazon VPC wizard to create a VPC, attach an Internet Gateway, add a subnet and then define routing for the VPC so that traffic can flow between the subnet and the Internet gateway.
+</p>
+</div>
+<div class="card__footer">
+<div class="card__footer__left">
+<span>Introductory</span>
+</div>
+<div class="card__footer__right">
+<div class="rateit" data-rateit-readonly="true" data-rateit-value="4.131"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 66.096px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+</div>
+</div>
+</a></div>
+
+</h4>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="lab-introduction js-lab-introduction is-hidden">
+<div class="lab-introduction__inner">
+<h1 class="headline-1">Welcome to Your First Lab!</h1>
+<ql-icon-button class="js-skip-button">close</ql-icon-button>
+<div class="lab-introduction__video">
+<iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" id="lab-introduction" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/yF7EDXKTmoQ.html"></iframe>
+</div>
+<a class="js-skip-button button button--outline">Skip this video</a>
+</div>
+</div>
+
+
+
+</div>
+</main>
+<div class="modal fade" id="lab-details-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<div class="modal-body">
+<p class="l-mbm">
+In this hands-on lab, you'll learn how to load data from Amazon S3 into an Amazon Redshift cluster and use Tableau Desktop for creating visualizations from that dataset. Note: registration and providing your personal contact information to Tableau is required for access to the trial version of Tableau Desktop needed for this lab.  You may be contacted by Tableau as per their license agreements, which are provided during installation.
+</p>
+<p>
+This lab is included in the quest
+<a href="https://www.qwiklabs.com/quests/18">Advanced Operations Using Amazon Redshift</a>.
+If you complete this lab you'll receive credit for it when you enroll in this quest.
+</p>
+<p class="small-label l-mbs">
+<strong>
+Duration:
+</strong>
+5m setup
+·
+70m access
+·
+70m completion
+</p>
+<p class="small-label l-mbs">
+<strong>AWS Region:</strong>
+[us-west-2] <strong>US West (Oregon)</strong>
+</p>
+<p class="small-label l-mbs">
+<span><strong>Levels: </strong>fundamental</span>
+</p>
+<p class="small-label">
+<strong>
+Permalink:
+</strong>
+<a href="https://www.qwiklabs.com/catalog_lab/2699">https://www.qwiklabs.com/catalog_lab/2699</a>
+</p>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Got It
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/saved_resource(1).html"></iframe>
+</div>
+<div class="modal fade" id="lab-review-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<form class="simple_form js-lab-review-form" id="new_lab_review" action="https://www.qwiklabs.com/lab_reviews" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><div class="modal-body">
+<p class="label">
+How satisfied are you with this lab?*
+</p>
+<div class="rateit js-rateit" data-rateit-max="5" data-rateit-min="0" data-rateit-resetable="false" data-rateit-step="1" data-rateit-value="0"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 0px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+<div class="l-mtm">
+
+<div class="control-group hidden lab_review_user_id"><div class="controls"><input class="hidden" type="hidden" value="743665" name="lab_review[user_id]" id="lab_review_user_id"></div></div>
+<div class="control-group hidden lab_review_classroom_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[classroom_id]" id="lab_review_classroom_id"></div></div>
+<div class="control-group hidden lab_review_lab_id"><div class="controls"><input class="hidden" type="hidden" value="2699" name="lab_review[lab_id]" id="lab_review_lab_id"></div></div>
+<div class="control-group hidden lab_review_focus_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[focus_id]" id="lab_review_focus_id"></div></div>
+<div class="control-group hidden lab_review_rating"><div class="controls"><input class="hidden js-rating-input" type="hidden" name="lab_review[rating]" id="lab_review_rating"></div></div>
+<div class="control-group text optional lab_review_comment"><label class="text optional control-label" for="lab_review_comment">Comment</label><div class="controls"><textarea class="text optional" name="lab_review[comment]" id="lab_review_comment"></textarea></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Cancel
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<input type="submit" name="commit" value="Submit" disabled="disabled" class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary" id="submit" data-disabled="false" data-disable-with="Submit" data-upgraded=",MaterialButton,MaterialRipple"><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></input>
+</div>
+</form>
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/saved_resource(2).html"></iframe>
+</div>
+<div class="modal fade" id="lab-access-modal" style="display: none;">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<a class="lab-access-modal-close" data-analytics-action="dismissed_lab_payment_modal" data-dismiss="modal">
+<i class="material-icons">close</i>
+</a>
+<form class="js-lab-access-form" action="https://www.qwiklabs.com/lab_onetime_coupons/activate?parent=catalog" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓">
+<div class="modal-body">
+<div class="lab-access-modal">
+<input type="hidden" name="id" id="id" value="11804">
+<input type="hidden" name="user_id" id="user_id" value="743665">
+<input type="hidden" name="launch_with_credits" id="launch_with_credits" value="0" class="js-launch-with-credits-input">
+<input type="hidden" name="launch_with_subs" id="launch_with_subs" value="1" class="js-launch-with-subscription-input">
+<div class="lab-access-modal__method">
+<p>
+This lab costs
+8 Credits.
+</p>
+<p>
+You have a valid subscription package. Would you like to charge this lab to your subscription?
+
+</p>
+<a class="button js-launch-with-subscription-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_subscription_button">
+Use Subscription
+</a>
+</div>
+<div class="lab-access-modal__method">
+<p>
+Enter Lab Access Code:
+</p>
+<div class="lab-access-modal__code js-access-code">
+<input type="text" name="uuid_1" id="uuid_1" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_2" id="uuid_2" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_3" id="uuid_3" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_4" id="uuid_4" value="" maxlength="4" placeholder="1234">
+</div>
+<a class="button js-launch-with-access-code-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_access_code_button">
+Launch with Access Code
+</a>
+</div>
+</div>
+</div>
+</form>
+
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/saved_resource(3).html"></iframe>
+</div>
+
+<script>
+  $( function() {
+    ql.initMaterialInputs();
+    initChosen();
+    initSearch();
+    initTabs();
+    ql.list.init();
+    ql.favoriting.init();
+    ql.header.myAccount.init();
+    initTooltips();
+    ql.autocomplete.init();
+    ql.modals.init();
+    ql.toggleButtons.init();
+    ql.analytics.init();
+    initLabContent( );
+  ql.labOutline.links.init();
+  ql.labOutline.layout.init();
+  initLabReviewModal();
+  initLabAccessModal();
+  ql.labAssessment.init();
+  ql.labData.init();
+  initLabTranslations( {"are_you_sure":"All done? If you end this lab, you will lose all your work. You may not be able to restart the lab if there is a quota limit. Are you sure you want to end this lab?\n","in_progress":"*In Progress*","ending":"*Ending*","starting":"*Starting, please wait*","end_concurrent_labs":"Sorry, you can only run one lab at a time. To start this lab, please confirm that you want all of your existing labs to end.\n","copied":"Copied","no_resource":"Error retrieving resource.","no_support":"No Support","mac_press":"Press ⌘-C to copy","thanks_review":"Thanks for reviewing this lab.","windows_press":"Press Ctrl-C to copy","days":"days"} );
+  ql.labRun.init();
+  ql.initHeader();
+  ql.navigation.init();
+  ql.navPanel.init();
+  ql.navigation.init();
+  
+  });
+</script>
+<style>
+  .mdl-layout__container {
+    position: static
+  }
+</style>
+
+
+<iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/saved_resource(4).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 1; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px; width: 112px;width: 112px;" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/saved_resource(5).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px; visibility: hidden;" src="./Using Tableau Desktop with Amazon Redshift _ Qwiklabs_files/saved_resource(6).html"></iframe></div></body></html>

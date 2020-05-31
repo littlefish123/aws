@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://run.qwiklabs.com/focuses/11794?parent=catalog -->
+<html lang="en" class="mdl-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta content="[]" name="active-experiments">
+<meta content="{&quot;userId&quot;:743665}" name="help-api-product-data">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="Geue18sr0+UiCV0EuPcUK6U23BQNdUJbrbq/1Vmt74s8eHCWUnieWXnyQn5LzuyK4a+roJncE/uJrz3ANSqOFw==">
+<title>Working with Amazon Redshift | Qwiklabs</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+<meta content="The lab demonstrates how to use Amazon RedShift to create a cluster, load data, run queries and monitor performance. Note: Students will download a free SQL client as part of this lab." name="description">
+<meta content="Qwiklabs" name="author">
+<meta content="1rRsY0INj8RvwB5EF5pwdxt2A2P9aDgAlsICaJ0d5w0" name="google-site-verification">
+<meta content="Working with Amazon Redshift | Qwiklabs" property="og:title">
+<meta content="website" property="og:type">
+<meta content="/favicon-144.png" property="og:image">
+<meta content="Qwiklabs" property="og:site_name">
+<meta content="The lab demonstrates how to use Amazon RedShift to create a cluster, load data, run queries and monitor performance. Note: Students will download a free SQL client as part of this lab." property="og:description">
+<meta content="/qwiklabs_logo_900x887.png" property="og:logo" size="900x887">
+<meta content="/qwiklabs_logo_994x187.png" property="og:logo" size="994x187">
+<meta content="#3681E4" property="msapplication-TileColor">
+<meta content="/favicon-144.png" property="msapplication-TileImage">
+<link href="https://run.qwiklabs.com/favicon-32.png" rel="shortcut icon">
+<link color="#3681E4" href="https://run.qwiklabs.com/favicon-svg.svg" rel="mask-icon">
+<link href="https://run.qwiklabs.com/favicon-180.png" rel="apple-touch-icon-precomposed">
+<link rel="stylesheet" media="screen" href="./Working with Amazon Redshift _ Qwiklabs_files/css">
+
+
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+<![endif]-->
+<!--[endif]>  <![endif]-->
+<script type="text/javascript" async="" src="./Working with Amazon Redshift _ Qwiklabs_files/js"></script><script type="text/javascript" async="" src="./Working with Amazon Redshift _ Qwiklabs_files/analytics.js.download"></script><script type="text/javascript" async="" src="./Working with Amazon Redshift _ Qwiklabs_files/analytics.min.js.download"></script><script type="text/javascript" id="www-widgetapi-script" src="./Working with Amazon Redshift _ Qwiklabs_files/www-widgetapi.js.download" async=""></script><script>
+//<![CDATA[
+window.gon={};gon.current_user={"firstname":"Selina","lastname":"Ng","fullname":"Selina Ng","company":"Capgemini","email":"n.selina@ymail.com","origin":"google-run, direct","subscriptions":1,"id":"1c340942b6e43ad7908d196db2da6728","qlCreatedAt":"2018-01-21 06:49:32 UTC","optIn":false};gon.segment="j4Im8pqIko0Lxq4wVVZWMPMM0EroHUvb";gon.deployment="run";
+//]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.qwiklabs.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.qwiklabs.com/catalog?keywords={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script id="ze-snippet" src="./Working with Amazon Redshift _ Qwiklabs_files/snippet.js.download"></script>
+
+
+
+<link rel="stylesheet" media="all" href="./Working with Amazon Redshift _ Qwiklabs_files/application-162ab3877b3a481e7c5b49bf8be464f433c15a21bd2c4d9c870d4197793c85fe.css">
+<script>
+  EVENT_SOURCE_BASE_URL = "https://run.qwiklabs.com/nchan-sub?id=";
+</script>
+<script src="./Working with Amazon Redshift _ Qwiklabs_files/webcomponents-loader.js.download"></script><script src="./Working with Amazon Redshift _ Qwiklabs_files/webcomponents-hi.js.download"></script>
+<script src="./Working with Amazon Redshift _ Qwiklabs_files/hallofmirrors-d8d44acdb268858ff41d169894134efe6aef227326bbd58449c52a66aa3bf8d0.js.download"></script><script async="" src="./Working with Amazon Redshift _ Qwiklabs_files/lazy.min.js.download"></script>
+<script src="./Working with Amazon Redshift _ Qwiklabs_files/iframe_api"></script>
+<script src="./Working with Amazon Redshift _ Qwiklabs_files/vendor-45d462772c30000424907184f70c7157e95fb6227698d1671c5051818a6f60d8.js.download"></script>
+<script src="./Working with Amazon Redshift _ Qwiklabs_files/application-b8f24b563e7f6b4a399091631f253a394e419e33d6c909ef27e223b366f52750.js.download"></script>
+<script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script></head>
+<body class="focuses focuses-show lab-show l-full no-nav">
+<div class="header-container light-theme">
+<div class="header">
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect header__button header__button--nav header__nav-panel-button js-nav-toggle" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">menu</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header__title">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--nav" href="https://run.qwiklabs.com/quests/5" data-upgraded=",MaterialButton,MaterialRipple"><ql-icon>arrow_back</ql-icon><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
+<h1 class="headline-5">
+Working with Amazon Redshift
+</h1>
+</div>
+<div class="header__actions">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--action header__button--search js-header-search-bar-button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">search</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="toggle-lab-control-panel" href="javascript:;" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">description</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" data-mdl-for="toggle-lab-control-panel" data-upgraded=",MaterialTooltip">
+Toggle Lab Panel
+</div>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-favorite-button favorite-button" id="CatalogItem-11794-favorite-button" data-type="CatalogItem" data-id="11794" data-name="Working with Amazon Redshift" href="https://run.qwiklabs.com/favorite.json?item_id=11794&amp;item_type=CatalogItem" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">favorite_border</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" for="CatalogItem-11794-favorite-button" data-upgraded=",MaterialTooltip">
+Add to favorites
+</div>
+
+
+<ql-help context="lab" productdata="{&quot;userId&quot;:743665}" data-analytics-action="opened_help" data-analytics-label="lab"></ql-help>
+<a class="header-my-account-button mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-my-account-button" data-upgraded=",MaterialButton,MaterialRipple">
+<img class="avatar " alt="avatar image" src="./Working with Amazon Redshift _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header-my-account-menu js-my-account-menu">
+<div class="card elevation-2 no-padding">
+<div class="my-account-menu__top">
+<img class="avatar " alt="avatar image" src="./Working with Amazon Redshift _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<div class="my-account-menu__info">
+<h4 class="subtitle-headline-1">
+Selina Ng
+</h4>
+<p class="body-2 text--gray">
+<span>n.selina@ymail.com</span>
+</p>
+<a class="button" href="https://run.qwiklabs.com/my_account/profile">My Account</a>
+</div>
+</div>
+<div class="my-account-menu__bottom">
+<a class="text--green subtitle-headline-2" href="https://run.qwiklabs.com/my_account/credits">Monthly Subscription
+</a><a data-analytics-action="clicked_sign_out" class="button button--hairline" rel="nofollow" data-method="delete" href="https://run.qwiklabs.com/users/sign_out">Sign Out</a>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="header__search-bar js-header-search-bar">
+<form id="catalog-search-mobile" onsubmit="ql.catalogSearchFilter(); return false;" action="https://run.qwiklabs.com/searches/elasticsearch" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="Geue18sr0+UiCV0EuPcUK6U23BQNdUJbrbq/1Vmt74s8eHCWUnieWXnyQn5LzuyK4a+roJncE/uJrz3ANSqOFw==">
+<input type="text" name="keywords" id="keywords" placeholder="Search" maxlength="255" aria-label="catalog search bar">
+</form>
+
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">close</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+</div>
+
+<nav class="nav-bar">
+<a class="nav-bar__item js-navigation-button" href="https://run.qwiklabs.com/"><ql-icon class="nav-bar__item__icon">
+home
+</ql-icon>
+<span class="nav-bar__item__label">
+Home
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button  active" aria-current="page" href="https://run.qwiklabs.com/catalog"><ql-icon class="nav-bar__item__icon">
+school
+</ql-icon>
+<span class="nav-bar__item__label">
+Catalog
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button" href="https://run.qwiklabs.com/my_learning"><ql-icon class="nav-bar__item__icon">
+event_note
+</ql-icon>
+<span class="nav-bar__item__label">
+My Learning
+</span>
+</a>
+</nav>
+
+<nav class="nav-panel js-nav-panel">
+<div class="nav-panel__logo">
+<div class="logo logo--blue"></div>
+</div>
+<a title="Home" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/"><ql-icon class="nav-panel__item__icon">
+home
+</ql-icon>
+<div class="nav-panel__item__label">
+Home
+</div>
+</a>
+<a title="Catalog" tabindex="-1" class="nav-panel__item js-navigation-button active" aria-current="page" href="https://run.qwiklabs.com/catalog"><ql-icon class="nav-panel__item__icon">
+school
+</ql-icon>
+<div class="nav-panel__item__label">
+Catalog
+</div>
+</a>
+<a title="My Learning" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_learning"><ql-icon class="nav-panel__item__icon">
+event_note
+</ql-icon>
+<div class="nav-panel__item__label">
+My Learning
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a title="Profile" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/profile"><ql-icon class="nav-panel__item__icon">
+account_circle
+</ql-icon>
+<div class="nav-panel__item__label">
+Profile
+</div>
+</a>
+<a title="Credits &amp; Subscriptions" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/credits"><ql-icon class="nav-panel__item__icon">
+money
+</ql-icon>
+<div class="nav-panel__item__label">
+Credits &amp; Subscriptions
+</div>
+</a>
+<a title="Security" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/security"><ql-icon class="nav-panel__item__icon">
+security
+</ql-icon>
+<div class="nav-panel__item__label">
+Security
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a class="nav-panel__item" tabindex="-1" href="https://run.qwiklabs.com/focuses/11794?parent=catalog#"><ql-help>
+<div class="nav-panel__help-item">
+<ql-icon class="nav-panel__item__icon">help</ql-icon>
+<div class="nav-panel__item__label">Help</div>
+</div>
+</ql-help>
+</a><div class="nav-panel__small-links">
+<a tabindex="-1" href="https://run.qwiklabs.com/privacy_policy">Privacy</a>
+<a tabindex="-1" href="https://run.qwiklabs.com/terms_of_service">Terms</a>
+</div>
+</nav>
+<div class="nav-panel__overlay js-nav-toggle"></div>
+
+<main class="js-main">
+<span class="hidden" id="flash-sibling-before"></span>
+
+<div class="l-main-wrapper" id="main-wrapper">
+
+
+
+
+
+
+
+<div class="js-lab-state" data-analytics-payload="{&quot;label&quot;:&quot;Working with Amazon Redshift&quot;,&quot;lab_name&quot;:&quot;Working with Amazon Redshift&quot;,&quot;classroom_name&quot;:null,&quot;deployment&quot;:&quot;run&quot;}" data-focus-id="11794" data-lab-billing-limit="0.0" data-lab-duration="6900" data-parent="catalog" data-payment-required=""></div>
+<ql-lab-control-panel class="js-lab-control-panel l-lab-control-panel" connectiondetails="[]" connectionfiles="[]" labcontrolbutton="{&quot;disabled&quot;:false,&quot;pending&quot;:false,&quot;running&quot;:false}" labtimer="{&quot;ticking&quot;:false,&quot;secondsRemaining&quot;:6900}" studentresources="[]"></ql-lab-control-panel>
+<div class="l-lab-main-body">
+<div class="js-lab-content lab-content">
+<div class="alert alert--fake js-alert">
+<p class="alert__message js-alert-message"></p>
+<a class="alert__close js-alert-close">
+<i class="fa fa-times"></i>
+</a>
+<iframe class="l-ie-iframe-fix" src="./Working with Amazon Redshift _ Qwiklabs_files/saved_resource.html"></iframe>
+</div>
+<div class="lab-content__markdown-wrapper">
+<div class="lab-preamble">
+<h1 class="lab-preamble__title">
+Working with Amazon Redshift
+</h1>
+<div class="lab-preamble__details subtitle-headline-1">
+<span>1 hour 55 minutes</span>
+<span>10 Credits</span>
+<div class="lab__rating">
+<a href="https://run.qwiklabs.com/focuses/11794/reviews?parent=catalog"><div class="rateit" data-rateit-readonly="true" data-rateit-value="4.377"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 70.032px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+
+</a><a data-target="#lab-review-modal" data-toggle="modal">
+Rate Lab
+</a>
+</div>
+</div>
+</div>
+
+<div class="lab-content__inner-wrapper">
+<div class="js-markdown-instructions lab-content__markdown markdown-lab-instructions no-select" id="markdown-lab-instructions">
+<p><img src="./Working with Amazon Redshift _ Qwiklabs_files/aws-logo.png" alt=""></p>
+
+
+
+<p><strong>SPL-17 Version 4.2.7</strong></p>
+
+<p>© 2020 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.</p>
+
+<p>Errors or corrections? Email us at <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a>.</p>
+
+<p>Other questions? Contact us at <a href="https://aws.amazon.com/contact-us/aws-training/" target="_blank">https://aws.amazon.com/contact-us/aws-training/</a></p>
+
+<h2 id="step1">Overview</h2>
+
+<p>This lab provides an overview of Amazon Redshift. In this lab, you will launch and work with an Amazon Redshift cluster to analyze USA Domestic flight data.</p>
+
+<p>Amazon Redshift is a <strong>fast, fully managed, petabyte-scale data warehouse service</strong> that makes it simple and cost-effective to efficiently analyze all your data using your existing business intelligence tools. It is optimized for datasets ranging <strong>from a few hundred gigabytes to a petabyte</strong> or more and costs less than $1,000 per terabyte per year, a tenth the cost of most traditional data warehousing solutions.</p>
+
+<p>Amazon Redshift delivers fast query and I/O performance for virtually any size dataset by using <strong>columnar storage technology</strong> and <strong>parallelizing and distributing queries across multiple nodes</strong>. We’ve made Amazon Redshift easy to use by automating most of the common administrative tasks associated with provisioning, configuring, monitoring, backing up, and securing a data warehouse.</p>
+
+<p><strong>Topics Covered</strong></p>
+
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Launch an Amazon Redshift cluster</li>
+<li>Connect to Amazon Redshift by using SQL client software</li>
+<li>Load data from Amazon S3 into Amazon Redshift</li>
+<li>Query data from Amazon Redshift</li>
+<li>Monitor Amazon Redshift performance</li>
+</ul>
+<p><strong>Lab Pre-requisites</strong></p>
+
+<p>To successfully complete this lab, you should be familiar with basic concepts of databases and SQL.</p>
+
+<h2 id="step2">Start Lab</h2>
+<ol start="1">
+<li>At the top of your screen, launch your lab by clicking <span style="background-color:#34A853;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#34A853;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Start Lab</span>
+</li>
+</ol>
+<p>This will start the process of provisioning your lab resources. An estimated amount of time to provision your lab resources will be displayed. You must wait for your resources to be provisioned before continuing.</p>
+
+<p><i class="fas fa-info-circle"></i> If you are prompted for a token, use the one distributed to you (or credits you have purchased). </p>
+<ol start="2">
+<li>Open your lab by clicking <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span>
+</li>
+</ol>
+<p>This will automatically log you into the AWS Management Console. </p>
+
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Please do not change the Region unless instructed</strong>.</p>
+
+
+
+<h3>Common login errors</h3>
+
+<p><strong>Error : Federated login credentials</strong></p>
+
+<p><img src="./Working with Amazon Redshift _ Qwiklabs_files/federatedloginerror.png" alt=""></p>
+
+<p>If you see this message:</p>
+<ul>
+<li>Close the browser tab to return to your initial lab window</li>
+<li>Wait a few seconds</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+<p>You should now be able to access the AWS Management Console.</p>
+
+
+
+<p><strong>Error: You must first log out</strong></p>
+
+<p><img src="./Working with Amazon Redshift _ Qwiklabs_files/logouterror.png" alt=""></p>
+
+<p>If you see the message, <strong>You must first log out before logging into a different AWS account:</strong> </p>
+<ul>
+<li>Click <strong>click here</strong>
+</li>
+<li>Close your browser tab to return to your initial Qwiklabs window</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+
+
+<h2 id="step3">Task 1: Launch your Amazon Redshift Cluster</h2>
+
+<p>You will now launch an Amazon Redshift cluster, which starts your very own database for use in this lab.</p>
+<ol start="3">
+<li>Wait until the status of <strong>Provisioning lab resources</strong> gets complete.</li>
+</ol>
+<p>This indicates that required resources are available for your lab.</p>
+<ol start="4">
+<li><p>In the <strong>AWS Management Console</strong>, on the <strong>Services</strong> menu, click <strong>Amazon Redshift</strong>.</p></li>
+<li><p>If you see a page that says <strong>Welcome to the New Amazon Redshift Console</strong>, click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Get started</span></p></li>
+<li><p>At the top-right of the screen, if you see <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Try the new UI</span>, click it.</p></li>
+<li><p>In the left navigation pane, hover over <strong>CLUSTERS</strong>, then click <strong>Clusters</strong>.</p></li>
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create cluster</span> then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Cluster identifier:</strong> <input readonly="" class="copyable-inline-input" size="3" type="text" value="lab">
+</li>
+<li>
+<strong>Node type:</strong> <em>dc2.large</em>
+</li>
+<li>
+<strong>Nodes:</strong> <input readonly="" class="copyable-inline-input" size="1" type="text" value="2">
+</li>
+</ul>
+<p>This lab uses the <strong>dc2.large</strong> node size, which has 160GB of storage per node. You will be using a single node for this lab, but the type and number of nodes in a Redshift cluster can be changed at any time to provide extra storage and faster data processing.</p>
+<ol start="9">
+<li>Scroll down to the <strong>Database configurations</strong> section, then configure:</li>
+</ol><ul>
+<li>
+<strong>Database name:</strong> <input readonly="" class="copyable-inline-input" size="3" type="text" value="lab">
+</li>
+<li>
+<strong>Master user name:</strong> <input readonly="" class="copyable-inline-input" size="6" type="text" value="master">
+</li>
+<li>
+<strong>Master user password:</strong> <input readonly="" class="copyable-inline-input" size="11" type="text" value="Redshift123">
+</li>
+</ul><ol start="10">
+<li>Expand <i class="fas fa-caret-right"></i> <strong>Cluster permissions</strong>, then configure:</li>
+</ol><ul>
+<li>
+<strong>Available IAM roles:</strong> <em>Redshift-Role</em>
+</li>
+<li>Click <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Add IAM role</span>
+</li>
+</ul><ol start="11">
+<li><p>Next to <strong>Additional configurations</strong>, click the slider to not use the defaults.</p></li>
+<li><p>Expand <i class="fas fa-caret-right"></i> <strong>Network and security</strong>, configure:</p></li>
+</ol><ul>
+<li>
+<strong>Virtual private cloud (VPC)</strong> <em>Lab VPC</em>
+</li>
+<li>
+<strong>VPC security groups:</strong>
+<ul>
+<li>Select <strong>Redshift Security Group</strong>
+</li>
+<li>Remove <strong>Default</strong>
+</li>
+</ul>
+</li>
+</ul>
+<p><i class="fas fa-comment"></i> If you cannot see the <em>Redshift Security Group</em>, confirm that you have changed the VPC.</p>
+
+<p>These settings define the network and security configurations for the Redshift cluster.</p>
+<ol start="13">
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create cluster</span></p></li>
+<li><p>Click the <strong>lab</strong> link.</p></li>
+<li><p>Click the <strong>Properties</strong> tab.</p></li>
+</ol>
+<p>This shows the property details for your cluster.</p>
+
+<p>Your cluster can take up to 5 minutes to launch.</p>
+
+<p>While you are waiting, please continue reading the next section.</p>
+
+
+
+<h2 id="step4">Amazon Redshift Primer</h2>
+
+<p>While you are waiting for your cluster to launch, here is some information that highlights the most important features of Amazon Redshift.</p>
+
+<h3>Nodes &amp; Clusters</h3>
+
+<p>An Amazon Redshift data warehouse is a collection of computing resources called <strong>nodes</strong>. This collection of nodes is called a <strong>cluster</strong>. When you provision a cluster, you specify the type and the number of nodes that will make up the cluster. The node type determines the storage size, memory, CPU, and price of each node in the cluster:</p>
+
+<table>
+<tbody><tr>
+<th>Family</th>
+<th>Node Type</th>
+<th>Storage type</th>
+<th>Storage per node</th>
+<th>Maximum Storage</th>
+</tr>
+
+<tr>
+<td>Dense Compute</td>
+<td>dc2.large</td>
+<td>SSD</td>
+<td>0.16TB NVMe SSD</td>
+<td>32 nodes = 5.12TB</td>
+</tr>
+<tr>
+<td>Dense Compute</td>
+<td>dc2.8xlarge</td>
+<td>SSD</td>
+<td>2.56TB NVMe SSD</td>
+<td>128 nodes = 326TB</td>
+</tr>
+<tr>
+<td>Dense Storage</td>
+<td>ds2.xlarge</td>
+<td>Magnetic</td>
+<td>2TB</td>
+<td>32 nodes = 64TB</td>
+</tr>
+<tr>
+<td>Dense Storage</td>
+<td>ds2.8xlarge</td>
+<td>Magnetic</td>
+<td>16TB</td>
+<td>128 nodes = 2PB</td>
+</tr>
+</tbody></table>
+
+<h3>Scalability</h3>
+
+<p>If your storage and performance needs change after you initially provision your cluster, you can always <strong>scale</strong> the cluster in or out by <strong>adding or removing nodes</strong>, scale the cluster up or down by <strong>specifying a different node type</strong>, or you can do both. Resizing the cluster in either way involves minimal downtime. Resizing replaces the old cluster at the end of the resize operation. When you submit a resize request, the source cluster remains in read-only mode until the resize operation is complete.</p>
+
+<h3>Parallel Processing</h3>
+
+<p>Amazon Redshift <strong>distributes workload</strong> to each node in a cluster and <strong>processes work in parallel</strong>, allowing processing speed to scale in addition to storage.</p>
+
+<h3>Columnar Storage</h3>
+
+<p>Columnar storage for database tables is an important factor in optimizing analytic query performance because it drastically <strong>reduces the overall disk I/O requirements</strong> and <strong>reduces the amount of data you need to load from disk</strong>.</p>
+
+<p>Rather than storing data values together for a whole row, Amazon Redshift stores data by <strong>column</strong>. This means that operations on a column require less disk I/O.</p>
+
+<h3>Compression</h3>
+
+<p>Compression is a column-level operation that <strong>reduces the size of data when it is stored</strong>. Compression conserves storage space and reduces the size of data that is read from storage, which reduces the amount of disk I/O and therefore <strong>improves query performance.</strong></p>
+
+<h3>Snapshots as Backups</h3>
+
+<p>Snapshots are <strong>point-in-time backups</strong> of a cluster. You can create snapshots automatically or manually. Amazon Redshift stores these snapshots internally in <strong>Amazon S3</strong> using an encrypted Secure Sockets Layer (SSL) connection. If you need to restore a cluster, Amazon Redshift creates a new cluster and imports data from the snapshot that you specify.</p>
+
+<h3>Integrates With Existing Business Intelligence Tools</h3>
+
+<p>Amazon Redshift uses <strong>industry-standard SQL</strong> and is accessed using standard JDBC and ODBC drivers. Your existing Business Intelligence tools can easily integrate with Amazon Redshift.</p>
+
+<h3>Data Loading Process</h3>
+
+<p>The typical process for loading data into Amazon Redshift is:</p>
+<ul>
+<li>Data is <strong>exported</strong> from a source system (for example, a company database).</li>
+<li>The data is placed into an <strong>Amazon S3 bucket</strong>, preferably in a compressed format to save storage space.</li>
+<li>The data is <strong>copied into Amazon Redshift tables</strong> via the COPY command.</li>
+<li>The <strong>SQL client</strong> is used to <strong>query</strong> Amazon Redshift.</li>
+<li>The <strong>results</strong> of the query will be returned to the SQL client.</li>
+</ul>
+<p><img src="./Working with Amazon Redshift _ Qwiklabs_files/loading-process.png" alt="loading-process.png"></p>
+
+<p>In this lab, you will be loading <strong>USA domestic airline data</strong> for analysis. The data has been obtained from the United States Department of Transportation’s Bureau of Transportation Statistics.</p>
+
+<p>The transport data has already been placed into an Amazon S3 bucket in a compressed format. This lab will lead you through the steps of <strong>loading the data</strong> into an Amazon Redshift cluster and then <strong>running queries to analyze the data</strong>.</p>
+
+
+
+<h2 id="step5">Task 2: Connect to Amazon Redshift</h2>
+
+<p>In this task, you will use a web-based PostgreSQL client ("pgweb") to connect to Redshift.</p>
+<ol start="16">
+<li>Copy the <strong>pgweb</strong> IP address shown to the left of these instructions.</li>
+</ol>
+<p>This is the IP address of a web server that is running the pgweb software.</p>
+<ol start="17">
+<li>Open a new tab in your web browser, paste the IP address and hit Enter.</li>
+</ol>
+<p>You will be presented with the <em>pgweb</em> login screen.</p>
+<ol start="18">
+<li>Configure the following settings:</li>
+</ol><ul>
+<li>
+<strong>Username:</strong> <input readonly="" class="copyable-inline-input" size="6" type="text" value="master">
+</li>
+<li>
+<strong>Password:</strong> <input readonly="" class="copyable-inline-input" size="11" type="text" value="Redshift123">
+</li>
+<li>
+<strong>Database:</strong> <input readonly="" class="copyable-inline-input" size="3" type="text" value="lab">
+</li>
+<li>
+<strong>Port:</strong> <input readonly="" class="copyable-inline-input" size="4" type="text" value="5439"> (which is different to the default value)</li>
+</ul>
+<p><i class="fas fa-comment"></i> If you cannot change the <strong>Port</strong> value, set <strong>SSL</strong> to <strong>disable</strong> and try again.</p>
+
+<p>The <strong>Host</strong> value can be obtained from the Redshift management console, but you will need to wait until the cluster is available for use.</p>
+<ol start="19">
+<li><p>Return to the browser tab with the Redshift management console (but do not close the <em>pgweb</em> tab).</p></li>
+<li><p>Confirm that the Cluster Status displays <strong><em>available</em></strong>.</p></li>
+</ol>
+<p><i class="fas fa-comment"></i> If the status is not <em>available</em>, wait for your cluster to be available. You may have to refresh your screen.</p>
+
+<p>Once your cluster is available, Redshift will now display the <em>Endpoint</em>, which you will use with pgweb.</p>
+<ol start="21">
+<li>To the right of the screen, Copy the <strong>Endpoint</strong> to your clipboard.</li>
+</ol>
+<p>The endpoint will look similar to: <em>lab.czvdbh5dsk9y.us-west-2.redshift.amazonaws.com:5439/lab</em></p>
+<ol start="22">
+<li><p>Return to the <em>pgweb</em> browser tab.</p></li>
+<li><p>Paste the Endpoint into the <strong>Host</strong> field.</p></li>
+<li><p>Remove the <input readonly="" class="copyable-inline-input" size="9" type="text" value=":5439/lab"> ending so that the <strong>Host</strong> value ends with: <em>.com</em></p></li>
+<li><p>Click <strong>Connect</strong>.</p></li>
+</ol>
+<p>You are now ready to interact with Amazon Redshift.</p>
+
+<p><span style="color:red;"><i class="fas fa-exclamation-triangle"></i></span> If you are not able to connect, check your configuration. Your configuration should look similar to the screenshot above.</p>
+
+
+
+<h2 id="step6">Task 3: Load data</h2>
+
+<p>In this task, you will create a Table in Amazon Redshift. Tables are used to store a particular set of information.</p>
+
+<p>The first table will be used to store flight information.</p>
+<ol start="26">
+<li>Copy and paste the following text into pgweb (above the <em>Run Query</em> button):</li>
+</ol><pre class="highlight sql"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">flights</span> <span class="p">(</span>
+  <span class="k">year</span>           <span class="n">smallint</span><span class="p">,</span>
+  <span class="k">month</span>          <span class="n">smallint</span><span class="p">,</span>
+  <span class="k">day</span>            <span class="n">smallint</span><span class="p">,</span>
+  <span class="n">carrier</span>        <span class="n">varchar</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span> <span class="n">DISTKEY</span><span class="p">,</span>
+  <span class="n">origin</span>         <span class="n">char</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+  <span class="n">dest</span>           <span class="n">char</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+  <span class="n">aircraft_code</span>  <span class="n">char</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+  <span class="n">miles</span>          <span class="n">int</span><span class="p">,</span>
+  <span class="n">departures</span>     <span class="n">int</span><span class="p">,</span>
+  <span class="n">minutes</span>        <span class="n">int</span><span class="p">,</span>
+  <span class="n">seats</span>          <span class="n">int</span><span class="p">,</span>
+  <span class="n">passengers</span>     <span class="n">int</span><span class="p">,</span>
+  <span class="n">freight_pounds</span> <span class="n">int</span>
+<span class="p">);</span>
+</code><button class="button button--copy js-copy-button-0"><i class="fa fa-clipboard"></i></button></pre><ol start="27">
+<li>Click <strong>Run Query</strong>.</li>
+</ol>
+<p>A new <strong>flights</strong> table will appear on the left of the screen, under the <em>Tables</em> heading.</p>
+
+<p>You can now <strong>load data</strong> into the table. The data has already been placed into an Amazon S3 bucket and can be loaded into Amazon Redshift by using the COPY command.</p>
+<ol start="28">
+<li><p>Delete the query text.</p></li>
+<li><p>Paste the following text into pgweb <strong>but do not run it yet</strong>:</p></li>
+</ol><pre class="highlight sql"><code><span class="k">COPY</span> <span class="n">flights</span>
+<span class="k">FROM</span> <span class="s1">'s3://us-west-2-aws-training/awsu-spl/spl-17/4.2.7.prod/data/flights-usa'</span>
+<span class="n">IAM_ROLE</span> <span class="s1">'INSERT-YOUR-REDSHIFT-ROLE'</span>
+<span class="n">GZIP</span>
+<span class="k">DELIMITER</span> <span class="s1">','</span>
+<span class="n">REMOVEQUOTES</span>
+<span class="n">REGION</span> <span class="s1">'us-west-2'</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-1"><i class="fa fa-clipboard"></i></button></pre><ol start="30">
+<li>Replace <strong>INSERT-YOUR-REDSHIFT-ROLE</strong> in the third line with the <strong>RedshiftRole</strong> value shown to the left of these instructions. The result should look similar to this:</li>
+</ol>
+<p><em>IAM_ROLE 'arn:aws:iam::123456789012:role/Redshift-Role'</em></p>
+<ol start="31">
+<li>Click <strong>Run Query</strong>.</li>
+</ol>
+<p>It will take <strong>approximately 3 minutes</strong> to load the data. Please continue reading while the data is loading.</p>
+
+<p>The <strong>COPY</strong> command is used to load data into Amazon Redshift:</p>
+<ul>
+<li>
+<strong>FROM:</strong> Indicates where the data is located</li>
+<li>
+<strong>IAM_ROLE:</strong> Provides the permissions to access the data being loaded</li>
+<li>
+<strong>GZIP:</strong> Indicates that the data has been compressed (zipped) – Amazon Redshift will automatically decompress the data when it is loaded</li>
+<li>
+<strong>DELIMITER:</strong> Indicates that data items are separated by a comma</li>
+<li>
+<strong>REMOVEQUOTES:</strong> Tells Amazon Redshift to remove quotation marks that are included in the data</li>
+<li>
+<strong>REGION:</strong> Indicates which AWS region contains the S3 bucket</li>
+</ul>
+<p>The data being loaded consists of:</p>
+<ul>
+<li>23 data files in CSV format (one for each year from 1990 - 2012)</li>
+<li>Comprising <strong>6 GB of data</strong>
+</li>
+<li>Compressed with GZIP down to only 700 MB of storage</li>
+</ul>
+<p>The data files are being loaded <strong>in parallel</strong> from Amazon S3. This is the most efficient way to load data into Amazon Redshift since the load process is distributed across multiple <em>slices</em> across all available nodes.</p>
+
+<p>Each slice of a compute node is allocated a portion of the node's memory and disk space, where it processes a portion of the workload assigned to the node. The leader node manages distributing data to the slices and apportions the workload for any queries or other database operations to the slices. The slices then work in parallel to complete the operation.</p>
+
+<p>When you create a table, you can optionally specify one column as the <strong>distribution key</strong>. When the table is loaded with data, the rows are distributed to the node slices according to the distribution key. Choosing a good distribution key enables Amazon Redshift to use parallel processing to load data and execute queries efficiently.</p>
+
+<p>The CREATE TABLE command you ran earlier designated the carrier (airline) field as the <strong>Distribution Key</strong> (DISTKEY). This means the data will be split between the all available slices and nodes, but all data related to a particular carrier will always reside on the same slice. This improves processing speed when performing operations on the carrier field, such as GROUP BY and JOIN operations.</p>
+
+
+
+<h2 id="step7">Task 4: Run Queries</h2>
+
+<p>Once the COPY command has finished running, you can examine the contents of the table.</p>
+<ol start="32">
+<li>Run this query to count the number of rows in the table:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">flights</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-2"><i class="fa fa-clipboard"></i></button></pre>
+<p>You should see a value of <strong>96,825,753</strong> records. This means that almost 100 million rows have been loaded into the table.</p>
+
+<p>You can also use standard SQL commands to query the data.</p>
+<ol start="33">
+<li>Run this query to view 10 random rows of data:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">flights</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">random</span><span class="p">()</span>
+<span class="k">LIMIT</span> <span class="mi">10</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-3"><i class="fa fa-clipboard"></i></button></pre>
+<p>This query actually assigns a random number to all 96 million rows, sorts them by the random number and then returns the first 10 results.</p>
+
+<p>Here is an explanation of the columns returned:</p>
+
+<table>
+<tbody><tr>
+<th>Column</th>
+<th>Sample</th>
+<th>Description</th>
+</tr>
+
+<tr>
+<td>year</td>
+<td>1997</td>
+<td>Year</td>
+</tr>
+<tr>
+<td>month</td>
+<td>3</td>
+<td>Month</td>
+</tr>
+<tr>
+<td>day</td>
+<td>25</td>
+<td>Day</td>
+</tr>
+<tr>
+<td>carrier</td>
+<td>United Air Lines Inc.</td>
+<td>Airline</td>
+</tr>
+<tr>
+<td>origin</td>
+<td>SEA</td>
+<td>Airport where the flight started</td>
+</tr>
+<tr>
+<td>dest</td>
+<td>SFO</td>
+<td>Airport where the flight landed</td>
+</tr>
+<tr>
+<td>aircraft_code</td>
+<td>616</td>
+<td>A code indicating the aircraft (You will decode this in a later step)</td>
+</tr>
+<tr>
+<td>miles</td>
+<td>678</td>
+<td>Distance between cities</td>
+</tr>
+<tr>
+<td>departures</td>
+<td>11</td>
+<td>The number of departures on that day</td>
+</tr>
+<tr>
+<td>minutes</td>
+<td>1109</td>
+<td>Total minutes of flight time for all flights on that day</td>
+</tr>
+<tr>
+<td>seats</td>
+<td>1188</td>
+<td>Total number of available seats for all flights on that day</td>
+</tr>
+<tr>
+<td>passengers</td>
+<td>848</td>
+<td>Total number of passengers who flew for all flights on that day</td>
+</tr>
+<tr>
+<td>freight_pounds</td>
+<td>3335</td>
+<td>Total pounds of freight transported for all flights on that day</td>
+</tr>
+</tbody></table>
+
+<p>This data is highly detailed and very <em>low level</em>, which is similar to that found in a typical corporate data warehouse.</p>
+
+<p>Now that you have the data loaded, the next step is to perform <strong>queries</strong> to find underlying patterns in the data and to help drive business decisions.</p>
+
+<p>Here is a query that finds the top 10 carriers by number of departures:</p>
+<pre class="highlight sql"><code><span class="k">SELECT</span>
+  <span class="n">carrier</span><span class="p">,</span>
+  <span class="k">SUM</span> <span class="p">(</span><span class="n">departures</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">flights</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">carrier</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">2</span> <span class="k">DESC</span>
+<span class="k">LIMIT</span> <span class="mi">10</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-4"><i class="fa fa-clipboard"></i></button></pre><ol start="34">
+<li>Run the above query.</li>
+</ol>
+<p><strong>Question:</strong> Who are the top 3 carriers by number of departures?</p>
+<ol start="35">
+<li>Change <strong>departures</strong> to <input readonly="" class="copyable-inline-input" size="10" type="text" value="passengers"> and run it again to view top carriers by <strong>passengers carried</strong>.</li>
+</ol>
+<p><strong>Question:</strong> Who are the top 3 carriers by passengers carried?</p>
+<ol start="36">
+<li>Change <strong>departures</strong> to <input readonly="" class="copyable-inline-input" size="5" type="text" value="miles"> and run it again to view top carriers by <strong>miles flown</strong>.</li>
+</ol>
+<p><strong>Question:</strong> Who are the top 3 carriers by miles flown?</p>
+<ol start="37">
+<li>Change <strong>departures</strong> to <input readonly="" class="copyable-inline-input" size="18" type="text" value="passengers * miles"> and run it again to view top carriers by <strong>passenger-miles</strong>.</li>
+</ol>
+<p><strong>Question:</strong> Who are the top 3 carriers by passenger-miles?</p>
+<ol start="38">
+<li>Change <strong>departures</strong> to <input readonly="" class="copyable-inline-input" size="14" type="text" value="freight_pounds"> and run it again to view top carriers by <strong>freight transported</strong>.</li>
+</ol>
+<p><strong>Question:</strong> Who are the top 3 carriers of freight? (You should be able to guess this one!)</p>
+
+<p>Each of these queries is performing calculations against almost 100 million rows of data, but they each take only a few seconds to run. Adding additional compute nodes will make the queries run even faster.</p>
+
+
+
+<h2 id="step8">Task 5: Joining tables</h2>
+
+<p>In this task, you will load more data and then run queries that join information between tables.</p>
+<ol start="39">
+<li>Run this query to create a new table for aircraft information:</li>
+</ol><pre class="highlight sql"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">aircraft</span> <span class="p">(</span>
+  <span class="n">aircraft_code</span> <span class="n">CHAR</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="n">SORTKEY</span><span class="p">,</span>
+  <span class="n">aircraft</span>      <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="p">);</span>
+</code><button class="button button--copy js-copy-button-5"><i class="fa fa-clipboard"></i></button></pre>
+<p>A new <em>aircraft</em> table will appear in the left-side table list.</p>
+<ol start="40">
+<li>Paste the following text into pgweb <strong>but do not run it yet</strong>:</li>
+</ol><pre class="highlight sql"><code><span class="k">COPY</span> <span class="n">aircraft</span>
+<span class="k">FROM</span> <span class="s1">'s3://us-west-2-aws-training/awsu-spl/spl-17/4.2.7.prod/data/lookup_aircraft.csv'</span>
+<span class="n">IAM_ROLE</span> <span class="s1">'INSERT-YOUR-REDSHIFT-ROLE'</span>
+<span class="n">IGNOREHEADER</span> <span class="mi">1</span>
+<span class="k">DELIMITER</span> <span class="s1">','</span>
+<span class="n">REMOVEQUOTES</span>
+<span class="n">TRUNCATECOLUMNS</span>
+<span class="n">REGION</span> <span class="s1">'us-west-2'</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-6"><i class="fa fa-clipboard"></i></button></pre><ol start="41">
+<li><p>Replace <strong>INSERT-YOUR-REDSHIFT-ROLE</strong> with the <strong>RedshiftRole</strong> value shown to the left of these instructions.</p></li>
+<li><p>Run the query.</p></li>
+</ol>
+<p>This will load 383 different types of aircraft flown by the carriers.</p>
+<ol start="43">
+<li>Run this query to view 10 random rows of aircraft data:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span> <span class="o">*</span>
+<span class="k">FROM</span> <span class="n">aircraft</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">random</span><span class="p">()</span>
+<span class="k">LIMIT</span> <span class="mi">10</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-7"><i class="fa fa-clipboard"></i></button></pre>
+<p>The table contains an <strong>aircraft code</strong> and an <strong>aircraft description</strong>. The two tables can be joined together to provide useful information:</p>
+<ol start="44">
+<li>Run this query to view the most-flown types of aircraft:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span>
+  <span class="n">aircraft</span><span class="p">,</span>
+  <span class="k">SUM</span><span class="p">(</span><span class="n">departures</span><span class="p">)</span> <span class="k">AS</span> <span class="n">trips</span>
+<span class="k">FROM</span> <span class="n">flights</span>
+<span class="k">JOIN</span> <span class="n">aircraft</span> <span class="k">using</span> <span class="p">(</span><span class="n">aircraft_code</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">aircraft</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">trips</span> <span class="k">DESC</span>
+<span class="k">LIMIT</span> <span class="mi">10</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-8"><i class="fa fa-clipboard"></i></button></pre>
+<p>The results show the friendly name of aircraft that are flown on most trips. The <strong>JOIN</strong> command links the flight table with the aircraft table.</p>
+
+
+
+<h2 id="step9">Task 6: Analyze Performance</h2>
+
+<p>You can use the EXPLAIN command to view how Amazon Redshift processes queries.</p>
+<ol start="45">
+<li>Run this query:</li>
+</ol>
+<p><i class="fas fa-comment"></i>  Use the <strong>Run Query</strong> button (<em>not</em> the <strong>Explain Query</strong> button).</p>
+<pre class="highlight sql"><code><span class="k">SET</span> <span class="n">enable_result_cache_for_session</span> <span class="k">TO</span> <span class="k">OFF</span><span class="p">;</span>
+
+<span class="k">EXPLAIN</span>
+<span class="k">SELECT</span>
+  <span class="n">aircraft</span><span class="p">,</span>
+  <span class="k">SUM</span><span class="p">(</span><span class="n">departures</span><span class="p">)</span> <span class="k">AS</span> <span class="n">trips</span>
+<span class="k">FROM</span> <span class="n">flights</span>
+<span class="k">JOIN</span> <span class="n">aircraft</span> <span class="k">using</span> <span class="p">(</span><span class="n">aircraft_code</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">aircraft</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">trips</span> <span class="k">DESC</span>
+<span class="k">LIMIT</span> <span class="mi">10</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-9"><i class="fa fa-clipboard"></i></button></pre>
+<p>It is the same the previous query, but is prefixed by the EXPLAIN command.</p>
+
+<p>This command will return an <strong>Explain Plan</strong> similar to this:</p>
+<pre class="highlight sql"><code><span class="n">XN</span> <span class="k">Limit</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">1000156830987</span><span class="p">.</span><span class="mi">88</span><span class="p">..</span><span class="mi">1000156830987</span><span class="p">.</span><span class="mi">90</span> <span class="k">rows</span><span class="o">=</span><span class="mi">10</span> <span class="n">width</span><span class="o">=</span><span class="mi">29</span><span class="p">)</span>
+ <span class="o">-&gt;</span> <span class="n">XN</span> <span class="n">Merge</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">1000156830987</span><span class="p">.</span><span class="mi">88</span><span class="p">..</span><span class="mi">1000156830988</span><span class="p">.</span><span class="mi">84</span> <span class="k">rows</span><span class="o">=</span><span class="mi">383</span> <span class="n">width</span><span class="o">=</span><span class="mi">29</span><span class="p">)</span>
+  <span class="n">Merge</span> <span class="k">Key</span><span class="p">:</span> <span class="k">sum</span><span class="p">(</span><span class="n">flights</span><span class="p">.</span><span class="n">departures</span><span class="p">)</span>
+  <span class="o">-&gt;</span> <span class="n">XN</span> <span class="n">Network</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">1000156830987</span><span class="p">.</span><span class="mi">88</span><span class="p">..</span><span class="mi">1000156830988</span><span class="p">.</span><span class="mi">84</span> <span class="k">rows</span><span class="o">=</span><span class="mi">383</span> <span class="n">width</span><span class="o">=</span><span class="mi">29</span><span class="p">)</span>
+    <span class="n">Send</span> <span class="k">to</span> <span class="n">leader</span>
+    <span class="o">-&gt;</span> <span class="n">XN</span> <span class="n">Sort</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">1000156830987</span><span class="p">.</span><span class="mi">88</span><span class="p">..</span><span class="mi">1000156830988</span><span class="p">.</span><span class="mi">84</span> <span class="k">rows</span><span class="o">=</span><span class="mi">383</span> <span class="n">width</span><span class="o">=</span><span class="mi">29</span><span class="p">)</span>
+     <span class="n">Sort</span> <span class="k">Key</span><span class="p">:</span> <span class="k">sum</span><span class="p">(</span><span class="n">flights</span><span class="p">.</span><span class="n">departures</span><span class="p">)</span>
+     <span class="o">-&gt;</span> <span class="n">XN</span> <span class="n">HashAggregate</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">156830970</span><span class="p">.</span><span class="mi">49</span><span class="p">..</span><span class="mi">156830971</span><span class="p">.</span><span class="mi">44</span> <span class="k">rows</span><span class="o">=</span><span class="mi">383</span> <span class="n">width</span><span class="o">=</span><span class="mi">29</span><span class="p">)</span>
+       <span class="o">-&gt;</span> <span class="n">XN</span> <span class="n">Hash</span> <span class="k">Join</span> <span class="n">DS_BCAST_INNER</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">4</span><span class="p">.</span><span class="mi">79</span><span class="p">..</span><span class="mi">156346841</span><span class="p">.</span><span class="mi">73</span> <span class="k">rows</span><span class="o">=</span><span class="mi">96825752</span> <span class="n">width</span><span class="o">=</span><span class="mi">29</span><span class="p">)</span>
+        <span class="n">Hash</span> <span class="n">Cond</span><span class="p">:</span> <span class="p">(</span><span class="nv">"outer"</span><span class="p">.</span><span class="n">aircraft_code</span> <span class="o">=</span> <span class="nv">"inner"</span><span class="p">.</span><span class="n">aircraft_code</span><span class="p">)</span>
+        <span class="o">-&gt;</span> <span class="n">XN</span> <span class="n">Seq</span> <span class="n">Scan</span> <span class="k">on</span> <span class="n">flights</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="p">..</span><span class="mi">968257</span><span class="p">.</span><span class="mi">52</span> <span class="k">rows</span><span class="o">=</span><span class="mi">96825752</span> <span class="n">width</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+        <span class="o">-&gt;</span> <span class="n">XN</span> <span class="n">Hash</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">3</span><span class="p">.</span><span class="mi">83</span><span class="p">..</span><span class="mi">3</span><span class="p">.</span><span class="mi">83</span> <span class="k">rows</span><span class="o">=</span><span class="mi">383</span> <span class="n">width</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+          <span class="o">-&gt;</span> <span class="n">XN</span> <span class="n">Seq</span> <span class="n">Scan</span> <span class="k">on</span> <span class="n">aircraft</span> <span class="p">(</span><span class="n">cost</span><span class="o">=</span><span class="mi">0</span><span class="p">.</span><span class="mi">00</span><span class="p">..</span><span class="mi">3</span><span class="p">.</span><span class="mi">83</span> <span class="k">rows</span><span class="o">=</span><span class="mi">383</span> <span class="n">width</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+</code><button class="button button--copy js-copy-button-10"><i class="fa fa-clipboard"></i></button></pre>
+<p>The plan shows the <strong>logical steps</strong> that Amazon Redshift will perform when running the query. Reading the Explain Plan from the bottom up, it displays a breakdown of logical operations needed to perform the query as well as an indication of their <strong>relative processing cost</strong> and the amount of data that needs to be processed. By analyzing the plan, you can often identify opportunities to improve query performance.</p>
+
+<p>In traditional databases, a <strong>sequential scan</strong> (Seq Scan) across many rows of data can be very inefficient and is normally improved by adding an index. However, Amazon Redshift <strong>does not use indexes</strong>, yet is able to perform extremely fast queries across huge quantities of data – in this case, scanning over 96 million rows in a few seconds.</p>
+
+<h3>Data Compression &amp; Column-based Storage</h3>
+
+<p>Data in Amazon Redshift is stored as <strong>columns</strong>. This is faster than storing data as <strong>rows</strong>, since most queries only require a few columns of data. It also allows Amazon Redshift to compress data within each column.</p>
+
+<p>When data was loaded with the COPY command earlier in this lab, Amazon Redshift performed a compression analysis to identify the optimal way to store each column. You can view the results of the analysis by using the ANALYZE COMPRESSION command.</p>
+<ol start="46">
+<li>Run this command to analyze the data stored in the <em>flights</em> table:</li>
+</ol><pre class="highlight sql"><code><span class="k">ANALYZE</span> <span class="n">COMPRESSION</span> <span class="n">flights</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-11"><i class="fa fa-clipboard"></i></button></pre>
+<p>Amazon Redshift will display recommended compression settings for the data.</p>
+
+<p>Compression is a column-level operation that reduces the size of data when it is stored. Possible compression methods are:</p>
+<ul>
+<li>
+<strong>Byte dictionary:</strong> A method of reference up to 256 possible values in a single byte. Ideal for fields with few, but frequently repeated, values such as Country names.</li>
+<li>
+<strong>Delta:</strong> Compresses data by recording the difference between values that follow each other in the column.</li>
+<li>
+<strong>LZO:</strong> Provides a very high compression ratio with good performance. Works well for columns that store very long character strings, especially free form text, such as product descriptions, user comments, or JSON strings.</li>
+<li>
+<strong>Mostly:</strong> Compresses the majority of the values in the column to a smaller standard storage size.</li>
+<li>
+<strong>Run-length:</strong> Replaces a value that is repeated consecutively with a token that consists of the value and a count of the number of consecutive occurrences (the length of the run). Best suited to a table in which data values are often repeated consecutively, for example, when the table is sorted by those values.</li>
+<li>
+<strong>Text:</strong> Compresses VARCHAR columns in which the same words recur often.</li>
+<li>
+<strong>Zstandard:</strong> Provides a high compression ratio with very good performance across diverse data sets. Works especially well with CHAR and VARCHAR columns that store a wide range of long and short strings, such as product descriptions, user comments, logs, and JSON strings.</li>
+<li>
+<strong>Raw:</strong> Uncompressed</li>
+</ul>
+<p>When data is compressed, information can be retrieved from disk faster. Compression conserves storage space, <strong>reduces the amount of disk I/O</strong> and therefore <strong>improves query performance</strong>.</p>
+
+<h3>Creating tables from other tables</h3>
+
+<p>It is often necessarily to manipulate data to make the information more meaningful. Amazon Redshift has the ability to <strong>create new tables based upon data from existing tables</strong>.</p>
+
+<p>For example, if you want to closely analyze data on <strong>passengers who fly to Las Vegas</strong>, you can create a table with only those flights that flew to Las Vegas.</p>
+
+<p>You will now load a table that converts 3-digit airport codes (eg ‘LAS’) into easily-readable city names (‘Las Vegas’).</p>
+<ol start="47">
+<li>
+<strong>Run</strong> this query create a new table for airport information:</li>
+</ol><pre class="highlight sql"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">airports</span> <span class="p">(</span>
+  <span class="n">airport_code</span> <span class="n">CHAR</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="n">SORTKEY</span><span class="p">,</span>
+  <span class="n">airport</span>      <span class="n">varchar</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="p">);</span>
+</code><button class="button button--copy js-copy-button-12"><i class="fa fa-clipboard"></i></button></pre>
+<p>A new <em>airports</em> table will appear in the left-side list of tables.</p>
+<ol start="48">
+<li>Run this command, replacing <strong>INSERT-YOUR-REDSHIFT-ROLE</strong> with the <strong>RedshiftRole</strong> value shown to the left of these instructions:</li>
+</ol><pre class="highlight sql"><code><span class="k">COPY</span> <span class="n">airports</span>
+<span class="k">FROM</span> <span class="s1">'s3://us-west-2-aws-training/awsu-spl/spl-17/4.2.7.prod/data/lookup_airports.csv'</span>
+<span class="n">IAM_ROLE</span> <span class="s1">'INSERT-YOUR-REDSHIFT-ROLE'</span>
+<span class="n">IGNOREHEADER</span> <span class="mi">1</span>
+<span class="k">DELIMITER</span> <span class="s1">','</span>
+<span class="n">REMOVEQUOTES</span>
+<span class="n">TRUNCATECOLUMNS</span>
+<span class="n">REGION</span> <span class="s1">'us-west-2'</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-13"><i class="fa fa-clipboard"></i></button></pre>
+<p>This loads a list of 6,265 airports.</p>
+
+<p>Next, combine the <em>flights</em> and <em>airports</em> information into a new table that only including flights that went to Las Vegas.</p>
+<ol start="49">
+<li>Run this query create a new table about Las Vegas flights:</li>
+</ol><pre class="highlight sql"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">vegas_flights</span>
+  <span class="n">DISTKEY</span> <span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+  <span class="n">SORTKEY</span> <span class="p">(</span><span class="n">origin</span><span class="p">)</span>
+<span class="k">AS</span>
+<span class="k">SELECT</span>
+  <span class="n">flights</span><span class="p">.</span><span class="o">*</span><span class="p">,</span>
+  <span class="n">airport</span>
+<span class="k">FROM</span> <span class="n">flights</span>
+<span class="k">JOIN</span> <span class="n">airports</span> <span class="k">ON</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">airport_code</span>
+<span class="k">WHERE</span> <span class="n">dest</span> <span class="o">=</span> <span class="s1">'LAS'</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-14"><i class="fa fa-clipboard"></i></button></pre>
+<p>A new <em>vegas_flights</em> table will appear in the left-side list of tables.</p>
+
+<p>Queries can now be run against this new <em>vegas_flights</em> table.</p>
+<ol start="50">
+<li>Run this query to discover from where the most popular flights to Las Vegas originate:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span>
+  <span class="n">airport</span><span class="p">,</span>
+  <span class="n">to_char</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">passengers</span><span class="p">),</span> <span class="s1">'999,999,999'</span><span class="p">)</span> <span class="k">as</span> <span class="n">passengers</span>
+<span class="k">FROM</span> <span class="n">vegas_flights</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">airport</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="k">SUM</span><span class="p">(</span><span class="n">passengers</span><span class="p">)</span> <span class="k">desc</span>
+<span class="k">LIMIT</span> <span class="mi">10</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-15"><i class="fa fa-clipboard"></i></button></pre>
+<p><strong>Question:</strong> Which is the airport that sends the most passengers to Las Vegas?</p>
+
+<p>This query also demonstrates use of the PostgreSQL <input readonly="" class="copyable-inline-input" size="7" type="text" value="to_char"> function that formats output text in a human-friendly format.</p>
+
+<p>Creating new tables in this manner can improve performance since queries only need to scan a subset of data.</p>
+
+<h3>Examining Disk Space and Data Distribution</h3>
+
+<p>Data in Amazon Redshift is distributed across <strong>multiple nodes and hard disks</strong>.</p>
+<ol start="51">
+<li>
+<strong>Run</strong> this query to see much disk capacity has been used:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span>
+  <span class="k">owner</span> <span class="k">AS</span> <span class="n">node</span><span class="p">,</span>
+  <span class="n">diskno</span><span class="p">,</span>
+  <span class="n">used</span><span class="p">,</span>
+  <span class="n">capacity</span><span class="p">,</span>
+  <span class="n">used</span><span class="o">/</span><span class="n">capacity</span><span class="p">::</span><span class="n">numeric</span> <span class="o">*</span> <span class="mi">100</span> <span class="k">as</span> <span class="n">percent_used</span>
+<span class="k">FROM</span> <span class="n">stv_partitions</span>
+<span class="k">WHERE</span> <span class="k">host</span> <span class="o">=</span> <span class="n">node</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-16"><i class="fa fa-clipboard"></i></button></pre>
+<p>The output shows:</p>
+<ul>
+<li>
+<strong>Node:</strong> The node within the cluster.</li>
+<li>
+<strong>Diskno:</strong> The disk number. Nodes can have multiple drives, allowing data to be accessed in parallel.</li>
+<li>
+<strong>Used:</strong> Megabytes of disk space used.</li>
+<li>
+<strong>Capacity:</strong> Available disk space. There is 160GB per node, but extra is provided for database replication.</li>
+<li>
+<strong>Percent_used:</strong> Percent of disk space used. The flight data is occupying less than 0.5% of available disk space.</li>
+</ul>
+<p>Disk usage is also available on a per-table basis.</p>
+<ol start="52">
+<li>Run this query to see how much space is taken by each of the data tables:</li>
+</ol><pre class="highlight sql"><code><span class="k">SELECT</span>
+  <span class="n">name</span><span class="p">,</span>
+  <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">stv_blocklist</span>
+<span class="k">JOIN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="k">DISTINCT</span> <span class="n">name</span><span class="p">,</span> <span class="n">id</span> <span class="k">as</span> <span class="n">tbl</span> <span class="k">from</span> <span class="n">stv_tbl_perm</span><span class="p">)</span> <span class="k">USING</span> <span class="p">(</span><span class="n">tbl</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">name</span><span class="p">;</span>
+</code><button class="button button--copy js-copy-button-17"><i class="fa fa-clipboard"></i></button></pre>
+<p>The amounts shown are in MB. The flights table consumes 1548 MB (1.5 GB). Each Amazon Redshift dc2.large node can hold 160GB, which is <strong>one hundred times</strong> the amount of data currently in use.</p>
+
+
+
+<h2 id="step10">Task 7: Explore the Amazon Redshift Console</h2>
+
+<p>All your interactions with Amazon Redshift so far have been via SQL.</p>
+
+<p>Amazon Redshift also has a <strong>management console</strong> that provides insight into operation of the system.</p>
+<ol start="53">
+<li><p>Return to your web browser tab showing the Amazon Redshift console.</p></li>
+<li><p>In the left navigation pane, click <strong>CLUSTERS</strong>.</p></li>
+<li><p>Click <strong>lab</strong>.</p></li>
+<li><p>Click the <strong>Query monitoring</strong> tab.</p></li>
+</ol>
+<p>Amazon Redshift maintains information about every data load and query performed.</p>
+<ol start="57">
+<li><p>Click the refresh button next to <strong>Query monitoring</strong>.</p></li>
+<li><p>In the <strong>Queries</strong> window, click on one of the queries.</p></li>
+</ol>
+<p>The information above will be updated to include information such as:</p>
+<ul>
+<li>The duration of the query.</li>
+<li>The user that ran the query.</li>
+<li>The SQL used for the query.</li>
+</ul><ol start="59">
+<li><p>Scroll down to the <strong>Queries and loads</strong> section.</p></li>
+<li><p>In the drop-down box, select <strong>Loads</strong>.</p></li>
+<li><p>Click one of the query job numbers for <strong>COPY flights FROM…</strong> in the SQL column.</p></li>
+</ol>
+<p>Information will be displayed showing:</p>
+<ul>
+<li>The SQL used to run the query.</li>
+<li>The Total runtime.</li>
+<li>The Rows returned.</li>
+<li>The Total data scanned.</li>
+</ul><ol start="62">
+<li>Click <strong>Query plan</strong> tab.</li>
+</ol>
+<p>This shows a chart that displays system performance during the load. This information can be used to diagnose problems and to monitor system performance during regular load processes.</p>
+<ol start="63">
+<li><p>In the left navigation pane, click <strong>CLUSTERS</strong>.</p></li>
+<li><p>Click <strong>lab</strong>.</p></li>
+<li><p>Click <strong>Cluster performance</strong> to view information about the cluster.</p></li>
+<li><p>Click the <strong>Maintenance and monitoring</strong> tab.</p></li>
+</ol>
+<p>You will see a section for <strong>CloudWatch Alarms</strong>, which can send a notification based upon cluster metrics, such as available disk space or the health of the cluster.</p>
+
+<h3>Snapshots</h3>
+
+<p>Snapshots are <strong>point-in-time backups</strong> of a cluster. You can create snapshots automatically or manually. Amazon Redshift stores these snapshots in Amazon S3. If you need to restore a cluster, Amazon Redshift creates a new cluster and imports data from the snapshot that you specify.</p>
+
+<p>Amazon Redshift periodically takes <strong>automated snapshots</strong> and deletes the automated snapshot at the end of a retention period that you specify.</p>
+
+<p>You can also take a <strong>manual snapshot</strong> whenever you wish. Manual snapshots are retained even after you delete your cluster. Manual snapshots accrue storage charges, so it is important that you manually delete them if you no longer need them.</p>
+
+<p>To reduce backup times and Amazon S3 storage requirements, Amazon Redshift uses <strong>incremental backups</strong>. When a snapshot is taken, the backup records the cluster changes since the last snapshot.</p>
+
+<p>Amazon Redshift provides <strong>free storage for snapshots</strong> that is equal to the storage capacity of your cluster until you delete the cluster. You can use this free storage for automated or manual snapshots. After the free backup storage limit is reached, you are charged for any additional storage at the normal rate.</p>
+<ol start="67">
+<li>Click the <strong>Backup</strong> tab.</li>
+</ol>
+<p>You should see that a an automatic snapshot was created.</p>
+
+<h3>Exporting Data</h3>
+
+<p>Data can also be <strong>exported to Amazon S3</strong> with the UNLOAD command. The data can then be used in other systems, such as Amazon DynamoDB, your own applications or loaded into another Amazon Redshift cluster. The command accepts an SQL query and can export the data into fixed-width or delimited text files and can also be compressed with GZIP and encrypted.</p>
+
+<h3>Delete the Cluster</h3>
+
+<p>This lab is now complete. The final step is to shut down the cluster.</p>
+<ol start="68">
+<li><p>In the <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Actions</span>  menu, click <strong>Delete</strong>.</p></li>
+<li><p>De-select <strong>Create final snapshot</strong>.</p></li>
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Delete</span></p></li>
+</ol>
+<p>Your cluster will now be deleted.</p>
+
+
+
+<h2 id="step11">Conclusion</h2>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You have now successfully learned how to:</p>
+<ul>
+<li>Launch an Amazon Redshift cluster.</li>
+<li>Connect to Amazon Redshift by using SQL client software.</li>
+<li>Load data from Amazon S3 into Amazon Redshift.</li>
+<li>Query data from Amazon Redshift.</li>
+<li>Monitor Amazon Redshift performance.</li>
+</ul>
+<h2 id="step12">End Lab</h2>
+
+<p>Follow these steps to close the console, end your lab, and evaluate the experience.</p>
+<ol start="71">
+<li><p>Return to the AWS Management Console.</p></li>
+<li><p>On the navigation bar, click <strong>awsstudent@&lt;AccountNumber&gt;</strong>, and then click <strong>Sign Out</strong>.</p></li>
+<li><p>Click <span style="background-color:#D93025;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#D93025;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">End Lab</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-family:Google Sans;font-weight:bold;font-size:90%;color:#444;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">OK</span></p></li>
+<li><p>(Optional):</p></li>
+</ol><ul>
+<li>Select the applicable number of stars <i class="far fa-star"></i>
+</li>
+<li>Type a comment</li>
+<li>
+<p>Click <strong>Submit</strong></p>
+<ul>
+<li>1 star = Very dissatisfied</li>
+<li>2 stars = Dissatisfied</li>
+<li>3 stars = Neutral</li>
+<li>4 stars = Satisfied</li>
+<li>5 stars = Very satisfied</li>
+</ul>
+</li>
+</ul>
+<p>You may close the dialog if you don't want to provide feedback.</p>
+<ul>
+<li>For more information about AWS Training and Certification, see <a href="http://aws.amazon.com/training/" target="_blank"><em>http://aws.amazon.com/training/</em></a>.</li>
+<li>For more AWS Self-Paced Labs, see <a href="http://amazon.qwiklabs.com/" target="_blank"><em>http://amazon.qwiklabs.com</em></a>.</li>
+</ul>
+<p>For feedback, suggestions, or corrections, please email us at <a href="mailto:aws-course-feedback+spl@amazon.com" target="_blank"><em>aws-course-feedback@amazon.com</em></a>.</p>
+
+</div>
+<div class="js-lab-content-outline lab-content__outline">
+<a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step1">Overview</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step2">Start Lab</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step3">Task 1: Launch your Amazon Redshift Cluster</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step4">Amazon Redshift Primer</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step5">Task 2: Connect to Amazon Redshift</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step6">Task 3: Load data</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step7">Task 4: Run Queries</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step8">Task 5: Joining tables</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step9">Task 6: Analyze Performance</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step10">Task 7: Explore the Amazon Redshift Console</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step11">Conclusion</a><a href="https://run.qwiklabs.com/focuses/11794?parent=catalog#step12">End Lab</a>
+</div>
+</div>
+
+</div>
+
+<div class="lab-content__markdown-wrapper">
+<div class="lab-content__markdown">
+<div class="lab-content__recommendation">
+<!-- # TODO: Change classes so that this doesn't stack vertically -->
+<section class="upcoming-cards">
+<h2 class="headline-3">Continue questing</h2>
+<div class="content-card-grid">
+<div class="card-content-wrapper js-content-card" data-id="2573" data-level="Expert" data-name="Exploring Google Ngrams with Amazon EMR" data-type="Lab">
+<a class="card card--content elevation-0 content-lab" href="https://run.qwiklabs.com/focuses/10601?parent=catalog"><div class="card__image">
+<div class="card__image__inner" style="background-image: url(https://cdn.qwiklabs.com/assets/fractal4-1d205807c54d90fe4382315dbfc0dd665ddb825bbc90f3ca5db7d7170fa0df1b.jpg)"></div>
+</div>
+<div class="card__body">
+<div class="overline card--content__type">
+Hands-On Lab
+</div>
+<h3 class="card--content__title">
+Exploring Google Ngrams with Amazon EMR
+</h3>
+<p class="card--content__description body-1">
+This lab demonstrates how to launch an Amazon Elastic MapReduce (EMR) cluster for Big Data processing and use Hive with SQL-style queries to analyze data. You will create a Hadoop cluster using Amazon EMR which will allow to run interactive Hive queries against data stored in Amazon S3. You will use Hive to normalize the data in a more useful way, and you will run queries to analyze the data.
+</p>
+</div>
+<div class="card__footer">
+<div class="card__footer__left">
+<span>Expert</span>
+</div>
+<div class="card__footer__right">
+<div class="rateit" data-rateit-readonly="true" data-rateit-value="3.6535"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 58.456px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+</div>
+</div>
+</a></div>
+
+</div>
+</section>
+
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="lab-introduction js-lab-introduction is-hidden">
+<div class="lab-introduction__inner">
+<h1 class="headline-1">Welcome to Your First Lab!</h1>
+<ql-icon-button class="js-skip-button">close</ql-icon-button>
+<div class="lab-introduction__video">
+<iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" id="lab-introduction" src="./Working with Amazon Redshift _ Qwiklabs_files/yF7EDXKTmoQ.html"></iframe>
+</div>
+<a class="js-skip-button button button--outline">Skip this video</a>
+</div>
+</div>
+
+
+
+</div>
+</main>
+<div class="modal fade" id="lab-details-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<div class="modal-body">
+<p class="l-mbm">
+The lab demonstrates how to use Amazon RedShift to create a cluster, load data, run queries and monitor performance. Note: Students will download a free SQL client as part of this lab.
+</p>
+<p>
+This lab is included in these quests:
+<a href="https://run.qwiklabs.com/quests/18">Advanced Operations Using Amazon Redshift</a>, <a href="https://run.qwiklabs.com/quests/5">Big Data on AWS</a>.
+If you complete this lab you'll receive credit for it when you enroll in one of these quests.
+</p>
+<p class="small-label l-mbs">
+<strong>
+Duration:
+</strong>
+3m setup
+·
+115m access
+·
+115m completion
+</p>
+<p class="small-label l-mbs">
+<strong>AWS Region:</strong>
+[us-west-2] <strong>US West (Oregon)</strong>
+</p>
+<p class="small-label l-mbs">
+<span><strong>Levels: </strong>advanced</span>
+</p>
+<p class="small-label">
+<strong>
+Permalink:
+</strong>
+<a href="https://run.qwiklabs.com/catalog_lab/2698">https://run.qwiklabs.com/catalog_lab/2698</a>
+</p>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Got It
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Working with Amazon Redshift _ Qwiklabs_files/saved_resource(1).html"></iframe>
+</div>
+<div class="modal fade" id="lab-review-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<form class="simple_form js-lab-review-form" id="edit_lab_review_5910409" action="https://run.qwiklabs.com/lab_reviews/5910409" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="_method" value="patch"><div class="modal-body">
+<p class="label">
+How satisfied are you with this lab?*
+</p>
+<div class="rateit js-rateit" data-rateit-max="5" data-rateit-min="0" data-rateit-resetable="false" data-rateit-step="1" data-rateit-value="2"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 32px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+<div class="l-mtm">
+
+<div class="control-group hidden lab_review_user_id"><div class="controls"><input class="hidden" type="hidden" value="743665" name="lab_review[user_id]" id="lab_review_user_id"></div></div>
+<div class="control-group hidden lab_review_classroom_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[classroom_id]" id="lab_review_classroom_id"></div></div>
+<div class="control-group hidden lab_review_lab_id"><div class="controls"><input class="hidden" type="hidden" value="2698" name="lab_review[lab_id]" id="lab_review_lab_id"></div></div>
+<div class="control-group hidden lab_review_focus_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[focus_id]" id="lab_review_focus_id"></div></div>
+<div class="control-group hidden lab_review_rating"><div class="controls"><input class="hidden js-rating-input" type="hidden" value="-1" name="lab_review[rating]" id="lab_review_rating"></div></div>
+<div class="control-group text optional lab_review_comment"><label class="text optional control-label" for="lab_review_comment">Comment</label><div class="controls"><textarea class="text optional" name="lab_review[comment]" id="lab_review_comment">Too easy</textarea></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Cancel
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<input type="submit" name="commit" value="Submit" disabled="disabled" class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary" id="submit" data-disabled="false" data-disable-with="Submit" data-upgraded=",MaterialButton,MaterialRipple"><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></input>
+</div>
+</form>
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Working with Amazon Redshift _ Qwiklabs_files/saved_resource(2).html"></iframe>
+</div>
+<div class="modal fade" id="lab-access-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<a class="lab-access-modal-close" data-analytics-action="dismissed_lab_payment_modal" data-dismiss="modal">
+<i class="material-icons">close</i>
+</a>
+<form class="js-lab-access-form" action="https://run.qwiklabs.com/lab_onetime_coupons/activate?parent=catalog" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓">
+<div class="modal-body">
+<div class="lab-access-modal">
+<input type="hidden" name="id" id="id" value="11794">
+<input type="hidden" name="user_id" id="user_id" value="743665">
+<input type="hidden" name="launch_with_credits" id="launch_with_credits" value="0" class="js-launch-with-credits-input">
+<input type="hidden" name="launch_with_subs" id="launch_with_subs" value="0" class="js-launch-with-subscription-input">
+<div class="lab-access-modal__method">
+<p>
+This lab costs
+10 Credits.
+</p>
+<p>
+You have a valid subscription package. Would you like to charge this lab to your subscription?
+
+</p>
+<a class="button js-launch-with-subscription-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_subscription_button">
+Use Subscription
+</a>
+</div>
+<div class="lab-access-modal__method">
+<p>
+Enter Lab Access Code:
+</p>
+<div class="lab-access-modal__code js-access-code">
+<input type="text" name="uuid_1" id="uuid_1" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_2" id="uuid_2" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_3" id="uuid_3" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_4" id="uuid_4" value="" maxlength="4" placeholder="1234">
+</div>
+<a class="button js-launch-with-access-code-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_access_code_button">
+Launch with Access Code
+</a>
+</div>
+</div>
+</div>
+</form>
+
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Working with Amazon Redshift _ Qwiklabs_files/saved_resource(3).html"></iframe>
+</div>
+
+<script>
+  $( function() {
+    ql.initMaterialInputs();
+    initChosen();
+    initSearch();
+    initTabs();
+    ql.list.init();
+    ql.favoriting.init();
+    ql.header.myAccount.init();
+    initTooltips();
+    ql.autocomplete.init();
+    ql.modals.init();
+    ql.toggleButtons.init();
+    ql.analytics.init();
+    initLabContent( );
+  ql.labOutline.links.init();
+  ql.labOutline.layout.init();
+  initLabReviewModal();
+  initLabAccessModal();
+  ql.labAssessment.init();
+  ql.labData.init();
+  initLabTranslations( {"are_you_sure":"All done? If you end this lab, you will lose all your work. You may not be able to restart the lab if there is a quota limit. Are you sure you want to end this lab?\n","in_progress":"*In Progress*","ending":"*Ending*","starting":"*Starting, please wait*","end_concurrent_labs":"Sorry, you can only run one lab at a time. To start this lab, please confirm that you want all of your existing labs to end.\n","copied":"Copied","no_resource":"Error retrieving resource.","no_support":"No Support","mac_press":"Press ⌘-C to copy","thanks_review":"Thanks for reviewing this lab.","windows_press":"Press Ctrl-C to copy","days":"days"} );
+  ql.labRun.init();
+  ql.initHeader();
+  ql.navigation.init();
+  ql.navPanel.init();
+  ql.navigation.init();
+  
+  });
+</script>
+<style>
+  .mdl-layout__container {
+    position: static
+  }
+</style>
+
+
+<iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Working with Amazon Redshift _ Qwiklabs_files/saved_resource(4).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 1; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px; width: 111px;width: 111px;width: 111px;" src="./Working with Amazon Redshift _ Qwiklabs_files/saved_resource(5).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px; visibility: hidden;" src="./Working with Amazon Redshift _ Qwiklabs_files/saved_resource(6).html"></iframe></div></body></html>
