@@ -1,0 +1,2 @@
+com\amazonaws\services\kinesisanalytics\CustomSinkStreamingJob.class
+com\amazonaws\services\kinesisanalytics\sink\CloudWatchLogSink.class

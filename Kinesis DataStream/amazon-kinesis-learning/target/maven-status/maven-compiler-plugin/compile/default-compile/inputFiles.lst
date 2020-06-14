@@ -1,0 +1,7 @@
+D:\Kinesis Stock Trade\amazon-kinesis-learning\src\main\java\com\amazonaws\services\kinesis\samples\stocktrades\processor\StockTradesProcessor.java
+D:\Kinesis Stock Trade\amazon-kinesis-learning\src\main\java\com\amazonaws\services\kinesis\samples\stocktrades\model\StockTrade.java
+D:\Kinesis Stock Trade\amazon-kinesis-learning\src\main\java\com\amazonaws\services\kinesis\samples\stocktrades\processor\StockTradeRecordProcessor.java
+D:\Kinesis Stock Trade\amazon-kinesis-learning\src\main\java\com\amazonaws\services\kinesis\samples\stocktrades\writer\StockTradesWriter.java
+D:\Kinesis Stock Trade\amazon-kinesis-learning\src\main\java\com\amazonaws\services\kinesis\samples\stocktrades\processor\StockStats.java
+D:\Kinesis Stock Trade\amazon-kinesis-learning\src\main\java\com\amazonaws\services\kinesis\samples\stocktrades\writer\StockTradeGenerator.java
+D:\Kinesis Stock Trade\amazon-kinesis-learning\src\main\java\com\amazonaws\services\kinesis\samples\stocktrades\processor\StockTradeRecordProcessorFactory.java
