@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://www.qwiklabs.com/focuses/10436?parent=catalog -->
+<html lang="en" class="mdl-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta content="[]" name="active-experiments">
+<meta content="{&quot;userId&quot;:743665}" name="help-api-product-data">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="4+EKX2LJcw7PIkhsQt6OcIwfi1CNrgiVUryhbEFOX/UyYxNnqtOQWBy8oFyVMEf6a0rrFSYxXmq8rEyHCSWS4w==">
+<title>Build a Dynamic Conversational Bot - Part 1 | Qwiklabs</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+<meta content="In this lab, you will use Amazon Lex to create and build a conversational bot that understands your requests and asks for more input if needed. If all required slots have been filled, the bot will ask for confirmation before triggering an action." name="description">
+<meta content="Qwiklabs" name="author">
+<meta content="1rRsY0INj8RvwB5EF5pwdxt2A2P9aDgAlsICaJ0d5w0" name="google-site-verification">
+<meta content="Build a Dynamic Conversational Bot - Part 1 | Qwiklabs" property="og:title">
+<meta content="website" property="og:type">
+<meta content="/favicon-144.png" property="og:image">
+<meta content="Qwiklabs" property="og:site_name">
+<meta content="In this lab, you will use Amazon Lex to create and build a conversational bot that understands your requests and asks for more input if needed. If all required slots have been filled, the bot will ask for confirmation before triggering an action." property="og:description">
+<meta content="/qwiklabs_logo_900x887.png" property="og:logo" size="900x887">
+<meta content="/qwiklabs_logo_994x187.png" property="og:logo" size="994x187">
+<meta content="#3681E4" property="msapplication-TileColor">
+<meta content="/favicon-144.png" property="msapplication-TileImage">
+<link href="https://www.qwiklabs.com/favicon-32.png" rel="shortcut icon">
+<link color="#3681E4" href="https://www.qwiklabs.com/favicon-svg.svg" rel="mask-icon">
+<link href="https://www.qwiklabs.com/favicon-180.png" rel="apple-touch-icon-precomposed">
+<link rel="stylesheet" media="screen" href="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/css">
+
+
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+<![endif]-->
+<!--[endif]>  <![endif]-->
+<script type="text/javascript" async="" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/js"></script><script type="text/javascript" async="" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/analytics.js.download"></script><script type="text/javascript" async="" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/analytics.min.js.download"></script><script type="text/javascript" id="www-widgetapi-script" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/www-widgetapi.js.download" async=""></script><script>
+//<![CDATA[
+window.gon={};gon.current_user={"firstname":"Selina","lastname":"Ng","fullname":"Selina Ng","company":"Capgemini","email":"n.selina@ymail.com","origin":"google-run, direct","subscriptions":1,"id":"1c340942b6e43ad7908d196db2da6728","qlCreatedAt":"2018-01-21 06:49:32 UTC","optIn":false};gon.segment="j4Im8pqIko0Lxq4wVVZWMPMM0EroHUvb";gon.deployment="run";
+//]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.qwiklabs.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.qwiklabs.com/catalog?keywords={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script id="ze-snippet" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/snippet.js.download"></script>
+
+
+
+<link rel="stylesheet" media="all" href="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/application-162ab3877b3a481e7c5b49bf8be464f433c15a21bd2c4d9c870d4197793c85fe.css">
+<script>
+  EVENT_SOURCE_BASE_URL = "https://run.qwiklabs.com/nchan-sub?id=";
+</script>
+<script src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/webcomponents-loader.js.download"></script><script src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/webcomponents-hi.js.download"></script>
+<script src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/hallofmirrors-35b5646fc769dae276cceea36b80def66b111f8f0d8576f77facc9db3773c9f3.js.download"></script><script async="" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/lazy.min.js.download"></script>
+<script src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/iframe_api"></script>
+<script src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/vendor-45d462772c30000424907184f70c7157e95fb6227698d1671c5051818a6f60d8.js.download"></script>
+<script src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/application-b8f24b563e7f6b4a399091631f253a394e419e33d6c909ef27e223b366f52750.js.download"></script>
+<script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script></head>
+<body class="focuses focuses-show lab-show l-full no-nav">
+<div class="header-container light-theme">
+<div class="header">
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect header__button header__button--nav header__nav-panel-button js-nav-toggle" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">menu</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header__title">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--nav" href="https://www.qwiklabs.com/" data-upgraded=",MaterialButton,MaterialRipple"><ql-icon>arrow_back</ql-icon><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
+<h1 class="headline-5">
+Build a Dynamic Conversational Bot - Part 1
+</h1>
+</div>
+<div class="header__actions">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--action header__button--search js-header-search-bar-button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">search</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="toggle-lab-control-panel" href="javascript:;" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">description</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" data-mdl-for="toggle-lab-control-panel" data-upgraded=",MaterialTooltip">
+Toggle Lab Panel
+</div>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-favorite-button favorite-button" id="CatalogItem-10436-favorite-button" data-type="CatalogItem" data-id="10436" data-name="Build a Dynamic Conversational Bot - Part 1" href="https://www.qwiklabs.com/unfavorite.json?item_id=10436&amp;item_type=CatalogItem" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">favorite</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" for="CatalogItem-10436-favorite-button" data-upgraded=",MaterialTooltip">
+Remove from favorites
+</div>
+
+
+<ql-help context="lab" productdata="{&quot;userId&quot;:743665}" data-analytics-action="opened_help" data-analytics-label="lab"></ql-help>
+<a class="header-my-account-button mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-my-account-button" data-upgraded=",MaterialButton,MaterialRipple">
+<img class="avatar " alt="avatar image" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header-my-account-menu js-my-account-menu">
+<div class="card elevation-2 no-padding">
+<div class="my-account-menu__top">
+<img class="avatar " alt="avatar image" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<div class="my-account-menu__info">
+<h4 class="subtitle-headline-1">
+Selina Ng
+</h4>
+<p class="body-2 text--gray">
+<span>n.selina@ymail.com</span>
+</p>
+<a class="button" href="https://www.qwiklabs.com/my_account/profile">My Account</a>
+</div>
+</div>
+<div class="my-account-menu__bottom">
+<a class="text--green subtitle-headline-2" href="https://www.qwiklabs.com/my_account/credits">Monthly Subscription
+</a><a data-analytics-action="clicked_sign_out" class="button button--hairline" rel="nofollow" data-method="delete" href="https://www.qwiklabs.com/users/sign_out">Sign Out</a>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="header__search-bar js-header-search-bar">
+<form id="catalog-search-mobile" onsubmit="ql.catalogSearchFilter(); return false;" action="https://www.qwiklabs.com/searches/elasticsearch" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="4+EKX2LJcw7PIkhsQt6OcIwfi1CNrgiVUryhbEFOX/UyYxNnqtOQWBy8oFyVMEf6a0rrFSYxXmq8rEyHCSWS4w==">
+<input type="text" name="keywords" id="keywords" placeholder="Search" maxlength="255" aria-label="catalog search bar">
+</form>
+
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">close</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+</div>
+
+<nav class="nav-bar">
+<a class="nav-bar__item js-navigation-button" href="https://www.qwiklabs.com/"><ql-icon class="nav-bar__item__icon">
+home
+</ql-icon>
+<span class="nav-bar__item__label">
+Home
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button  active" aria-current="page" href="https://www.qwiklabs.com/catalog"><ql-icon class="nav-bar__item__icon">
+school
+</ql-icon>
+<span class="nav-bar__item__label">
+Catalog
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button" href="https://www.qwiklabs.com/my_learning"><ql-icon class="nav-bar__item__icon">
+event_note
+</ql-icon>
+<span class="nav-bar__item__label">
+My Learning
+</span>
+</a>
+</nav>
+
+<nav class="nav-panel js-nav-panel">
+<div class="nav-panel__logo">
+<div class="logo logo--blue"></div>
+</div>
+<a title="Home" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/"><ql-icon class="nav-panel__item__icon">
+home
+</ql-icon>
+<div class="nav-panel__item__label">
+Home
+</div>
+</a>
+<a title="Catalog" tabindex="-1" class="nav-panel__item js-navigation-button active" aria-current="page" href="https://www.qwiklabs.com/catalog"><ql-icon class="nav-panel__item__icon">
+school
+</ql-icon>
+<div class="nav-panel__item__label">
+Catalog
+</div>
+</a>
+<a title="My Learning" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_learning"><ql-icon class="nav-panel__item__icon">
+event_note
+</ql-icon>
+<div class="nav-panel__item__label">
+My Learning
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a title="Profile" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/profile"><ql-icon class="nav-panel__item__icon">
+account_circle
+</ql-icon>
+<div class="nav-panel__item__label">
+Profile
+</div>
+</a>
+<a title="Credits &amp; Subscriptions" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/credits"><ql-icon class="nav-panel__item__icon">
+money
+</ql-icon>
+<div class="nav-panel__item__label">
+Credits &amp; Subscriptions
+</div>
+</a>
+<a title="Security" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/security"><ql-icon class="nav-panel__item__icon">
+security
+</ql-icon>
+<div class="nav-panel__item__label">
+Security
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a class="nav-panel__item" tabindex="-1" href="https://www.qwiklabs.com/focuses/10436?parent=catalog#"><ql-help>
+<div class="nav-panel__help-item">
+<ql-icon class="nav-panel__item__icon">help</ql-icon>
+<div class="nav-panel__item__label">Help</div>
+</div>
+</ql-help>
+</a><div class="nav-panel__small-links">
+<a tabindex="-1" href="https://www.qwiklabs.com/privacy_policy">Privacy</a>
+<a tabindex="-1" href="https://www.qwiklabs.com/terms_of_service">Terms</a>
+</div>
+</nav>
+<div class="nav-panel__overlay js-nav-toggle"></div>
+
+<main class="js-main">
+<span class="hidden" id="flash-sibling-before"></span>
+
+<div class="l-main-wrapper" id="main-wrapper">
+
+
+
+
+
+
+
+<div class="js-lab-state" data-analytics-payload="{&quot;label&quot;:&quot;Build a Dynamic Conversational Bot - Part 1&quot;,&quot;lab_name&quot;:&quot;Build a Dynamic Conversational Bot - Part 1&quot;,&quot;classroom_name&quot;:null,&quot;deployment&quot;:&quot;run&quot;}" data-focus-id="10436" data-lab-billing-limit="0.0" data-lab-duration="3600" data-parent="catalog" data-payment-required=""></div>
+<ql-lab-control-panel class="js-lab-control-panel l-lab-control-panel" connectiondetails="[]" connectionfiles="[]" labcontrolbutton="{&quot;disabled&quot;:false,&quot;pending&quot;:false,&quot;running&quot;:false}" labtimer="{&quot;ticking&quot;:false,&quot;secondsRemaining&quot;:3600}" studentresources="[]"></ql-lab-control-panel>
+<div class="l-lab-main-body">
+<div class="js-lab-content lab-content">
+<div class="alert alert--fake js-alert">
+<p class="alert__message js-alert-message"></p>
+<a class="alert__close js-alert-close">
+<i class="fa fa-times"></i>
+</a>
+<iframe class="l-ie-iframe-fix" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/saved_resource.html"></iframe>
+</div>
+<div class="lab-content__markdown-wrapper">
+<div class="lab-preamble">
+<h1 class="lab-preamble__title">
+Build a Dynamic Conversational Bot - Part 1
+</h1>
+<div class="lab-preamble__details subtitle-headline-1">
+<span>1 hour </span>
+<span>8 Credits</span>
+<div class="lab__rating">
+<a href="https://www.qwiklabs.com/focuses/10436/reviews?parent=catalog"><div class="rateit" data-rateit-readonly="true" data-rateit-value="4.4211"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 70.7376px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+
+</a><a data-target="#lab-review-modal" data-toggle="modal">
+Rate Lab
+</a>
+</div>
+</div>
+</div>
+
+<div class="lab-content__inner-wrapper">
+<div class="js-markdown-instructions lab-content__markdown markdown-lab-instructions no-select" id="markdown-lab-instructions">
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/aws-logo.png" alt=""></p>
+
+
+
+<p><strong>SPL-209 - Version 1.0.2</strong></p>
+
+<p>© 2020 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.</p>
+
+<p>Errors or corrections? Email us at <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a>.</p>
+
+<p>Other questions? Contact us at <a href="https://aws.amazon.com/contact-us/aws-training/" target="_blank">https://aws.amazon.com/contact-us/aws-training/</a></p>
+
+<h2 id="step1">Lab Overview</h2>
+
+<p>In this lab, you will use <strong>Amazon Lex</strong> to create and build a conversational bot that understands your requests and asks for more input if needed. If all required slots have been filled, the bot will ask for confirmation before triggering an action.</p>
+<ul>
+<li>Create a bot by using <strong>Amazon Lex</strong> through the AWS Management Console.</li>
+<li>Configure your bot to receive product order requests and assist you if needed.</li>
+</ul>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/chatbot-lab1.jpg" alt="Bot interaction architecture step- 1"></p>
+
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Create and build a conversational bot with <strong>Amazon Lex</strong> by using the AWS Management Console</li>
+<li>Understand how to build an interaction model using <strong>utterances</strong>, <strong>intents</strong>, and <strong>slots</strong>
+</li>
+</ul>
+<h3>Technical Knowledge Prerequisites</h3>
+
+<p>This lab requires:</p>
+<ul>
+<li>Access to a notebook computer with Wi-Fi and Microsoft Windows, Mac OS X, or Linux (Ubuntu, SuSE, or Red Hat)</li>
+<li>An Internet browser such as Chrome, Firefox, or IE9 (previous versions of Internet Explorer are not supported). We recommend to use <strong>Chrome</strong> or <strong>Firefox</strong>.</li>
+</ul>
+<h2 id="step2">Start Lab</h2>
+<ol start="1">
+<li>At the top of your screen, launch your lab by clicking <span style="background-color:#34A853;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#34A853;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Start Lab</span>
+</li>
+</ol>
+<p>This will start the process of provisioning your lab resources. An estimated amount of time to provision your lab resources will be displayed. You must wait for your resources to be provisioned before continuing.</p>
+
+<p><i class="fas fa-info-circle"></i> If you are prompted for a token, use the one distributed to you (or credits you have purchased). </p>
+<ol start="2">
+<li>Open your lab by clicking <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span>
+</li>
+</ol>
+<p>This will automatically log you into the AWS Management Console. </p>
+
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Please do not change the Region unless instructed</strong>.</p>
+
+
+
+<h3>Common login errors</h3>
+
+<p><strong>Error : Federated login credentials</strong></p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/federatedloginerror.png" alt=""></p>
+
+<p>If you see this message:</p>
+<ul>
+<li>Close the browser tab to return to your initial lab window</li>
+<li>Wait a few seconds</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+<p>You should now be able to access the AWS Management Console.</p>
+
+
+
+<p><strong>Error: You must first log out</strong></p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/logouterror.png" alt=""></p>
+
+<p>If you see the message, <strong>You must first log out before logging into a different AWS account:</strong> </p>
+<ul>
+<li>Click <strong>click here</strong>
+</li>
+<li>Close your browser tab to return to your initial Qwiklabs window</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+
+
+
+
+<h2 id="step3">Task 1: Create an Amazon Lex bot</h2>
+
+<p>In this task, you will create the initial version of your bot.</p>
+<ol start="3">
+<li><p>In the <strong>AWS Management Console</strong>, ensure that the region is set to <strong>Oregon</strong> (us-west-2) in the right corner of the navigation bar.</p></li>
+<li><p>On the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Service</span> menu, click <strong>Amazon Lex</strong>.</p></li>
+</ol>
+<p>You can also locate the services by typing its name in the search bar.</p>
+<ol start="5">
+<li><p>If a <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Get Started</span> page appears, click it.</p></li>
+<li><p>On the <strong>Create your Lex bot</strong> page, click <span style="background-color:white;font-weight:bold;font-size:90%;color:#1166bb;border-color:#c4cbcd;border-style:solid;border-width:2px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Custom bot</span> then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Bot name:</strong> <input readonly="" class="copyable-inline-input" size="5" type="text" value="myBot">
+</li>
+<li>
+<strong>Output voice:</strong> Choose a voice</li>
+<li>
+<strong>Session timeout:</strong> <input readonly="" class="copyable-inline-input" size="1" type="text" value="5"> min</li>
+<li>
+<strong>COPPA:</strong> <i class="far fa-dot-circle"></i> <em>No</em>
+</li>
+</ul>
+<p>You will create a custom bot that lets you interact with it using voice commands. COPPA is not required because you are not going to deploy the bot on a page that is under COPPA regulation.</p>
+<ol start="7">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><strong>Create</strong></span>
+</li>
+</ol>
+<p>This will create a bot and will redirect you to the bot configuration page.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/configuration-page.png" alt="Bot configuration page"></p>
+
+
+
+<h2 id="step4">Task 2: Create an Intent</h2>
+
+<p>In this task, you will create two intents and add two sample utterances that allow your bot to select a specific intent during a conversation.</p>
+
+<p>You will first create a help intent, which allows the user to ask for help.</p>
+<ol start="8">
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><i class="fas fa-plus" style="color:white;"></i> <strong>Create Intent</strong></span></p></li>
+<li><p>On the <strong>Add intent</strong> pop-up, click <span style="color:#1166bb;"><i class="fas fa-search"></i><strong>Search existing intents</strong></span>, then configure:</p></li>
+</ol><ul>
+<li>Search for: <input readonly="" class="copyable-inline-input" size="17" type="text" value="AMAZON.HelpIntent">
+</li>
+<li>In the search results, click <strong>AMAZON.HelpIntent</strong>
+</li>
+<li>
+<strong>Give a new name for the built-in intent:</strong> <input readonly="" class="copyable-inline-input" size="4" type="text" value="Help">
+</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Add</span>
+</li>
+</ul>
+<p>Because we are using a built-in intent at this stage, you can't add custom utterances. These built-in intents provide an extensive set of pre-built utterances.</p>
+
+<h3>Configure Error Handling</h3>
+
+<p>Error Handling is used in situations where your bot does not understand your request.</p>
+<ol start="10">
+<li>In the left navigation pane, click <strong>Error Handling</strong>, then configure:</li>
+</ol><ul>
+<li>In the <strong>Clarification prompts</strong> box, enter</li>
+</ul><pre class="highlight plaintext"><code>Sorry, I didn't understand you, what would you like to do?
+</code><button class="button button--copy js-copy-button-0"><i class="fa fa-clipboard"></i></button></pre><ul>
+<li>Click the plus button <i class="fas fa-plus-circle" style="color:#1166bb;"></i>
+</li>
+</ul><ol start="11">
+<li><p>Change the <strong>Maximum number of retries</strong> to <input readonly="" class="copyable-inline-input" size="1" type="text" value="2"></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Save</span></p></li>
+</ol>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/error-handling.png" alt="error-handling"></p>
+
+<h3>Add Your First Custom Intent</h3>
+<ol start="13">
+<li><p>In the left navigation pane next to <strong>Intents</strong>, click <i class="fa fa-plus-circle" style="color:#1166bb;"></i></p></li>
+<li><p>On the <strong>Add intent</strong> pop-up, click  <i class="fas fa-plus-circle" style="color:#1166bb;"> Create intent</i>, then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Give a unique name for the new intent:</strong> <input readonly="" class="copyable-inline-input" size="12" type="text" value="OrderProduct">
+</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><strong>Add</strong></span>
+</li>
+</ul><ol start="15">
+<li>In the left navigation pane, click <strong>OrderProduct</strong>.</li>
+</ol>
+<p>This brings you to the configuration page for <strong>OrderProduct</strong>.</p>
+<ol start="16">
+<li>Add the sample utterances below to your <strong>OrderProduct</strong> intent by:</li>
+</ol><ul>
+<li>Entering each one into the sample utterance box one at a time</li>
+<li>Clicking <i class="fa fa-plus-circle" style="color:#1166bb;"></i>
+</li>
+</ul><pre class="highlight plaintext"><code>I would like to order ice cream
+</code><button class="button button--copy js-copy-button-1"><i class="fa fa-clipboard"></i></button></pre><pre class="highlight plaintext"><code>I would like to order chocolate ice cream
+</code><button class="button button--copy js-copy-button-2"><i class="fa fa-clipboard"></i></button></pre><pre class="highlight plaintext"><code>I would like to order 5 cups of chocolate ice cream
+</code><button class="button button--copy js-copy-button-3"><i class="fa fa-clipboard"></i></button></pre><pre class="highlight plaintext"><code>Send me 5 cups of chocolate ice cream
+</code><button class="button button--copy js-copy-button-4"><i class="fa fa-clipboard"></i></button></pre>
+<p>Once you have completed this task, your bot should consist of a built-in intent and your first custom intent.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/sample-utterances.png" alt="sample-utterances"></p>
+
+
+
+<h2 id="step5">Task 3: Create Your Own Slot Types</h2>
+
+<p>In this task, you will create your own <strong>Slot Types</strong> that contain a list of products, corresponding flavors, and order quantities.</p>
+
+<h3>Create ProductType Slot Type</h3>
+<ol start="17">
+<li>Highlight <span style="background-color: light#1166bb;"><strong>ice cream</strong></span> in one of the <strong>sample utterances</strong>.</li>
+</ol>
+<p>This will open a small pop up.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/chatbot-lab1-marked-slot-value.jpg" alt="Marked slot value pop up"></p>
+<ol start="18">
+<li>Click <i class="fa fa-plus"></i> <strong>Create slot with new slot type</strong>, then configure:</li>
+</ol><ul>
+<li>
+<strong>Slot type name:</strong> <input readonly="" class="copyable-inline-input" size="11" type="text" value="ProductType">
+</li>
+<li>
+<strong>Value:</strong> add <input readonly="" class="copyable-inline-input" size="13" type="text" value="frozen yogurt">
+</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><strong>Add slot to intent</strong></span>
+</li>
+</ul>
+<p><strong>ice cream</strong> should already be there.</p>
+
+<p>This will replace all existing <span style="background-color: light#1166bb;"><strong>ice cream</strong></span> strings in the utterances with <strong>{slotOne}</strong>.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/slotOne.png" alt="SlotOne"></p>
+<ol start="19">
+<li>If the other instances of ice cream are not labeled as <strong>slotOne</strong>: </li>
+</ol><ul>
+<li>Highlight each one</li>
+<li>Select <strong>slotOne</strong> </li>
+</ul><ol start="20">
+<li>In the <strong>Slots</strong> section below, rename <strong>slotOne</strong> to <input readonly="" class="copyable-inline-input" size="11" type="text" value="productType">
+</li>
+</ol>
+<p>This will modify all <strong>{slotOne}</strong> marker in the utterances to <strong>{productType}</strong>.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/productType.png" alt="productType"></p>
+<ol start="21">
+<li>Ensure that the <strong>Required</strong> box <i class="far fa-check-square"></i> is selected.</li>
+</ol>
+<h3>Create ProductFlavor Slot Type</h3>
+<ol start="22">
+<li>In the <strong>Sample utterances</strong> box:</li>
+</ol><ul>
+<li>Highlight <span style="background-color: light#1166bb;"><strong>chocolate</strong></span>
+</li>
+<li>Click <i class="fa fa-plus"></i> <strong>Create slot with new slot type</strong>
+</li>
+</ul><ol start="23">
+<li><p>On the <strong>Add slot type</strong> window, for <strong>Slot type name</strong>, enter <input readonly="" class="copyable-inline-input" size="13" type="text" value="ProductFlavor"></p></li>
+<li><p>Add the slot values below by:</p></li>
+</ol><ul>
+<li>Entering each one into the value box one at a time</li>
+<li>
+<p>Clicking <i class="fa fa-plus-circle" style="color:#1166bb;"></i></p>
+<ul>
+<li><input readonly="" class="copyable-inline-input" size="7" type="text" value="vanilla"></li>
+<li><input readonly="" class="copyable-inline-input" size="10" type="text" value="strawberry"></li>
+<li>
+<strong>chocolate</strong> should already be part of the list</li>
+</ul>
+</li>
+</ul><ol start="25">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><strong>Add slot to intent</strong></span>
+</li>
+</ol>
+<p>This will replace all existing <span style="background-color: light#1166bb;"><strong>chocolate</strong></span> strings in the utterances to <strong>{slotTwo}</strong>.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/slotTwo.png" alt="slotTwo"></p>
+<ol start="26">
+<li>If the other instances of chocolate are not labeled as <strong>slotTwo</strong>: </li>
+</ol><ul>
+<li>Highlight each one</li>
+<li>Select <strong>slotTwo</strong> </li>
+</ul><ol start="27">
+<li>In the <strong>Slots</strong> section below, rename <strong>slotTwo</strong> to <input readonly="" class="copyable-inline-input" size="13" type="text" value="productFlavor">
+</li>
+</ol>
+<p>This will modify all <strong>{slotTwo}</strong> markers in the utterances to <strong>{productFlavor}</strong>.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/productFlavor.png" alt="productFlavor"></p>
+<ol start="28">
+<li>Next to <strong>ProductFlavor</strong>,select the <strong>Required</strong> box <i class="far fa-check-square"></i>
+</li>
+</ol>
+<h3>Create OrderQuantity Slot Type</h3>
+<ol start="29">
+<li>In the <strong>Sample utterances</strong> box:</li>
+</ol><ul>
+<li>Highlight the number <span style="background-color: light#1166bb;"><strong>5</strong></span>
+</li>
+<li>In the search box, enter <input readonly="" class="copyable-inline-input" size="13" type="text" value="AMAZON.NUMBER">
+</li>
+<li>Click <strong>AMAZON.NUMBER</strong>
+</li>
+</ul>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/slotthree.png" alt="slotThree"></p>
+<ol start="30">
+<li>In the <strong>Slots</strong> section below, rename <strong>slotThree</strong> to <input readonly="" class="copyable-inline-input" size="13" type="text" value="orderQuantity">
+</li>
+</ol>
+<p>This will modify all <strong>{slotThree}</strong> markers in the utterances to <strong>{orderQuantity}</strong>.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/orderQuantity.png" alt="OrderQuantity"></p>
+<ol start="31">
+<li>Next to <strong>orderQuantity</strong>, select the <strong>Required</strong> box <i class="far fa-check-square"></i>
+</li>
+</ol>
+<p>By the end of this task, your custom intent <strong>OrderProduct</strong> should consist of three custom slots to:</p>
+<ul>
+<li>Detect the product</li>
+<li>Detect its flavor</li>
+<li>Detect the desired order quantity</li>
+</ul>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/expectedConfig.png" alt="expectedConfig"></p>
+
+
+
+<h2 id="step6">Task 4: Add Prompts to Your Slots</h2>
+
+<p>In this task, you will configure your bot to request the value for a required slot, and then complement your slots with <strong>Prompts</strong> and <strong>Corresponding utterances</strong>.</p>
+
+<h3>Add Prompts for ProductType</h3>
+<ol start="32">
+<li>In the <strong>Slots</strong> section, click on the <strong>settings icon</strong> <i class="fas fa-cog"></i> for your <strong>productType</strong>.</li>
+</ol>
+<p>This opens a new configuration window.</p>
+<ol start="33">
+<li>Add the following prompts by:</li>
+</ol><ul>
+<li>Entering each one into the <strong>Prompts</strong> box one at a time</li>
+<li>Clicking <i class="fa fa-plus-circle" style="color:#1166bb;"></i>
+</li>
+</ul><pre class="highlight plaintext"><code>What would you like to order?
+</code><button class="button button--copy js-copy-button-5"><i class="fa fa-clipboard"></i></button></pre><pre class="highlight plaintext"><code>What kind of product would you like to order?
+</code><button class="button button--copy js-copy-button-6"><i class="fa fa-clipboard"></i></button></pre><ol start="34">
+<li><p>Remove the default prompt <strong>e.g. What city?</strong> by clicking on <i class="fa fa-times-circle"></i>.</p></li>
+<li><p>For <strong>Corresponding utterances</strong>, add:</p></li>
+</ol><pre class="highlight plaintext"><code>I would like to order {productType}
+</code><button class="button button--copy js-copy-button-7"><i class="fa fa-clipboard"></i></button></pre>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/configuration.png" alt="configuration"></p>
+<ol start="36">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><strong>Save</strong></span>
+</li>
+</ol>
+<h3>Add Prompts for ProductFlavor</h3>
+<ol start="37">
+<li><p>In the <strong>Slots</strong> section, click on the <strong>settings icon</strong> <i class="fa fa-cog"></i> for your <strong>productFlavor</strong>.</p></li>
+<li><p>For <strong>Prompts</strong> add:</p></li>
+</ol><pre class="highlight plaintext"><code>Which {productType} flavor would you like to order?
+</code><button class="button button--copy js-copy-button-8"><i class="fa fa-clipboard"></i></button></pre><ol start="39">
+<li>For <strong>Corresponding utterances</strong>, add:</li>
+</ol><pre class="highlight plaintext"><code>I would like to order {productFlavor}
+</code><button class="button button--copy js-copy-button-9"><i class="fa fa-clipboard"></i></button></pre><ol start="40">
+<li><p>Remove the default prompt <strong>e.g. What city?</strong> by clicking on <i class="fa fa-times-circle"></i>.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><strong>Save</strong></span></p></li>
+</ol>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/config2.png" alt="config2"></p>
+
+<h3>Add Prompts for OrderQuantity</h3>
+<ol start="42">
+<li><p>In the <strong>Slots</strong> section, click on the <strong>settings icon</strong> <i class="fa fa-cog"></i> for your <strong>orderQuantity</strong>.</p></li>
+<li><p>Add the following prompts by:</p></li>
+</ol><ul>
+<li>Entering each one into the <strong>Prompts</strong> box one at a time</li>
+<li>Clicking <i class="fa fa-plus-circle" style="color:#1166bb;"></i>
+</li>
+</ul><pre class="highlight plaintext"><code>How many cups of {productFlavor} {productType} would you like to order?
+</code><button class="button button--copy js-copy-button-10"><i class="fa fa-clipboard"></i></button></pre><pre class="highlight plaintext"><code>How many cups of {productFlavor} {productType} would you like?
+</code><button class="button button--copy js-copy-button-11"><i class="fa fa-clipboard"></i></button></pre><ol start="44">
+<li><p>Remove the default prompt <strong>e.g. What city?</strong> by clicking on <i class="fa fa-times-circle"></i>.</p></li>
+<li><p>Add the following corresponding utterances by:</p></li>
+</ol><ul>
+<li>Entering each one into the <strong>Corresponding utterances</strong> box one at a time</li>
+<li>Clicking <i class="fa fa-plus-circle" style="color:#1166bb;"></i>
+</li>
+</ul><pre class="highlight plaintext"><code>I would like to order {orderQuantity} cups
+</code><button class="button button--copy js-copy-button-12"><i class="fa fa-clipboard"></i></button></pre><pre class="highlight plaintext"><code>I'd like {orderQuantity} cups please
+</code><button class="button button--copy js-copy-button-13"><i class="fa fa-clipboard"></i></button></pre><pre class="highlight plaintext"><code>{orderQuantity} please
+</code><button class="button button--copy js-copy-button-14"><i class="fa fa-clipboard"></i></button></pre><ol start="46">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><strong>Save</strong></span>
+</li>
+</ol>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/config3.png" alt="config3"></p>
+<ol start="47">
+<li>Scroll to the bottom of the screen, then click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"> <strong>Save Intent</strong></span>
+</li>
+</ol>
+
+
+<h2 id="step7">Task 5: Add a Confirmation Prompt</h2>
+
+<p>In this task, you will add a <strong>Confirmation prompt</strong> to test your bot.</p>
+<ol start="48">
+<li><p>Expand <i class="fas fa-caret-right"></i> <strong>Confirmation prompt</strong>.</p></li>
+<li><p>Select <i class="far fa-check-square"></i> <strong>Confirmation prompt</strong>, then configure:</p></li>
+</ol><ul>
+<li><strong>Confirm:</strong></li>
+</ul><pre class="highlight plaintext"><code>Are you sure you want to order {orderQuantity} cups of {productFlavor} {productType}?
+</code><button class="button button--copy js-copy-button-15"><i class="fa fa-clipboard"></i></button></pre><ul>
+<li><strong>Cancel (if the user says "no"):</strong></li>
+</ul><pre class="highlight plaintext"><code>Okay. Your order will not be placed.
+</code><button class="button button--copy js-copy-button-16"><i class="fa fa-clipboard"></i></button></pre>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/confirm.png" alt="confirm"></p>
+<ol start="50">
+<li>Scroll to the bottom of the screen, then click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"> <strong>Save Intent</strong></span>
+</li>
+</ol>
+
+
+<h2 id="step8">Task 6: Build and Test Your Bot</h2>
+
+<p>In this task, you will build your bot and do some tests.</p>
+<ol start="51">
+<li><p>At the top of the screen, click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"> <strong>Build</strong></span></p></li>
+<li><p>In the <strong>Build your bot</strong> pop-up, click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;"><strong>Build</strong></span></p></li>
+</ol>
+<p>If you receive any errors during the build process, double-check to make sure there are spaces on both sides of the <strong>slots</strong> in your <strong>Sample utterances</strong>.</p>
+<ol start="53">
+<li><p>Close the <strong>myBot build was successful</strong> message if it appears.</p></li>
+<li><p>On the right side of the lex console look for <strong>Test Bot</strong> window, if <strong>Test Bot</strong> window doesn't appear, click <strong>Test Chatbot</strong> to expand Test Bot window.</p></li>
+<li><p>Check error handling by sending a few random strings in the chat window. Your bot should answer with randomly picked phrases from the two <strong>Clarification prompts</strong>.<br>
+After the third attempt, you should receive the <strong>Hang-up phrase</strong> (<input readonly="" class="copyable-inline-input" size="22" type="text" value="Sorry, I could not....">), which ends the session.</p></li>
+</ol>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/test.png" alt="test"></p>
+<ol start="56">
+<li>Ask your bot for support by sending <input readonly="" class="copyable-inline-input" size="4" type="text" value="help">
+Since the help intent has no slots to fill, it's immediately ready for fulfillment. Based on the intent configuration, it returns the parameter to the chat client, <strong>Intent Help is ReadyForFulfillment</strong>.</li>
+</ol>
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/help.png" alt="help"></p>
+<ol start="57">
+<li>Finally, test the <strong>OrderProduct</strong> intent by typing <input readonly="" class="copyable-inline-input" size="31" type="text" value="I would like to order ice cream"> Because the <strong>productFlavor</strong> and <strong>orderQuantity</strong> slots are not filled at this stage, the bot should prompt you to fill them.</li>
+</ol>
+<p>Additionally, after filling all the slots, the bot should prompt you for an order confirmation, as configured in task 5. If you answer the confirmation prompt with <input readonly="" class="copyable-inline-input" size="2" type="text" value="no">, your intent never reaches the "ready for fulfillment" state, and Amazon Lex ends the session.</p>
+
+<p>You might notice that you can order any flavor in the world, even if it is not part of the productFlavor slot. This is because the slot value's are not validated yet, as you haven't configured a slot validation and fulfillment yet. This will be addressed in part 2.</p>
+
+<p><img src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/icecream.png" alt="icecream"></p>
+
+
+
+<h2 id="step9">Conclusion</h2>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You now have successfully:</p>
+<ul>
+<li>Create and build a conversational bot by using <strong>Amazon Lex</strong>
+</li>
+<li>Use and understand of <strong>utterances</strong>, <strong>intents</strong> and <strong>slots</strong>.</li>
+</ul>
+<h2 id="step10">End Lab</h2>
+
+<p>Follow these steps to close the console, end your lab, and evaluate the experience.</p>
+<ol start="58">
+<li><p>Return to the AWS Management Console.</p></li>
+<li><p>On the navigation bar, click <strong>awsstudent@&lt;AccountNumber&gt;</strong>, and then click <strong>Sign Out</strong>.</p></li>
+<li><p>Click <span style="background-color:#D93025;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#D93025;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">End Lab</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-family:Google Sans;font-weight:bold;font-size:90%;color:#444;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">OK</span></p></li>
+<li><p>(Optional):</p></li>
+</ol><ul>
+<li>Select the applicable number of stars <i class="far fa-star"></i>
+</li>
+<li>Type a comment</li>
+<li>
+<p>Click <strong>Submit</strong></p>
+<ul>
+<li>1 star = Very dissatisfied</li>
+<li>2 stars = Dissatisfied</li>
+<li>3 stars = Neutral</li>
+<li>4 stars = Satisfied</li>
+<li>5 stars = Very satisfied</li>
+</ul>
+</li>
+</ul>
+<p>You may close the dialog if you don't want to provide feedback.</p>
+
+<h2 id="step11">Additional Resources</h2>
+<ul>
+<li>For more information about AWS Training and Certification, see <a href="http://aws.amazon.com/training/" target="_blank"><em>http://aws.amazon.com/training/</em></a>.</li>
+<li>For more AWS Self-Paced Labs, see <a href="http://amazon.qwiklabs.com/" target="_blank"><em>http://amazon.qwiklabs.com</em></a>.</li>
+</ul>
+<p>For feedback, suggestions, or corrections, please email us at <a href="mailto:aws-course-feedback+spl@amazon.com" target="_blank"><em>aws-course-feedback@amazon.com</em></a>.</p>
+
+</div>
+<div class="js-lab-content-outline lab-content__outline is-stuck">
+<a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step1" class="is-active">Lab Overview</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step2" class="">Start Lab</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step3" class="">Task 1: Create an Amazon Lex bot</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step4" class="">Task 2: Create an Intent</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step5" class="">Task 3: Create Your Own Slot Types</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step6" class="">Task 4: Add Prompts to Your Slots</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step7" class="">Task 5: Add a Confirmation Prompt</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step8" class="">Task 6: Build and Test Your Bot</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step9" class="">Conclusion</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step10" class="">End Lab</a><a href="https://www.qwiklabs.com/focuses/10436?parent=catalog#step11" class="">Additional Resources</a>
+</div>
+</div>
+
+</div>
+
+<div class="lab-content__markdown-wrapper">
+<div class="lab-content__markdown">
+<div class="lab-content__recommendation">
+<h4 class="headline-3">
+Ready for more?
+<p>Here's another lab we think you'll like.</p>
+<div class="card-content-wrapper js-content-card" data-id="200" data-level="Introductory" data-name="Introduction to Amazon Virtual Private Cloud (VPC)" data-type="Lab">
+<a class="card card--content elevation-0 content-lab" href="https://www.qwiklabs.com/focuses/279?parent=catalog"><div class="card__image">
+<div class="card__image__inner" style="background-image: url(https://cdn.qwiklabs.com/assets/fractal4-1d205807c54d90fe4382315dbfc0dd665ddb825bbc90f3ca5db7d7170fa0df1b.jpg)"></div>
+</div>
+<div class="card__body">
+<div class="overline card--content__type">
+Hands-On Lab
+</div>
+<h3 class="card--content__title">
+Introduction to Amazon Virtual Private Cloud (VPC)
+</h3>
+<p class="card--content__description body-1">
+This lab introduces you to Amazon Virtual Private Cloud (Amazon VPC). In this lab you will use the Amazon VPC wizard to create a VPC, attach an Internet Gateway, add a subnet and then define routing for the VPC so that traffic can flow between the subnet and the Internet gateway.
+</p>
+</div>
+<div class="card__footer">
+<div class="card__footer__left">
+<span>Introductory</span>
+</div>
+<div class="card__footer__right">
+<div class="rateit" data-rateit-readonly="true" data-rateit-value="4.1311"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 66.0976px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+</div>
+</div>
+</a></div>
+
+</h4>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="lab-introduction js-lab-introduction is-hidden">
+<div class="lab-introduction__inner">
+<h1 class="headline-1">Welcome to Your First Lab!</h1>
+<ql-icon-button class="js-skip-button">close</ql-icon-button>
+<div class="lab-introduction__video">
+<iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" id="lab-introduction" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/yF7EDXKTmoQ.html"></iframe>
+</div>
+<a class="js-skip-button button button--outline">Skip this video</a>
+</div>
+</div>
+
+
+
+</div>
+</main>
+<div class="modal fade" id="lab-details-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<div class="modal-body">
+<p class="l-mbm">
+In this lab, you will use Amazon Lex to create and build a conversational bot that understands your requests and asks for more input if needed. If all required slots have been filled, the bot will ask for confirmation before triggering an action.
+</p>
+<p class="small-label l-mbs">
+<strong>
+Duration:
+</strong>
+0m setup
+·
+60m access
+·
+60m completion
+</p>
+<p class="small-label l-mbs">
+<strong>AWS Region:</strong>
+[us-west-2] <strong>US West (Oregon)</strong>
+</p>
+<p class="small-label l-mbs">
+
+</p>
+<p class="small-label">
+<strong>
+Permalink:
+</strong>
+<a href="https://www.qwiklabs.com/catalog_lab/2507">https://www.qwiklabs.com/catalog_lab/2507</a>
+</p>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Got It
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/saved_resource(1).html"></iframe>
+</div>
+<div class="modal fade" id="lab-review-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<form class="simple_form js-lab-review-form" id="new_lab_review" action="https://www.qwiklabs.com/lab_reviews" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><div class="modal-body">
+<p class="label">
+How satisfied are you with this lab?*
+</p>
+<div class="rateit js-rateit" data-rateit-max="5" data-rateit-min="0" data-rateit-resetable="false" data-rateit-step="1" data-rateit-value="0"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 0px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+<div class="l-mtm">
+
+<div class="control-group hidden lab_review_user_id"><div class="controls"><input class="hidden" type="hidden" value="743665" name="lab_review[user_id]" id="lab_review_user_id"></div></div>
+<div class="control-group hidden lab_review_classroom_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[classroom_id]" id="lab_review_classroom_id"></div></div>
+<div class="control-group hidden lab_review_lab_id"><div class="controls"><input class="hidden" type="hidden" value="2507" name="lab_review[lab_id]" id="lab_review_lab_id"></div></div>
+<div class="control-group hidden lab_review_focus_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[focus_id]" id="lab_review_focus_id"></div></div>
+<div class="control-group hidden lab_review_rating"><div class="controls"><input class="hidden js-rating-input" type="hidden" name="lab_review[rating]" id="lab_review_rating"></div></div>
+<div class="control-group text optional lab_review_comment"><label class="text optional control-label" for="lab_review_comment">Comment</label><div class="controls"><textarea class="text optional" name="lab_review[comment]" id="lab_review_comment"></textarea></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Cancel
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<input type="submit" name="commit" value="Submit" disabled="disabled" class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary" id="submit" data-disabled="false" data-disable-with="Submit" data-upgraded=",MaterialButton,MaterialRipple"><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></input>
+</div>
+</form>
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/saved_resource(2).html"></iframe>
+</div>
+<div class="modal fade" id="lab-access-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<a class="lab-access-modal-close" data-analytics-action="dismissed_lab_payment_modal" data-dismiss="modal">
+<i class="material-icons">close</i>
+</a>
+<form class="js-lab-access-form" action="https://www.qwiklabs.com/lab_onetime_coupons/activate?parent=catalog" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓">
+<div class="modal-body">
+<div class="lab-access-modal">
+<input type="hidden" name="id" id="id" value="10436">
+<input type="hidden" name="user_id" id="user_id" value="743665">
+<input type="hidden" name="launch_with_credits" id="launch_with_credits" value="0" class="js-launch-with-credits-input">
+<input type="hidden" name="launch_with_subs" id="launch_with_subs" value="0" class="js-launch-with-subscription-input">
+<div class="lab-access-modal__method">
+<p>
+This lab costs
+8 Credits.
+</p>
+<p>
+You have a valid subscription package. Would you like to charge this lab to your subscription?
+
+</p>
+<a class="button js-launch-with-subscription-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_subscription_button">
+Use Subscription
+</a>
+</div>
+<div class="lab-access-modal__method">
+<p>
+Enter Lab Access Code:
+</p>
+<div class="lab-access-modal__code js-access-code">
+<input type="text" name="uuid_1" id="uuid_1" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_2" id="uuid_2" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_3" id="uuid_3" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_4" id="uuid_4" value="" maxlength="4" placeholder="1234">
+</div>
+<a class="button js-launch-with-access-code-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_access_code_button">
+Launch with Access Code
+</a>
+</div>
+</div>
+</div>
+</form>
+
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/saved_resource(3).html"></iframe>
+</div>
+
+<script>
+  $( function() {
+    ql.initMaterialInputs();
+    initChosen();
+    initSearch();
+    initTabs();
+    ql.list.init();
+    ql.favoriting.init();
+    ql.header.myAccount.init();
+    initTooltips();
+    ql.autocomplete.init();
+    ql.modals.init();
+    ql.toggleButtons.init();
+    ql.analytics.init();
+    initLabContent( );
+  ql.labOutline.links.init();
+  ql.labOutline.layout.init();
+  initLabReviewModal();
+  initLabAccessModal();
+  ql.labAssessment.init();
+  ql.labData.init();
+  initLabTranslations( {"are_you_sure":"All done? If you end this lab, you will lose all your work. You may not be able to restart the lab if there is a quota limit. Are you sure you want to end this lab?\n","in_progress":"*In Progress*","ending":"*Ending*","starting":"*Starting, please wait*","end_concurrent_labs":"Sorry, you can only run one lab at a time. To start this lab, please confirm that you want all of your existing labs to end.\n","copied":"Copied","no_resource":"Error retrieving resource.","no_support":"No Support","mac_press":"Press ⌘-C to copy","thanks_review":"Thanks for reviewing this lab.","windows_press":"Press Ctrl-C to copy","days":"days"} );
+  ql.labRun.init();
+  ql.initHeader();
+  ql.navigation.init();
+  ql.navPanel.init();
+  ql.navigation.init();
+  
+  });
+</script>
+<style>
+  .mdl-layout__container {
+    position: static
+  }
+</style>
+
+
+<iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/saved_resource(4).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 1; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px; width: 112px;width: 112px;" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/saved_resource(5).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px; visibility: hidden;" src="./Build a Dynamic Conversational Bot - Part 1 _ Qwiklabs_files/saved_resource(6).html"></iframe></div></body></html>

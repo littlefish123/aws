@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://www.qwiklabs.com/focuses/10371?parent=catalog -->
+<html lang="en" class="mdl-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta content="[]" name="active-experiments">
+<meta content="{&quot;userId&quot;:743665}" name="help-api-product-data">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="nIK8t3SEPgdbkawdY8Z9od3GHuhHcr+VgCtGBEaJM/RNAKWPvJ7dUYgPRC20KLQrOpN+rezt6WpuO6vvDuL+4g==">
+<title>Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda | Qwiklabs</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+<meta content="This is a two part lab. In part one of the lab, you will create a Lambda function from a blueprint, create an Amazon Kinesis Stream, then trigger the function with data from your stream and monitor the process with Amazon CloudWatch. In part two of the lab, you will learn the basics of event-driven programming using Amazon DynamoDB, its Streams feature, and AWS Lambda. You will walk through the process of building a real-world application using AWS Triggers, which combines DynamoDB Streams and Lambda. Prerequisites: To successfully complete this lab, you should be familiar with DynamoDB and Kinesis through taking those introductory labs. Node.js and Python programming are required, although full solution code is provided.  You should have at a minimum taken the Introduction to AWS Lambda lab." name="description">
+<meta content="Qwiklabs" name="author">
+<meta content="1rRsY0INj8RvwB5EF5pwdxt2A2P9aDgAlsICaJ0d5w0" name="google-site-verification">
+<meta content="Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda | Qwiklabs" property="og:title">
+<meta content="website" property="og:type">
+<meta content="/favicon-144.png" property="og:image">
+<meta content="Qwiklabs" property="og:site_name">
+<meta content="This is a two part lab. In part one of the lab, you will create a Lambda function from a blueprint, create an Amazon Kinesis Stream, then trigger the function with data from your stream and monitor the process with Amazon CloudWatch. In part two of the lab, you will learn the basics of event-driven programming using Amazon DynamoDB, its Streams feature, and AWS Lambda. You will walk through the process of building a real-world application using AWS Triggers, which combines DynamoDB Streams and Lambda. Prerequisites: To successfully complete this lab, you should be familiar with DynamoDB and Kinesis through taking those introductory labs. Node.js and Python programming are required, although full solution code is provided.  You should have at a minimum taken the Introduction to AWS Lambda lab." property="og:description">
+<meta content="/qwiklabs_logo_900x887.png" property="og:logo" size="900x887">
+<meta content="/qwiklabs_logo_994x187.png" property="og:logo" size="994x187">
+<meta content="#3681E4" property="msapplication-TileColor">
+<meta content="/favicon-144.png" property="msapplication-TileImage">
+<link href="https://www.qwiklabs.com/favicon-32.png" rel="shortcut icon">
+<link color="#3681E4" href="https://www.qwiklabs.com/favicon-svg.svg" rel="mask-icon">
+<link href="https://www.qwiklabs.com/favicon-180.png" rel="apple-touch-icon-precomposed">
+<link rel="stylesheet" media="screen" href="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/css">
+
+
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+<![endif]-->
+<!--[endif]>  <![endif]-->
+<script type="text/javascript" async="" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/js"></script><script type="text/javascript" async="" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/analytics.js.download"></script><script type="text/javascript" async="" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/analytics.min.js.download"></script><script type="text/javascript" id="www-widgetapi-script" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/www-widgetapi.js.download" async=""></script><script>
+//<![CDATA[
+window.gon={};gon.current_user={"firstname":"Selina","lastname":"Ng","fullname":"Selina Ng","company":"Capgemini","email":"n.selina@ymail.com","origin":"google-run, direct","subscriptions":1,"id":"1c340942b6e43ad7908d196db2da6728","qlCreatedAt":"2018-01-21 06:49:32 UTC","optIn":false};gon.segment="j4Im8pqIko0Lxq4wVVZWMPMM0EroHUvb";gon.deployment="run";
+//]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.qwiklabs.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.qwiklabs.com/catalog?keywords={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script id="ze-snippet" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/snippet.js.download"></script>
+
+
+
+<link rel="stylesheet" media="all" href="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/application-162ab3877b3a481e7c5b49bf8be464f433c15a21bd2c4d9c870d4197793c85fe.css">
+<script>
+  EVENT_SOURCE_BASE_URL = "https://run.qwiklabs.com/nchan-sub?id=";
+</script>
+<script src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/webcomponents-loader.js.download"></script><script src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/webcomponents-hi.js.download"></script>
+<script src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/hallofmirrors-35b5646fc769dae276cceea36b80def66b111f8f0d8576f77facc9db3773c9f3.js.download"></script><script async="" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/lazy.min.js.download"></script>
+<script src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/iframe_api"></script>
+<script src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/vendor-45d462772c30000424907184f70c7157e95fb6227698d1671c5051818a6f60d8.js.download"></script>
+<script src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/application-b8f24b563e7f6b4a399091631f253a394e419e33d6c909ef27e223b366f52750.js.download"></script>
+<script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script></head>
+<body class="focuses focuses-show lab-show l-full no-nav">
+<div class="header-container light-theme">
+<div class="header">
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect header__button header__button--nav header__nav-panel-button js-nav-toggle" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">menu</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header__title">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--nav" href="https://www.qwiklabs.com/" data-upgraded=",MaterialButton,MaterialRipple"><ql-icon>arrow_back</ql-icon><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
+<h1 class="headline-5">
+Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda
+</h1>
+</div>
+<div class="header__actions">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--action header__button--search js-header-search-bar-button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">search</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="toggle-lab-control-panel" href="javascript:;" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">description</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" data-mdl-for="toggle-lab-control-panel" data-upgraded=",MaterialTooltip">
+Toggle Lab Panel
+</div>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-favorite-button favorite-button" id="CatalogItem-10371-favorite-button" data-type="CatalogItem" data-id="10371" data-name="Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda" href="https://www.qwiklabs.com/unfavorite.json?item_id=10371&amp;item_type=CatalogItem" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">favorite</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" for="CatalogItem-10371-favorite-button" data-upgraded=",MaterialTooltip">
+Remove from favorites
+</div>
+
+
+<ql-help context="lab" productdata="{&quot;userId&quot;:743665}" data-analytics-action="opened_help" data-analytics-label="lab"></ql-help>
+<a class="header-my-account-button mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-my-account-button" data-upgraded=",MaterialButton,MaterialRipple">
+<img class="avatar " alt="avatar image" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header-my-account-menu js-my-account-menu">
+<div class="card elevation-2 no-padding">
+<div class="my-account-menu__top">
+<img class="avatar " alt="avatar image" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<div class="my-account-menu__info">
+<h4 class="subtitle-headline-1">
+Selina Ng
+</h4>
+<p class="body-2 text--gray">
+<span>n.selina@ymail.com</span>
+</p>
+<a class="button" href="https://www.qwiklabs.com/my_account/profile">My Account</a>
+</div>
+</div>
+<div class="my-account-menu__bottom">
+<a class="text--green subtitle-headline-2" href="https://www.qwiklabs.com/my_account/credits">Monthly Subscription
+</a><a data-analytics-action="clicked_sign_out" class="button button--hairline" rel="nofollow" data-method="delete" href="https://www.qwiklabs.com/users/sign_out">Sign Out</a>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="header__search-bar js-header-search-bar">
+<form id="catalog-search-mobile" onsubmit="ql.catalogSearchFilter(); return false;" action="https://www.qwiklabs.com/searches/elasticsearch" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="nIK8t3SEPgdbkawdY8Z9od3GHuhHcr+VgCtGBEaJM/RNAKWPvJ7dUYgPRC20KLQrOpN+rezt6WpuO6vvDuL+4g==">
+<input type="text" name="keywords" id="keywords" placeholder="Search" maxlength="255" aria-label="catalog search bar">
+</form>
+
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">close</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+</div>
+
+<nav class="nav-bar">
+<a class="nav-bar__item js-navigation-button" href="https://www.qwiklabs.com/"><ql-icon class="nav-bar__item__icon">
+home
+</ql-icon>
+<span class="nav-bar__item__label">
+Home
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button  active" aria-current="page" href="https://www.qwiklabs.com/catalog"><ql-icon class="nav-bar__item__icon">
+school
+</ql-icon>
+<span class="nav-bar__item__label">
+Catalog
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button" href="https://www.qwiklabs.com/my_learning"><ql-icon class="nav-bar__item__icon">
+event_note
+</ql-icon>
+<span class="nav-bar__item__label">
+My Learning
+</span>
+</a>
+</nav>
+
+<nav class="nav-panel js-nav-panel">
+<div class="nav-panel__logo">
+<div class="logo logo--blue"></div>
+</div>
+<a title="Home" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/"><ql-icon class="nav-panel__item__icon">
+home
+</ql-icon>
+<div class="nav-panel__item__label">
+Home
+</div>
+</a>
+<a title="Catalog" tabindex="-1" class="nav-panel__item js-navigation-button active" aria-current="page" href="https://www.qwiklabs.com/catalog"><ql-icon class="nav-panel__item__icon">
+school
+</ql-icon>
+<div class="nav-panel__item__label">
+Catalog
+</div>
+</a>
+<a title="My Learning" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_learning"><ql-icon class="nav-panel__item__icon">
+event_note
+</ql-icon>
+<div class="nav-panel__item__label">
+My Learning
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a title="Profile" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/profile"><ql-icon class="nav-panel__item__icon">
+account_circle
+</ql-icon>
+<div class="nav-panel__item__label">
+Profile
+</div>
+</a>
+<a title="Credits &amp; Subscriptions" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/credits"><ql-icon class="nav-panel__item__icon">
+money
+</ql-icon>
+<div class="nav-panel__item__label">
+Credits &amp; Subscriptions
+</div>
+</a>
+<a title="Security" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/security"><ql-icon class="nav-panel__item__icon">
+security
+</ql-icon>
+<div class="nav-panel__item__label">
+Security
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a class="nav-panel__item" tabindex="-1" href="https://www.qwiklabs.com/focuses/10371?parent=catalog#"><ql-help>
+<div class="nav-panel__help-item">
+<ql-icon class="nav-panel__item__icon">help</ql-icon>
+<div class="nav-panel__item__label">Help</div>
+</div>
+</ql-help>
+</a><div class="nav-panel__small-links">
+<a tabindex="-1" href="https://www.qwiklabs.com/privacy_policy">Privacy</a>
+<a tabindex="-1" href="https://www.qwiklabs.com/terms_of_service">Terms</a>
+</div>
+</nav>
+<div class="nav-panel__overlay js-nav-toggle"></div>
+
+<main class="js-main">
+<span class="hidden" id="flash-sibling-before"></span>
+
+<div class="l-main-wrapper" id="main-wrapper">
+
+
+
+
+
+
+
+<div class="js-lab-state" data-analytics-payload="{&quot;label&quot;:&quot;Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda&quot;,&quot;lab_name&quot;:&quot;Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda&quot;,&quot;classroom_name&quot;:null,&quot;deployment&quot;:&quot;run&quot;}" data-focus-id="10371" data-lab-billing-limit="0.0" data-lab-duration="3600" data-parent="catalog" data-payment-required=""></div>
+<ql-lab-control-panel class="js-lab-control-panel l-lab-control-panel" connectiondetails="[]" connectionfiles="[]" labcontrolbutton="{&quot;disabled&quot;:false,&quot;pending&quot;:false,&quot;running&quot;:false}" labtimer="{&quot;ticking&quot;:false,&quot;secondsRemaining&quot;:3600}" studentresources="[]"></ql-lab-control-panel>
+<div class="l-lab-main-body">
+<div class="js-lab-content lab-content">
+<div class="alert alert--fake js-alert">
+<p class="alert__message js-alert-message"></p>
+<a class="alert__close js-alert-close">
+<i class="fa fa-times"></i>
+</a>
+<iframe class="l-ie-iframe-fix" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/saved_resource.html"></iframe>
+</div>
+<div class="lab-content__markdown-wrapper">
+<div class="lab-preamble">
+<h1 class="lab-preamble__title">
+Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda
+</h1>
+<div class="lab-preamble__details subtitle-headline-1">
+<span>1 hour </span>
+<span>10 Credits</span>
+<div class="lab__rating">
+<a href="https://www.qwiklabs.com/focuses/10371/reviews?parent=catalog"><div class="rateit" data-rateit-readonly="true" data-rateit-value="4.3014"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 68.8224px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+
+</a><a data-target="#lab-review-modal" data-toggle="modal">
+Rate Lab
+</a>
+</div>
+</div>
+</div>
+
+<div class="lab-content__inner-wrapper">
+<div class="js-markdown-instructions lab-content__markdown markdown-lab-instructions no-select" id="markdown-lab-instructions">
+<p><img src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/aws-logo.png" alt=""></p>
+
+
+
+<p><strong>SPL-51 Version 3.1.9</strong></p>
+
+<p>© 2020 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.</p>
+
+<p>Errors or corrections? Email us at <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a>.</p>
+
+<p>Other questions? Contact us at <a href="https://aws.amazon.com/contact-us/aws-training/" target="_blank">https://aws.amazon.com/contact-us/aws-training/</a></p>
+
+<h2 id="step1">Overview</h2>
+
+<p>This is a two part lab. In part one of the lab, you will create a Lambda function from a blueprint, create an Amazon Kinesis Stream, then trigger the function with data from your stream and monitor the process with Amazon CloudWatch.</p>
+
+<p>In part two of the lab, you will learn the basics of event-driven programming using Amazon DynamoDB, DynamoDB Streams, and AWS Lambda. You will walk through the process of building a real-world application using triggers that combine DynamoDB Streams and Lambda.</p>
+
+<h3>Topics covered</h3>
+
+<p>By the end of this lab, you will be able to:</p>
+<ul>
+<li>Create an AWS Lambda function from a blueprint</li>
+<li>Create an Amazon Kinesis Stream</li>
+<li>Use Amazon CloudWatch to monitor Kinesis event data triggering your Lambda function</li>
+<li>Create an Amazon DynamoDB table and insert items</li>
+<li>Enable the Amazon DynamoDB Streams feature</li>
+<li>Configure and troubleshoot Lambda functions</li>
+</ul>
+<h3>Prerequisites</h3>
+
+<p>To successfully complete this lab, you should be familiar with DynamoDB and Kinesis by taking relevant introductory labs. Node.js and Python programming skills are recommended, although full solution code is provided. You should have completed the <strong>Introduction to AWS Lambda</strong> self-paced lab.</p>
+
+<p>Please be sure that pop-ups are enabled for this lab.</p>
+
+<h3>Other AWS Services</h3>
+
+<p>Other AWS Services than the ones needed for this lab are disabled by IAM policy during your access time in this lab. In addition, the capabilities of the services used in this lab are limited to what is required by the lab and in some cases are even further limited as an intentional aspect of the lab design. Expect errors when accessing other services or performing actions beyond those provided in this lab guide.</p>
+
+
+
+<h2 id="step2">Start Lab</h2>
+<ol start="1">
+<li>At the top of your screen, launch your lab by clicking <span style="background-color:#34A853;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#34A853;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Start Lab</span>
+</li>
+</ol>
+<p>This will start the process of provisioning your lab resources. An estimated amount of time to provision your lab resources will be displayed. You must wait for your resources to be provisioned before continuing.</p>
+
+<p><i class="fas fa-info-circle"></i> If you are prompted for a token, use the one distributed to you (or credits you have purchased). </p>
+<ol start="2">
+<li>Open your lab by clicking <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span>
+</li>
+</ol>
+<p>This will automatically log you into the AWS Management Console. </p>
+
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Please do not change the Region unless instructed</strong>.</p>
+
+
+
+<h3>Common login errors</h3>
+
+<p><strong>Error : Federated login credentials</strong></p>
+
+<p><img src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/federatedloginerror.png" alt=""></p>
+
+<p>If you see this message:</p>
+<ul>
+<li>Close the browser tab to return to your initial lab window</li>
+<li>Wait a few seconds</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+<p>You should now be able to access the AWS Management Console.</p>
+
+
+
+<p><strong>Error: You must first log out</strong></p>
+
+<p><img src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/logouterror.png" alt=""></p>
+
+<p>If you see the message, <strong>You must first log out before logging into a different AWS account:</strong> </p>
+<ul>
+<li>Click <strong>click here</strong>
+</li>
+<li>Close your browser tab to return to your initial Qwiklabs window</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+
+
+<h2 id="step3">About the Technologies</h2>
+
+<h3>AWS Lambda</h3>
+
+<p>Lambda is a compute service that provides resizable compute capacity in the cloud to make web-scale computing easier for developers. You can upload your code to AWS Lambda and the service can run the code on your behalf using AWS infrastructure. AWS Lambda supports multiple coding languages: Node.js, Java, or Python.</p>
+
+<p>After you upload your code and create a Lambda function, AWS Lambda takes care of provisioning and managing the servers that you use to run the code. In this lab, you will use AWS Lambda as an event-driven compute service where AWS Lambda runs your code in response to changes to data in and SNS topic and an Amazon S3 bucket.<br>
+x<input readonly="" class="copyable-inline-input" size="1" type="text" value="x"><br>
+You can use AWS Lambda in two ways:</p>
+<ul>
+<li>As an event-driven compute service where AWS Lambda runs your code in response to events, such as uploading image files as you will see in this lab.</li>
+</ul>
+<p><img src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/lambda-howitworks.png" alt=""></p>
+<ul>
+<li>As a compute service to run your code in response to HTTP requests using Amazon API Gateway or API calls.</li>
+</ul>
+<p><img src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/lambda-mobilebackend.png" alt=""></p>
+
+<p>Lambda passes on to you the financial benefits of Amazon’s scale. AWS Lambda executes your code only when needed and scales automatically, from a few requests per day to thousands per second. With these capabilities, you can use Lambda to easily build data processing triggers for AWS services like Amazon S3 and Amazon DynamoDB, process streaming data stored in Amazon Kinesis, or create your own back end that operates at AWS scale, performance, and security.</p>
+
+<p>This lab guide explains basic concepts of AWS in a step by step fashion. However, it can only give a brief overview of Lambda concepts. For further information, see the official Amazon Web Services Documentation for Lambda at <a href="https://aws.amazon.com/documentation/lambda/" target="_blank">https://aws.amazon.com/documentation/lambda/</a>. For pricing details, see <a href="https://aws.amazon.com/lambda/pricing/" target="_blank">https://aws.amazon.com/lambda/pricing/</a>.</p>
+
+<h3>Lambda Blueprints</h3>
+
+<p>Blueprints are sample configurations of event sources and Lambda functions that do minimal processing for you. Most blueprints process events from specific event sources, such as Amazon S3 or DynamoDB. For example, if you select an s3-get-object blueprint, it provides sample code that processes an object-created event published by Amazon S3 that Lambda receives as parameter.</p>
+
+<p>When you create a new AWS Lambda function, you can use a blueprint that best aligns with your scenario. You can then customize the blueprint as needed. You do not have to use a blueprint (you can author a Lambda function and configure an event source separately).</p>
+
+<h3>Amazon DynamoDB</h3>
+
+<p>Amazon DynamoDB is a fast and flexible NoSQL database service for all applications that need consistent, single-digit millisecond latency at any scale. It is a fully managed database and supports both document and key-value data models. Its flexible data model and reliable performance make it a great fit for mobile, web, gaming, ad-tech, IoT, and many other applications. For further information, see the official Amazon Web Services Documentation for DynamoDB at <a href="https://aws.amazon.com/documentation/dynamodb/" target="_blank">https://aws.amazon.com/documentation/dynamodb/</a>.</p>
+
+<p><img src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/lambda-etl.png" alt=""></p>
+
+<h3>Amazon Kinesis</h3>
+
+<p>Amazon Kinesis is a fully managed service for real-time processing of streaming data at massive scale. Amazon Kinesis can collect and process hundreds of terabytes of data per hour from hundreds of thousands of sources, allowing you to easily write applications that process information in real-time, from sources such as web site click-streams, marketing and financial information, manufacturing instrumentation and social media, and operational logs and metering data.</p>
+
+<p>With Amazon Kinesis applications, you can easily send data to a variety of other services such as Amazon Simple Storage Service (Amazon S3), Amazon DynamoDB, Amazon Lambda, or Amazon Redshift. In a few clicks and a couple of lines of code, you can start building applications which respond to changes in your data stream in seconds, at any scale, while only paying for the resources you use. For further information, see the official Amazon Web Services Documentation for Kinesis at <a href="http://aws.amazon.com/documentation/kinesis/" target="_blank">http://aws.amazon.com/documentation/kinesis/</a>.</p>
+
+<p><img src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/lambda-iot.png" alt=""></p>
+
+
+
+<h2 id="step4">Part 1: Event-Driven Programming with Amazon Kinesis and AWS Lambda</h2>
+
+<p>In the first part of this lab, you will learn event-driven programming with Kinesis and Lambda.</p>
+
+
+
+<h2 id="step5">Task 1: Create an Amazon Kinesis Stream</h2>
+
+<p>In this task, you will create an Amazon Kinesis stream.</p>
+<ol start="3">
+<li><p>In the AWS Management Console, click <strong>Services</strong> then click <strong>Kinesis</strong>.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Get started</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create data stream</span> then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Kinesis stream name:</strong> <input readonly="" class="copyable-inline-input" size="10" type="text" value="Lab-Stream">
+</li>
+<li>
+<strong>Number of shards:</strong> <input readonly="" class="copyable-inline-input" size="1" type="text" value="1">
+</li>
+</ul>
+<p>Each shard supports a pre-defined capacity, as shown in the <strong>Total stream capacity</strong> section. This lab only requires one shard, but applications requiring more capacity can simply request more shards.</p>
+<ol start="6">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create Kinesis stream</span>
+</li>
+</ol>
+
+
+<h2 id="step6">Task 2: Create a Lambda Function</h2>
+
+<p>In this task, you will define an AWS Lambda function that will be triggered by data coming into the stream.</p>
+<ol start="7">
+<li><p>On the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>Lambda</strong>.</p></li>
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create function</span></p></li>
+</ol>
+<p>You will start by selecting a Lambda blueprint. Blueprints are pre-built for you and can be customized to suit your specific needs</p>
+<ol start="9">
+<li>Select <i class="far fa-dot-circle"></i> <strong>Use a blueprint</strong>, then:</li>
+</ol><ul>
+<li>Click the <strong>Blueprints</strong> search <i class="fas fa-search"></i> box</li>
+<li>Search for: <input readonly="" class="copyable-inline-input" size="29" type="text" value="kinesis-process-record-python">
+</li>
+<li>Select <i class="far fa-dot-circle"></i> <strong>kinesis-process-record-python</strong>
+</li>
+<li>Click <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Configure</span>
+</li>
+</ul><ol start="10">
+<li>In the <strong>Basic information</strong> section, configure:</li>
+</ol><ul>
+<li>
+<strong>Function name:</strong> <input readonly="" class="copyable-inline-input" size="21" type="text" value="ProcessKinesisRecords">
+</li>
+<li>
+<strong>Execution role:</strong> <em>Use an existing role</em>
+</li>
+<li>
+<strong>Existing role:</strong> <em>lambda_basic_execution</em>
+</li>
+</ul><ol start="11">
+<li>In the <strong>Kinesis trigger</strong> section, configure: </li>
+</ol><ul>
+<li>
+<strong>Kinesis stream:</strong> <input readonly="" class="copyable-inline-input" size="10" type="text" value="Lab-Stream">
+</li>
+<li>
+<i class="far fa-check-square"></i> <strong>Enable trigger</strong>
+</li>
+</ul>
+<p>This will configure the Lambda function so that it is triggered whenever data comes into the Kinesis stream you created earlier.</p>
+<ol start="12">
+<li>Scroll down and examine the Lambda blueprint displayed in the <strong>Lambda function code</strong> section. It does the following:</li>
+</ol><ul>
+<li>Loop through each of the records received</li>
+<li>Decode the data, which is encoded in Base 64</li>
+<li>Print the data to the debug log</li>
+</ul><ol start="13">
+<li>At the bottom of the screen, click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create function</span>
+</li>
+</ol>
+<p>This function will now trigger whenever data is sent to the stream.</p>
+
+
+
+<h2 id="step7">Task 3: Test your Function</h2>
+
+<p>In this task you will simulate data coming from a stream to trigger your Lambda function.</p>
+<ol start="14">
+<li>Click <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Test</span>
+</li>
+</ol>
+<p>An event template for Kinesis will be automatically selected. The event contains a simulated message arriving via Kinesis.</p>
+<ol start="15">
+<li><p>For <strong>Event name</strong>, enter: <input readonly="" class="copyable-inline-input" size="6" type="text" value="stream"></p></li>
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create</span></p></li>
+<li><p>Click <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Test</span></p></li>
+</ol>
+<p>You should see the message: <em>Execution result: succeeded</em></p>
+<ol start="18">
+<li>Expand <i class="fas fa-caret-right"></i> <strong>Details</strong> to view the output of the Lambda function.</li>
+</ol>
+<p>You will be shown information about the Lambda execution:</p>
+<ul>
+<li>Execution duration</li>
+<li>Resources consumed</li>
+<li>Maximum memory used</li>
+<li>Log output</li>
+</ul><ol start="19">
+<li>Click the test button another three times, waiting a few seconds between each test.</li>
+</ol>
+<p>This will generate test data for Amazon CloudWatch.</p>
+<ol start="20">
+<li>Click the <strong>Monitoring</strong> tab.</li>
+</ol>
+<p>You will be presented with CloudWatch metrics for your Lambda function. Metrics should be available for <em>Invocations</em> and <em>Duration</em>.</p>
+
+<p><i class="fas fa-comment"></i> If the metrics do not appear, wait a minute and then click <i class="fas fa-sync"></i> refresh.</p>
+
+<h2 id="step8">Part 2: Event Driven Programing with Amazon DynamoDB and AWS Lambda</h2>
+
+<p>In the second half of this lab, you will learn about a different event driven programming method, this time with DynamoDB and Lambda.</p>
+
+<h2 id="step9">Task 4: Create Tables in DynamoDB</h2>
+
+<p>First, you will create a DynamoDB table that will contain scores for online games.</p>
+<ol start="21">
+<li><p>On the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>DynamoDB</strong>.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create table</span> and configure:</p></li>
+</ol><ul>
+<li>
+<strong>Table name:</strong> <input readonly="" class="copyable-inline-input" size="16" type="text" value="GameScoreRecords">
+</li>
+<li>
+<strong>Primary key:</strong> <input readonly="" class="copyable-inline-input" size="8" type="text" value="RecordID">
+</li>
+<li>
+<strong>Primary key type:</strong> <em>Number</em>
+</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create</span>
+</li>
+</ul>
+<p>You will now create another table for linking scores to users.</p>
+<ol start="23">
+<li>Click <strong>Create table</strong> and configure:</li>
+</ol><ul>
+<li>
+<strong>Table name:</strong> <input readonly="" class="copyable-inline-input" size="16" type="text" value="GameScoresByUser">
+</li>
+<li>
+<strong>Primary key:</strong> <input readonly="" class="copyable-inline-input" size="8" type="text" value="Username">
+</li>
+<li>
+<strong>Primary key type:</strong> <em>String</em>
+</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create</span>
+</li>
+</ul>
+<p>You can now activate <strong>DynamoDB Streams</strong> on the first table. This will generate streaming data whenever there is any change to the table (insert, update, delete).</p>
+<ol start="24">
+<li><p>Click the first table you created, <strong>GameScoreRecords</strong>.</p></li>
+<li><p>On the <strong>Overview</strong> tab, click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Manage Stream</span> then configure:</p></li>
+</ol><ul>
+<li>
+<strong>View type:</strong> <i class="far fa-dot-circle"></i> <em>New image-the entire item, as it appears after it was modified</em>
+</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Enable</span>
+</li>
+</ul>
+<p>Any record sent to this table will now send a message via DyanmoDB streams, which can trigger a Lambda function.</p>
+
+
+
+<h2 id="step10">Task 5: Create a Lambda Function</h2>
+
+<p>You will now create a Lambda function that will be triggered by updates to your DynamoDB table.</p>
+<ol start="26">
+<li><p>On the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>Lambda</strong>.</p></li>
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create function</span></p></li>
+</ol>
+<p>You will be providing the code to run, so will <strong>Author from scratch</strong>.</p>
+<ol start="28">
+<li>Configure the following:</li>
+</ol><ul>
+<li>
+<strong>Function name:</strong> <input readonly="" class="copyable-inline-input" size="21" type="text" value="AggregateScoresByUser">
+</li>
+<li>
+<strong>Runtime:</strong> <em>Node.js 12.x</em>
+</li>
+<li>Expand <i class="fas fa-caret-right"></i> <strong>Choose or create an execution role</strong>
+</li>
+<li>
+<strong>Execution role:</strong>  <em>Use an existing role</em>
+</li>
+<li>
+<strong>Existing role:</strong> <em>lambda_basic_execution_dynamodb</em>
+</li>
+</ul><ol start="29">
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create function</span></p></li>
+<li><p>Scroll down to the <strong>Function code</strong> section, then:</p></li>
+</ol><ul>
+<li><p>Delete all of the code in the <strong>index.js</strong> editor</p></li>
+<li><p>Copy and paste this code into the <strong>index.js</strong> editor:</p></li>
+</ul><pre class="highlight javascript"><code><span class="c1">// Set up AWS client</span>
+<span class="kd">var</span> <span class="nx">AWS</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'aws-sdk'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">dynamodb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AWS</span><span class="p">.</span><span class="nx">DynamoDB</span><span class="p">();</span>
+
+<span class="c1">// update AWS configuration to set region</span>
+<span class="nx">AWS</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">update</span><span class="p">({</span><span class="na">region</span> <span class="p">:</span> <span class="s1">'us-west-2'</span><span class="p">});</span>
+
+<span class="nx">exports</span><span class="p">.</span><span class="nx">handler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">,</span> <span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Keep track of how many requests are in flight</span>
+    <span class="kd">var</span> <span class="nx">inflightRequests</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="nx">event</span><span class="p">.</span><span class="nx">Records</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">record</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'DynamoDB Record: %j'</span><span class="p">,</span> <span class="nx">record</span><span class="p">.</span><span class="nx">dynamodb</span><span class="p">);</span>
+        <span class="c1">// Get the new image of the DynamoDB Streams record</span>
+        <span class="kd">var</span> <span class="nx">newItemImage</span> <span class="o">=</span> <span class="nx">record</span><span class="p">.</span><span class="nx">dynamodb</span><span class="p">.</span><span class="nx">NewImage</span><span class="p">;</span>
+
+        <span class="c1">// Set the appropriate parameters for UpdateItem</span>
+        <span class="c1">// Refer to the ADD operation in the UpdateItem API for UpdateExpression</span>
+        <span class="c1">// http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html</span>
+        <span class="c1">// Adds the specified value to the item, if attribute does not exist, set the attribute</span>
+        <span class="kd">var</span> <span class="nx">updateItemParams</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="na">TableName</span><span class="p">:</span> <span class="s2">"GameScoresByUser"</span><span class="p">,</span>
+            <span class="na">Key</span> <span class="p">:</span> <span class="p">{</span> <span class="na">Username</span> <span class="p">:</span> <span class="nx">newItemImage</span><span class="p">.</span><span class="nx">Username</span> <span class="p">},</span>
+            <span class="na">UpdateExpression</span> <span class="p">:</span> <span class="s1">'ADD Score :attrValue'</span><span class="p">,</span>
+            <span class="na">ExpressionAttributeValues</span> <span class="p">:</span> <span class="p">{</span><span class="s1">':attrValue'</span> <span class="p">:</span> <span class="nx">newItemImage</span><span class="p">.</span><span class="nx">Score</span><span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Make a callback function to execute once UpdateItem request completes</span>
+        <span class="c1">// It may be helpful to refer to the updateItem method for the Javascript SDK</span>
+        <span class="c1">// http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB.html\#updateItem-property</span>
+        <span class="kd">var</span> <span class="nx">updateItemCallback</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">// log errors</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">stack</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="c1">// check if all requests are finished, if so, end the function</span>
+                <span class="nx">inflightRequests</span><span class="o">--</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">inflightRequests</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">(</span><span class="s2">"Successfully processed "</span> <span class="o">+</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Records</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">" records."</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// Send UpdateItem request to DynamoDB</span>
+        <span class="nx">dynamodb</span><span class="p">.</span><span class="nx">updateItem</span><span class="p">(</span><span class="nx">updateItemParams</span><span class="p">,</span> <span class="nx">updateItemCallback</span><span class="p">);</span>
+        <span class="c1">// Increase count for number of requests in flight</span>
+        <span class="nx">inflightRequests</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">});</span>
+
+        <span class="c1">// If there are no more requests pending, end the function</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">inflightRequests</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">context</span><span class="p">.</span><span class="nx">succeed</span><span class="p">(</span><span class="s2">"Successfully processed "</span> <span class="o">+</span> <span class="nx">event</span><span class="p">.</span><span class="nx">Records</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">" records."</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+</code><button class="button button--copy js-copy-button-0"><i class="fa fa-clipboard"></i></button></pre>
+<p>Examine the code. It does the following:</p>
+<ul>
+<li>Loop through each incoming record</li>
+<li>Create (ADD) an item in the <em>GameScoresByUser</em> table with the incoming score</li>
+<li>Wait until all updates have been processed</li>
+</ul>
+<p>You will now configure the function to execute when a value is added to the DynamoDB table.</p>
+<ol start="31">
+<li><p>Scroll up to the <strong>Designer</strong> section.</p></li>
+<li><p>Click <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;"><i class="fas fa-plus"></i> Add trigger</span> then configure:</p></li>
+<li><p>In the <strong>Trigger configuration</strong> section, configure the following:</p></li>
+</ol><ul>
+<li>
+<strong>Select a trigger:</strong> click <strong>DynamoDB</strong>.</li>
+<li>
+<strong>DynamoDB table:</strong> <em>GameScoreRecords</em>
+</li>
+<li>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Add</span>
+</li>
+</ul>
+<p>The function will now be triggered when a new game score is added to the DynamoDB table.</p>
+<ol start="34">
+<li>At the top of the screen, click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Save</span>
+</li>
+</ol>
+<p>You can now test the function with a record that simulates an update of the database.</p>
+<ol start="35">
+<li><p>Click <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Test</span></p></li>
+<li><p>For <strong>Event name</strong>, enter: <input readonly="" class="copyable-inline-input" size="5" type="text" value="score"></p></li>
+<li><p>Delete the existing test code (with key3, etc).</p></li>
+<li><p>Copy and paste this record into the test event window:</p></li>
+</ol><pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"Records"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"eventID"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"eventVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"dynamodb"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"Keys"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"RecordID"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="s2">"S"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="w"> </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"NewImage"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"RecordID"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="s2">"S"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"Username"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"S"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jane Doe"</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"Score"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"N"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100"</span><span class="w"> </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"Nickname"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">"S"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JaneD"</span><span class="w"> </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"StreamViewType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NEW_IMAGE"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"SequenceNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"111"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"SizeBytes"</span><span class="p">:</span><span class="w"> </span><span class="mi">26</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"awsRegion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"us-west-2"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eventName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"INSERT"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eventSourceARN"</span><span class="p">:</span><span class="w"> </span><span class="s2">"arn:aws:dynamodb:us-west-2:account-id:table/GameScoreRecords/stream/2015-10-07T00:48:05.899"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"eventSource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"aws:dynamodb"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code><button class="button button--copy js-copy-button-1"><i class="fa fa-clipboard"></i></button></pre>
+<p>Examine the test record. It is simulating an incoming record from the <em>GameScoreRecords</em> table.</p>
+<ol start="39">
+<li><p>At the bottom of the page, click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create</span></p></li>
+<li><p>Click <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Test</span></p></li>
+</ol>
+<p>Your Lambda function will be invoked. The heading (towards the top of the page) should say <em>Execution result: succeeded</em>.</p>
+<ol start="41">
+<li>Expand <i class="fas fa-caret-right"></i> <strong>Details</strong> to view the output of the Lambda function.</li>
+</ol>
+<p>You should see: <em>Successfully processed 1 records.</em></p>
+
+<h3>Verify in DynamoDB</h3>
+
+<p>You will now verify that the data was updated in DynamoDB.</p>
+<ol start="42">
+<li><p>On the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>DynamoDB</strong>.</p></li>
+<li><p>In the left navigation pane, click <strong>Tables</strong>.</p></li>
+<li><p>Select <i class="far fa-dot-circle"></i> <strong>GameScoreByUser</strong>.</p></li>
+<li><p>Click the <strong>Items</strong> tab.</p></li>
+</ol>
+<p>This table was previously empty (you created it yourself), but you should now see an entry for <em>Jane Doe</em>.</p>
+
+<h3>Trigger the Update</h3>
+
+<p>You can perform more tests by inserting values in the Scores table, and confirming that the Lambda updates the User table.</p>
+<ol start="46">
+<li><p>Select the <i class="far fa-dot-circle"></i> <strong>GameScoreRecords</strong> table.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create item</span> then for <strong>RecordID</strong>, enter any number.</p></li>
+<li><p>Enter a user name:</p></li>
+</ol><ul>
+<li>Click <i class="fas fa-plus-circle"></i> &gt; Append &gt; String</li>
+<li>For <strong>FIELD</strong>, enter: <input readonly="" class="copyable-inline-input" size="8" type="text" value="Username">
+</li>
+<li>For <strong>VALUE</strong>, enter a person's name</li>
+</ul><ol start="49">
+<li>You will now add a score:</li>
+</ol><ul>
+<li>Clicking <i class="fas fa-plus-circle"></i> &gt; Append &gt; Number</li>
+<li>For <strong>FIELD</strong>, enter: <input readonly="" class="copyable-inline-input" size="5" type="text" value="Score">
+</li>
+<li>For <strong>VALUE</strong>, enter a random score</li>
+</ul><ol start="50">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Save</span>
+</li>
+</ol>
+<p>Your new item will be displayed. It should have also triggered the Lambda function, resulting in a new entry in the other table.</p>
+<ol start="51">
+<li>Click the <strong>GameScoresByUser</strong> table.</li>
+</ol>
+<p>You should see that the new data you entered has been copied to the User table.</p>
+
+<p>Feel free to repeat the test by adding more items in the <em>GameScoreRecords</em> table.</p>
+
+
+
+<h2 id="step11">Conclusion</h2>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You now have successfully:</p>
+<ul>
+<li>Created a Lambda function from a blueprint.</li>
+<li>Created an Amazon Kinesis Stream and used it to trigger your Lambda function.</li>
+<li>Used CloudWatch to monitor your function.</li>
+<li>Create an Amazon DynamoDB table and inserted sample data.</li>
+<li>Enabled Amazon DynamoDB Streams.</li>
+<li>Tested and enabled the Lambda function on an Amazon DynamoDB table.</li>
+</ul>
+
+
+<h2 id="step12">End Lab</h2>
+
+<p>Follow these steps to close the console, end your lab, and evaluate the experience.</p>
+<ol start="52">
+<li><p>Return to the AWS Management Console.</p></li>
+<li><p>On the navigation bar, click <strong>awsstudent@&lt;AccountNumber&gt;</strong>, and then click <strong>Sign Out</strong>.</p></li>
+<li><p>Click <span style="background-color:#D93025;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#D93025;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">End Lab</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-family:Google Sans;font-weight:bold;font-size:90%;color:#444;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">OK</span></p></li>
+<li><p>(Optional):</p></li>
+</ol><ul>
+<li>Select the applicable number of stars <i class="far fa-star"></i>
+</li>
+<li>Type a comment</li>
+<li>
+<p>Click <strong>Submit</strong></p>
+<ul>
+<li>1 star = Very dissatisfied</li>
+<li>2 stars = Dissatisfied</li>
+<li>3 stars = Neutral</li>
+<li>4 stars = Satisfied</li>
+<li>5 stars = Very satisfied</li>
+</ul>
+</li>
+</ul>
+<p>You may close the dialog if you don't want to provide feedback.</p>
+
+
+
+<h2 id="step13">Additional resources</h2>
+
+<p>For more information about AWS Lambda, see:</p>
+<ul>
+<li>For more information about AWS Lambda, see <a href="https://aws.amazon.com/lambda/" target="_blank">https://aws.amazon.com/lambda/</a>
+</li>
+<li>For more information on AWS Training &amp; Certification, see <a href="http://aws.amazon.com/training/" target="_blank">http://aws.amazon.com/training/</a>
+</li>
+</ul>
+<p>For feedback, suggestions, or corrections, please email us at: <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a></p>
+
+</div>
+<div class="js-lab-content-outline lab-content__outline is-stuck">
+<a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step1" class="">Overview</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step2" class="">Start Lab</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step3" class="">About the Technologies</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step4" class="">Part 1: Event-Driven Programming with Amazon Kinesis and AWS Lambda</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step5" class="">Task 1: Create an Amazon Kinesis Stream</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step6" class="">Task 2: Create a Lambda Function</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step7" class="">Task 3: Test your Function</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step8" class="">Part 2: Event Driven Programing with Amazon DynamoDB and AWS Lambda</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step9" class="">Task 4: Create Tables in DynamoDB</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step10" class="is-active">Task 5: Create a Lambda Function</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step11" class="">Conclusion</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step12">End Lab</a><a href="https://www.qwiklabs.com/focuses/10371?parent=catalog#step13">Additional resources</a>
+</div>
+</div>
+
+</div>
+
+<div class="lab-content__markdown-wrapper">
+<div class="lab-content__markdown">
+<div class="lab-content__recommendation">
+<h4 class="headline-3">
+Ready for more?
+<p>Here's another lab we think you'll like.</p>
+<div class="card-content-wrapper js-content-card" data-id="118" data-level="Advanced" data-name="Building a Media Sharing Website - Part 1: Media Upload" data-type="Lab">
+<a class="card card--content elevation-0 content-lab" href="https://www.qwiklabs.com/focuses/292?parent=catalog"><div class="card__image">
+<div class="card__image__inner" style="background-image: url(https://cdn.qwiklabs.com/assets/fractal6-b848b69b0fdbc1e6aa7a7d83377f32d7a0388ff55034eda4fcc306b0a2a63a33.jpg)"></div>
+</div>
+<div class="card__body">
+<div class="overline card--content__type">
+Hands-On Lab
+</div>
+<h3 class="card--content__title">
+Building a Media Sharing Website - Part 1: Media Upload
+</h3>
+<p class="card--content__description body-1">
+This lab will demonstrate how to deploy a photo sharing website with a web interface for users to browse and store images. The application, written in Ruby on Rails, will use Amazon S3 for storage, Amazon DynamoDB for the database, and Amazon EC2 to host the web application.
+</p>
+</div>
+<div class="card__footer">
+<div class="card__footer__left">
+<span>Advanced</span>
+</div>
+<div class="card__footer__right">
+<div class="rateit" data-rateit-readonly="true" data-rateit-value="4.0725"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 65.16px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+</div>
+</div>
+</a></div>
+
+</h4>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="lab-introduction js-lab-introduction is-hidden">
+<div class="lab-introduction__inner">
+<h1 class="headline-1">Welcome to Your First Lab!</h1>
+<ql-icon-button class="js-skip-button">close</ql-icon-button>
+<div class="lab-introduction__video">
+<iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" id="lab-introduction" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/yF7EDXKTmoQ.html"></iframe>
+</div>
+<a class="js-skip-button button button--outline">Skip this video</a>
+</div>
+</div>
+
+
+
+</div>
+</main>
+<div class="modal fade" id="lab-details-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<div class="modal-body">
+<p class="l-mbm">
+This is a two part lab. In part one of the lab, you will create a Lambda function from a blueprint, create an Amazon Kinesis Stream, then trigger the function with data from your stream and monitor the process with Amazon CloudWatch. In part two of the lab, you will learn the basics of event-driven programming using Amazon DynamoDB, its Streams feature, and AWS Lambda. You will walk through the process of building a real-world application using AWS Triggers, which combines DynamoDB Streams and Lambda. Prerequisites: To successfully complete this lab, you should be familiar with DynamoDB and Kinesis through taking those introductory labs. Node.js and Python programming are required, although full solution code is provided.  You should have at a minimum taken the Introduction to AWS Lambda lab.
+</p>
+<p class="small-label l-mbs">
+<strong>
+Duration:
+</strong>
+0m setup
+·
+60m access
+·
+45m completion
+</p>
+<p class="small-label l-mbs">
+<strong>AWS Region:</strong>
+[us-west-2] <strong>US West (Oregon)</strong>
+</p>
+<p class="small-label l-mbs">
+<span><strong>Levels: </strong>advanced</span>
+</p>
+<p class="small-label">
+<strong>
+Permalink:
+</strong>
+<a href="https://www.qwiklabs.com/catalog_lab/2470">https://www.qwiklabs.com/catalog_lab/2470</a>
+</p>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Got It
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/saved_resource(1).html"></iframe>
+</div>
+<div class="modal fade" id="lab-review-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<form class="simple_form js-lab-review-form" id="new_lab_review" action="https://www.qwiklabs.com/lab_reviews" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><div class="modal-body">
+<p class="label">
+How satisfied are you with this lab?*
+</p>
+<div class="rateit js-rateit" data-rateit-max="5" data-rateit-min="0" data-rateit-resetable="false" data-rateit-step="1" data-rateit-value="0"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 0px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+<div class="l-mtm">
+
+<div class="control-group hidden lab_review_user_id"><div class="controls"><input class="hidden" type="hidden" value="743665" name="lab_review[user_id]" id="lab_review_user_id"></div></div>
+<div class="control-group hidden lab_review_classroom_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[classroom_id]" id="lab_review_classroom_id"></div></div>
+<div class="control-group hidden lab_review_lab_id"><div class="controls"><input class="hidden" type="hidden" value="2470" name="lab_review[lab_id]" id="lab_review_lab_id"></div></div>
+<div class="control-group hidden lab_review_focus_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[focus_id]" id="lab_review_focus_id"></div></div>
+<div class="control-group hidden lab_review_rating"><div class="controls"><input class="hidden js-rating-input" type="hidden" name="lab_review[rating]" id="lab_review_rating"></div></div>
+<div class="control-group text optional lab_review_comment"><label class="text optional control-label" for="lab_review_comment">Comment</label><div class="controls"><textarea class="text optional" name="lab_review[comment]" id="lab_review_comment"></textarea></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Cancel
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<input type="submit" name="commit" value="Submit" disabled="disabled" class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary" id="submit" data-disabled="false" data-disable-with="Submit" data-upgraded=",MaterialButton,MaterialRipple"><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></input>
+</div>
+</form>
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/saved_resource(2).html"></iframe>
+</div>
+<div class="modal fade" id="lab-access-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<a class="lab-access-modal-close" data-analytics-action="dismissed_lab_payment_modal" data-dismiss="modal">
+<i class="material-icons">close</i>
+</a>
+<form class="js-lab-access-form" action="https://www.qwiklabs.com/lab_onetime_coupons/activate?parent=catalog" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓">
+<div class="modal-body">
+<div class="lab-access-modal">
+<input type="hidden" name="id" id="id" value="10371">
+<input type="hidden" name="user_id" id="user_id" value="743665">
+<input type="hidden" name="launch_with_credits" id="launch_with_credits" value="0" class="js-launch-with-credits-input">
+<input type="hidden" name="launch_with_subs" id="launch_with_subs" value="0" class="js-launch-with-subscription-input">
+<div class="lab-access-modal__method">
+<p>
+This lab costs
+10 Credits.
+</p>
+<p>
+You have a valid subscription package. Would you like to charge this lab to your subscription?
+
+</p>
+<a class="button js-launch-with-subscription-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_subscription_button">
+Use Subscription
+</a>
+</div>
+<div class="lab-access-modal__method">
+<p>
+Enter Lab Access Code:
+</p>
+<div class="lab-access-modal__code js-access-code">
+<input type="text" name="uuid_1" id="uuid_1" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_2" id="uuid_2" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_3" id="uuid_3" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_4" id="uuid_4" value="" maxlength="4" placeholder="1234">
+</div>
+<a class="button js-launch-with-access-code-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_access_code_button">
+Launch with Access Code
+</a>
+</div>
+</div>
+</div>
+</form>
+
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/saved_resource(3).html"></iframe>
+</div>
+
+<script>
+  $( function() {
+    ql.initMaterialInputs();
+    initChosen();
+    initSearch();
+    initTabs();
+    ql.list.init();
+    ql.favoriting.init();
+    ql.header.myAccount.init();
+    initTooltips();
+    ql.autocomplete.init();
+    ql.modals.init();
+    ql.toggleButtons.init();
+    ql.analytics.init();
+    initLabContent( );
+  ql.labOutline.links.init();
+  ql.labOutline.layout.init();
+  initLabReviewModal();
+  initLabAccessModal();
+  ql.labAssessment.init();
+  ql.labData.init();
+  initLabTranslations( {"are_you_sure":"All done? If you end this lab, you will lose all your work. You may not be able to restart the lab if there is a quota limit. Are you sure you want to end this lab?\n","in_progress":"*In Progress*","ending":"*Ending*","starting":"*Starting, please wait*","end_concurrent_labs":"Sorry, you can only run one lab at a time. To start this lab, please confirm that you want all of your existing labs to end.\n","copied":"Copied","no_resource":"Error retrieving resource.","no_support":"No Support","mac_press":"Press ⌘-C to copy","thanks_review":"Thanks for reviewing this lab.","windows_press":"Press Ctrl-C to copy","days":"days"} );
+  ql.labRun.init();
+  ql.initHeader();
+  ql.navigation.init();
+  ql.navPanel.init();
+  ql.navigation.init();
+  
+  });
+</script>
+<style>
+  .mdl-layout__container {
+    position: static
+  }
+</style>
+
+
+<iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/saved_resource(4).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 1; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px; width: 112px;width: 112px;" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/saved_resource(5).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px; visibility: hidden;" src="./Serverless Architectures with Amazon DynamoDB and Amazon Kinesis Streams with AWS Lambda _ Qwiklabs_files/saved_resource(6).html"></iframe></div></body></html>

@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://www.qwiklabs.com/focuses/10916?parent=catalog -->
+<html lang="en" class="mdl-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta content="[]" name="active-experiments">
+<meta content="{&quot;userId&quot;:743665}" name="help-api-product-data">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="c+tjkzPhKBHrUokmzmzKnHhqoWh4swE+a10RVAWOb/SiaXqr+/vLRzjMYRYZggMWnz/BLdMsV8GFTfy/TeWi4g==">
+<title>Serverless Web Apps using Amazon DynamoDB - Part 1 | Qwiklabs</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+<meta content="This is part one of a three-part lab which teaches you how to create a serverless web app with an Amazon DynamoDB backend data store. In this first part of the lab, you will build the infrastructure you will need in subsequent labs. You will create a DynamoDB table and add data, then build the necessary IAM roles and polices. To successfully complete this lab, you should be familiar with DynamoDB and IAM through taking those introductory labs." name="description">
+<meta content="Qwiklabs" name="author">
+<meta content="1rRsY0INj8RvwB5EF5pwdxt2A2P9aDgAlsICaJ0d5w0" name="google-site-verification">
+<meta content="Serverless Web Apps using Amazon DynamoDB - Part 1 | Qwiklabs" property="og:title">
+<meta content="website" property="og:type">
+<meta content="/favicon-144.png" property="og:image">
+<meta content="Qwiklabs" property="og:site_name">
+<meta content="This is part one of a three-part lab which teaches you how to create a serverless web app with an Amazon DynamoDB backend data store. In this first part of the lab, you will build the infrastructure you will need in subsequent labs. You will create a DynamoDB table and add data, then build the necessary IAM roles and polices. To successfully complete this lab, you should be familiar with DynamoDB and IAM through taking those introductory labs." property="og:description">
+<meta content="/qwiklabs_logo_900x887.png" property="og:logo" size="900x887">
+<meta content="/qwiklabs_logo_994x187.png" property="og:logo" size="994x187">
+<meta content="#3681E4" property="msapplication-TileColor">
+<meta content="/favicon-144.png" property="msapplication-TileImage">
+<link href="https://www.qwiklabs.com/favicon-32.png" rel="shortcut icon">
+<link color="#3681E4" href="https://www.qwiklabs.com/favicon-svg.svg" rel="mask-icon">
+<link href="https://www.qwiklabs.com/favicon-180.png" rel="apple-touch-icon-precomposed">
+<link rel="stylesheet" media="screen" href="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/css">
+
+
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+<![endif]-->
+<!--[endif]>  <![endif]-->
+<script type="text/javascript" async="" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/js"></script><script type="text/javascript" async="" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/analytics.js.download"></script><script type="text/javascript" async="" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/analytics.min.js.download"></script><script type="text/javascript" id="www-widgetapi-script" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/www-widgetapi.js.download" async=""></script><script>
+//<![CDATA[
+window.gon={};gon.current_user={"firstname":"Selina","lastname":"Ng","fullname":"Selina Ng","company":"Capgemini","email":"n.selina@ymail.com","origin":"google-run, direct","subscriptions":1,"id":"1c340942b6e43ad7908d196db2da6728","qlCreatedAt":"2018-01-21 06:49:32 UTC","optIn":false};gon.segment="j4Im8pqIko0Lxq4wVVZWMPMM0EroHUvb";gon.deployment="run";
+//]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.qwiklabs.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.qwiklabs.com/catalog?keywords={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script id="ze-snippet" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/snippet.js.download"></script>
+
+
+
+<link rel="stylesheet" media="all" href="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/application-162ab3877b3a481e7c5b49bf8be464f433c15a21bd2c4d9c870d4197793c85fe.css">
+<script>
+  EVENT_SOURCE_BASE_URL = "https://run.qwiklabs.com/nchan-sub?id=";
+</script>
+<script src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/webcomponents-loader.js.download"></script><script src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/webcomponents-hi.js.download"></script>
+<script src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/hallofmirrors-35b5646fc769dae276cceea36b80def66b111f8f0d8576f77facc9db3773c9f3.js.download"></script><script async="" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/lazy.min.js.download"></script>
+<script src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/iframe_api"></script>
+<script src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/vendor-45d462772c30000424907184f70c7157e95fb6227698d1671c5051818a6f60d8.js.download"></script>
+<script src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/application-b8f24b563e7f6b4a399091631f253a394e419e33d6c909ef27e223b366f52750.js.download"></script>
+<script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script></head>
+<body class="focuses focuses-show lab-show l-full no-nav" style="">
+<div class="header-container light-theme">
+<div class="header">
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect header__button header__button--nav header__nav-panel-button js-nav-toggle" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">menu</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header__title">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--nav" href="https://www.qwiklabs.com/" data-upgraded=",MaterialButton,MaterialRipple"><ql-icon>arrow_back</ql-icon><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
+<h1 class="headline-5">
+Serverless Web Apps using Amazon DynamoDB - Part 1
+</h1>
+</div>
+<div class="header__actions">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--action header__button--search js-header-search-bar-button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">search</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="toggle-lab-control-panel" href="javascript:;" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">description</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" data-mdl-for="toggle-lab-control-panel" data-upgraded=",MaterialTooltip">
+Toggle Lab Panel
+</div>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-favorite-button favorite-button" id="CatalogItem-10916-favorite-button" data-type="CatalogItem" data-id="10916" data-name="Serverless Web Apps using Amazon DynamoDB - Part 1" href="https://www.qwiklabs.com/unfavorite.json?item_id=10916&amp;item_type=CatalogItem" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">favorite</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" for="CatalogItem-10916-favorite-button" data-upgraded=",MaterialTooltip">
+Remove from favorites
+</div>
+
+
+<ql-help context="lab" productdata="{&quot;userId&quot;:743665}" data-analytics-action="opened_help" data-analytics-label="lab"></ql-help>
+<a class="header-my-account-button mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-my-account-button" data-upgraded=",MaterialButton,MaterialRipple">
+<img class="avatar " alt="avatar image" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header-my-account-menu js-my-account-menu">
+<div class="card elevation-2 no-padding">
+<div class="my-account-menu__top">
+<img class="avatar " alt="avatar image" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<div class="my-account-menu__info">
+<h4 class="subtitle-headline-1">
+Selina Ng
+</h4>
+<p class="body-2 text--gray">
+<span>n.selina@ymail.com</span>
+</p>
+<a class="button" href="https://www.qwiklabs.com/my_account/profile">My Account</a>
+</div>
+</div>
+<div class="my-account-menu__bottom">
+<a class="text--green subtitle-headline-2" href="https://www.qwiklabs.com/my_account/credits">Monthly Subscription
+</a><a data-analytics-action="clicked_sign_out" class="button button--hairline" rel="nofollow" data-method="delete" href="https://www.qwiklabs.com/users/sign_out">Sign Out</a>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="header__search-bar js-header-search-bar">
+<form id="catalog-search-mobile" onsubmit="ql.catalogSearchFilter(); return false;" action="https://www.qwiklabs.com/searches/elasticsearch" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="c+tjkzPhKBHrUokmzmzKnHhqoWh4swE+a10RVAWOb/SiaXqr+/vLRzjMYRYZggMWnz/BLdMsV8GFTfy/TeWi4g==">
+<input type="text" name="keywords" id="keywords" placeholder="Search" maxlength="255" aria-label="catalog search bar">
+</form>
+
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">close</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+</div>
+
+<nav class="nav-bar">
+<a class="nav-bar__item js-navigation-button" href="https://www.qwiklabs.com/"><ql-icon class="nav-bar__item__icon">
+home
+</ql-icon>
+<span class="nav-bar__item__label">
+Home
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button  active" aria-current="page" href="https://www.qwiklabs.com/catalog"><ql-icon class="nav-bar__item__icon">
+school
+</ql-icon>
+<span class="nav-bar__item__label">
+Catalog
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button" href="https://www.qwiklabs.com/my_learning"><ql-icon class="nav-bar__item__icon">
+event_note
+</ql-icon>
+<span class="nav-bar__item__label">
+My Learning
+</span>
+</a>
+</nav>
+
+<nav class="nav-panel js-nav-panel">
+<div class="nav-panel__logo">
+<div class="logo logo--blue"></div>
+</div>
+<a title="Home" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/"><ql-icon class="nav-panel__item__icon">
+home
+</ql-icon>
+<div class="nav-panel__item__label">
+Home
+</div>
+</a>
+<a title="Catalog" tabindex="-1" class="nav-panel__item js-navigation-button active" aria-current="page" href="https://www.qwiklabs.com/catalog"><ql-icon class="nav-panel__item__icon">
+school
+</ql-icon>
+<div class="nav-panel__item__label">
+Catalog
+</div>
+</a>
+<a title="My Learning" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_learning"><ql-icon class="nav-panel__item__icon">
+event_note
+</ql-icon>
+<div class="nav-panel__item__label">
+My Learning
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a title="Profile" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/profile"><ql-icon class="nav-panel__item__icon">
+account_circle
+</ql-icon>
+<div class="nav-panel__item__label">
+Profile
+</div>
+</a>
+<a title="Credits &amp; Subscriptions" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/credits"><ql-icon class="nav-panel__item__icon">
+money
+</ql-icon>
+<div class="nav-panel__item__label">
+Credits &amp; Subscriptions
+</div>
+</a>
+<a title="Security" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://www.qwiklabs.com/my_account/security"><ql-icon class="nav-panel__item__icon">
+security
+</ql-icon>
+<div class="nav-panel__item__label">
+Security
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a class="nav-panel__item" tabindex="-1" href="https://www.qwiklabs.com/focuses/10916?parent=catalog#"><ql-help>
+<div class="nav-panel__help-item">
+<ql-icon class="nav-panel__item__icon">help</ql-icon>
+<div class="nav-panel__item__label">Help</div>
+</div>
+</ql-help>
+</a><div class="nav-panel__small-links">
+<a tabindex="-1" href="https://www.qwiklabs.com/privacy_policy">Privacy</a>
+<a tabindex="-1" href="https://www.qwiklabs.com/terms_of_service">Terms</a>
+</div>
+</nav>
+<div class="nav-panel__overlay js-nav-toggle"></div>
+
+<main class="js-main">
+<span class="hidden" id="flash-sibling-before"></span>
+
+<div class="l-main-wrapper" id="main-wrapper">
+
+
+
+
+
+
+
+<div class="js-lab-state" data-analytics-payload="{&quot;label&quot;:&quot;Serverless Web Apps using Amazon DynamoDB - Part 1&quot;,&quot;lab_name&quot;:&quot;Serverless Web Apps using Amazon DynamoDB - Part 1&quot;,&quot;classroom_name&quot;:null,&quot;deployment&quot;:&quot;run&quot;}" data-focus-id="10916" data-lab-billing-limit="0.0" data-lab-duration="3300" data-parent="catalog" data-payment-required=""></div>
+<ql-lab-control-panel class="js-lab-control-panel l-lab-control-panel" connectiondetails="[]" connectionfiles="[]" labcontrolbutton="{&quot;disabled&quot;:false,&quot;pending&quot;:false,&quot;running&quot;:false}" labtimer="{&quot;ticking&quot;:false,&quot;secondsRemaining&quot;:3300}" studentresources="[]"></ql-lab-control-panel>
+<div class="l-lab-main-body">
+<div class="js-lab-content lab-content">
+<div class="alert alert--fake js-alert alert-success" style="display: flex;">
+<p class="alert__message js-alert-message">Thanks for reviewing this lab.</p>
+<a class="alert__close js-alert-close">
+<i class="fa fa-times"></i>
+</a>
+<iframe class="l-ie-iframe-fix" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/saved_resource.html"></iframe>
+</div>
+<div class="lab-content__markdown-wrapper">
+<div class="lab-preamble">
+<h1 class="lab-preamble__title">
+Serverless Web Apps using Amazon DynamoDB - Part 1
+</h1>
+<div class="lab-preamble__details subtitle-headline-1">
+<span>55 minutes</span>
+<span>1 Credit</span>
+<div class="lab__rating">
+<a href="https://www.qwiklabs.com/focuses/10916/reviews?parent=catalog"><div class="rateit" data-rateit-readonly="true" data-rateit-value="4.354"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 69.664px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+
+</a><a data-target="#lab-review-modal" data-toggle="modal">
+Rate Lab
+</a>
+</div>
+</div>
+</div>
+
+<div class="lab-content__inner-wrapper">
+<div class="js-markdown-instructions lab-content__markdown markdown-lab-instructions no-select" id="markdown-lab-instructions">
+<p><img src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/aws-logo.png" alt=""></p>
+
+
+
+<p><strong>SPL-132 - Version 2.0.5</strong></p>
+
+<p>© 2020 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.</p>
+
+<p>Errors or corrections? Email us at <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a>.</p>
+
+<p>Other questions? Contact us at <a href="https://aws.amazon.com/contact-us/aws-training/" target="_blank">https://aws.amazon.com/contact-us/aws-training/</a></p>
+
+<h2 id="step1">Overview</h2>
+
+<p>Calling all AWS super heroes! Build a mission dossier generator using DynamoDB in this three-part series of labs using DynamoDB. You hold in your hands step-by-step instructions for completing Part 1. In this lab, you will build the infrastructure you will need in the next two labs. You will create a DynamoDB table and add data, and then review the necessary IAM roles and policies that you will use to grant secure access to this data.</p>
+
+<p>In labs 2 and 3, you will create Lambda functions that interact with DynamoDB, build an API through the API Gateway service, and finally publish an app to the public web, utilizing all of the DynamoDB skills you learn through the three labs. At the end of part 3, you will be able to generate mission dossiers and send super heroes off to save the world!</p>
+
+<h3>Topics covered</h3>
+
+<p>By the end of this lab you will be able to:</p>
+<ul>
+<li>Create an Amazon DynamoDB table</li>
+<li>Add items to your Amazon DynamoDB table</li>
+<li>Understand the structure of IAM roles and policies needed to access your table</li>
+</ul>
+<h3>Prerequisites</h3>
+
+<p>You should familiarize yourself with key concepts by taking the <a href="https://s3-us-west-2.amazonaws.com/searches/lab?keywords=Introduction%20to%20Amazon%20DynamoDB" target="_blank">Introduction to Amazon DynamoDB</a> and <a href="https://s3-us-west-2.amazonaws.com/searches/lab?keywords=Introduction%20to%20AWS%20Identity" target="_blank">Introduction to AWS Identity and Access Management (IAM)</a> labs. This is the first in a three-part series of labs. Each of the three labs can stand alone, but because the labs build upon what you learned previously, taking all three in order is the best learning experience.</p>
+
+<h3>Other AWS Services</h3>
+
+<p>Other AWS Services than the ones needed for this lab are disabled by IAM policy during your access time in this lab. In addition, the capabilities of the services used in this lab are limited to what’s required by the lab and in some cases are even further limited as an intentional aspect of the lab design. Expect errors when accessing other services or performing actions beyond those provided in this lab guide.</p>
+
+<h3>Amazon DynamoDB</h3>
+
+<p>Amazon DynamoDB is a fast and flexible NoSQL database service for all applications that need consistent, single-digit millisecond latency at any scale. It is a fully managed cloud database and supports both document and key-value store models. Its flexible data model and reliable performance make it a great fit for mobile, web, gaming, ad tech, IoT, and many other applications.</p>
+
+<p>You can use Amazon DynamoDB to create a database table that can store and retrieve any amount of data, and serve any level of request traffic. Amazon DynamoDB automatically spreads the data and traffic for the table over a sufficient number of servers to handle the request capacity specified by the customer and the amount of data stored, while maintaining consistent and fast performance.</p>
+
+<h3>DynamoDB Terminology</h3>
+
+<p><strong>Tables</strong><br>
+Similar to other database management systems, DynamoDB stores data in tables. A table is a collection of data. For example, in this lab you will create a table named SuperMission, where you will store mission information. You could also have a People table to store data about friends, family, or anyone else of interest, or a Cars table to store information about vehicles that people drive.</p>
+
+<p><strong>Items</strong><br>
+Each table contains multiple items. An item is a group of attributes that is uniquely identifiable among all of the other items. In a People table, each item would represent one person. For a Cars table, each item represents one vehicle. Items are similar in many ways to rows, records, or tuples in relational database systems. In DynamoDB, there is no limit to the number of items that you can store in a table.</p>
+
+<p><strong>Attributes</strong><br>
+Each item is composed of one or more attributes. An attribute is a fundamental data element, something that does not need to be broken down any further. In this lab, you will create a Mission item with attributes like SuperHero, MissionStatus, Villain1, Villain2, Villain3 and SecretIdentity. As another example, a Department item might have attributes such as DepartmentID, Name, Manager, and so on. An item in a People table could contain attributes such as PersonID, LastName, FirstName, and so on. Attributes in DynamoDB are similar in many ways to fields or columns in other database management systems.</p>
+
+<p><strong>Primary Key</strong><br>
+When you create a table, in addition to the table name, you must specify the primary key of the table. As in other databases, a primary key in DynamoDB uniquely identifies each item in the table, so that no two items can have the same key. When you add, update, or delete an item in the table, you must specify the primary key attribute values for that item. The key values are required; you cannot omit them. DynamoDB supports two different kinds of primary keys: <strong>Partition Key</strong> and <strong>Partition Key and Sort Key</strong>.</p>
+
+<p><strong>Secondary Indexes</strong><br>
+In DynamoDB, you can read data in a table by providing primary key attribute values. If you want to read the data using non-key attributes, you can use a secondary index to do this. After you create a secondary index on a table, you can read data from the index in much the same way as you do from the table. By using secondary indexes, your applications can use many different query patterns, in addition to accessing the data by primary key values.</p>
+
+<h3>AWS Identity and Access Management Documentation</h3>
+
+<p>AWS Identity and Access Management (IAM) is a web service that enables Amazon Web Services (AWS) customers to manage users and user permissions in AWS. The service is targeted at organizations with multiple users or systems in the cloud that use AWS products such as Amazon DynamoDB, AWS Lambda, and the AWS Management Console. With IAM, you can centrally manage users, security credentials such as access keys, and permissions that control which AWS resources users can access. For more information, see <a href="https://aws.amazon.com/iam/" target="_blank">https://aws.amazon.com/iam/</a>.</p>
+
+<h3>AWS Lambda</h3>
+
+<p>AWS Lambda is a compute service that provides resizable compute capacity in the cloud to make web-scale computing easier for developers. Upload your code to AWS Lambda and AWS Lambda takes care of provisioning and managing the servers that you use to run the code.  AWS Lambda supports multiple coding languages: Node.js, Java, or Python.<br>
+You can use AWS Lambda in two ways:</p>
+<ul>
+<li>As an event-driven compute service where AWS Lambda runs your code in response to events, such as uploading image files as you’ll see in this lab.</li>
+<li>As a compute service to run your code in response to HTTP requests using Amazon API Gateway or API calls.</li>
+</ul>
+<p>AWS Lambda passes on the financial benefits of Amazon’s scale to you. Lambda executes your code only when needed and scales automatically, from a few requests per day to thousands per second.  Lambda makes it easy to build data processing triggers for AWS services like Amazon S3 and Amazon DynamoDB, process streaming data stored in Amazon Kinesis, or create your own back end that operates at AWS scale, performance, and security.</p>
+
+<p>This lab guide explains basic concepts of AWS in a step by step fashion. However, it can only give a brief overview of Lambda concepts. For further information, see the official Amazon Web Services Documentation for Lambda at <a href="https://aws.amazon.com/documentation/lambda/" target="_blank">https://aws.amazon.com/documentation/lambda/</a>. For pricing details, see <a href="https://aws.amazon.com/lambda/pricing/" target="_blank">https://aws.amazon.com/lambda/pricing/</a>.</p>
+
+<h2 id="step2">Start Lab</h2>
+<ol start="1">
+<li>At the top of your screen, launch your lab by clicking <span style="background-color:#34A853;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#34A853;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Start Lab</span>
+</li>
+</ol>
+<p>This will start the process of provisioning your lab resources. An estimated amount of time to provision your lab resources will be displayed. You must wait for your resources to be provisioned before continuing.</p>
+
+<p><i class="fas fa-info-circle"></i> If you are prompted for a token, use the one distributed to you (or credits you have purchased). </p>
+<ol start="2">
+<li>Open your lab by clicking <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span>
+</li>
+</ol>
+<p>This will automatically log you into the AWS Management Console. </p>
+
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Please do not change the Region unless instructed</strong>.</p>
+
+
+
+<h3>Common login errors</h3>
+
+<p><strong>Error : Federated login credentials</strong></p>
+
+<p><img src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/federatedloginerror.png" alt=""></p>
+
+<p>If you see this message:</p>
+<ul>
+<li>Close the browser tab to return to your initial lab window</li>
+<li>Wait a few seconds</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+<p>You should now be able to access the AWS Management Console.</p>
+
+
+
+<p><strong>Error: You must first log out</strong></p>
+
+<p><img src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/logouterror.png" alt=""></p>
+
+<p>If you see the message, <strong>You must first log out before logging into a different AWS account:</strong> </p>
+<ul>
+<li>Click <strong>click here</strong>
+</li>
+<li>Close your browser tab to return to your initial Qwiklabs window</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+
+
+<h2 id="step3">Task 1: Create Your DynamoDB Table</h2>
+<ol start="3">
+<li><p>In the <strong>AWS Management Console</strong>, on the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>DynamoDB</strong>.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create table</span> then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Table name:</strong> <input readonly="" class="copyable-inline-input" size="12" type="text" value="SuperMission">
+</li>
+<li>
+<strong>Primary key:</strong>
+<ul>
+<li><input readonly="" class="copyable-inline-input" size="9" type="text" value="SuperHero"></li>
+<li><em>String</em></li>
+</ul>
+</li>
+</ul>
+<p>You will use the default settings to create the table.</p>
+<ol start="5">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create</span>
+</li>
+</ol>
+<p><i class="fas fa-comment"></i> The table will only take a few seconds to create. If your browser takes longer than this, click <strong>Cancel</strong> and refresh the web page. Your table should appear.</p>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You created a DynamoDB table.</p>
+
+
+
+<h2 id="step4">Task 2: Add Items via Tree Method</h2>
+
+<p>In this task, you will add items to the table using the Tree method.</p>
+<ol start="6">
+<li>Once the table creation process is complete:</li>
+</ol><ul>
+<li>Click the <strong>Items</strong> tab</li>
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create item</span>
+</li>
+</ul><ol start="7">
+<li>Confirm that <strong>Tree</strong> is selected in the top-left of the <em>Create item</em> dialog box.</li>
+</ol>
+<p>The first item <strong>Field</strong> is already populated for you with <em>SuperHero</em>.</p>
+<ol start="8">
+<li><p>For <strong>Value</strong>, enter: <input readonly="" class="copyable-inline-input" size="6" type="text" value="Batman"></p></li>
+<li><p>Add the next attribute by clicking the <i class="fas fa-plus-circle"></i> symbol, then:</p></li>
+</ol><ul>
+<li>Clicking <i class="fas fa-plus-circle"></i> <strong>Append</strong>
+</li>
+<li>Selecting <strong>String</strong>
+</li>
+</ul><ol start="10">
+<li>Using the table below, enter each item as <strong>Field</strong> and <strong>Value</strong>, one at a time.
+To add the next attribute, click <i class="fas fa-plus-circle"></i>, click <strong>Append</strong>, then click <strong>String</strong>.</li>
+</ol>
+<table>
+<tbody><tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+
+<tr>
+<td>SuperHero (already populated for you)</td>
+<td>Batman</td>
+</tr>
+<tr>
+<td>MissionStatus</td>
+<td>In progress</td>
+</tr>
+<tr>
+<td>Villain1</td>
+<td>Joker</td>
+</tr>
+<tr>
+<td>Villain2</td>
+<td>Bane</td>
+</tr>
+<tr>
+<td>Villain3</td>
+<td>Ras Al Ghul</td>
+</tr>
+<tr>
+<td>SecretIdentity</td>
+<td>Bruce Wayne</td>
+</tr>
+</tbody></table>
+
+<p>When you finish, your item should look similar to:</p>
+
+<p><img src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/output.png" alt="output"></p>
+<ol start="11">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Save</span>
+</li>
+</ol>
+
+
+<h2 id="step5">Task 3: Add Items via JSON</h2>
+
+<p>In this task, you will add an item as JSON.</p>
+<ol start="12">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create Item</span> then configure:</li>
+</ol><ul>
+<li>Click <strong>Tree</strong> <i class="fas fa-caret-down"></i>
+</li>
+<li>Select <strong>Text</strong>
+</li>
+</ul><ol start="13">
+<li><p>Delete all text in the editor.</p></li>
+<li><p>Copy and paste this JSON code into the editor:</p></li>
+</ol><pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"SuperHero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Superman"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doomsday"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"General Zod"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Lex Luthor"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"MissionStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"In progress"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"SecretIdentity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Clark Kent"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code><button class="button button--copy js-copy-button-0"><i class="fa fa-clipboard"></i></button></pre><ol start="15">
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Save</span></p></li>
+<li><p>Repeat the above steps to enter the third and fourth items.</p></li>
+</ol>
+<p><strong>Third item:</strong></p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"SuperHero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Winchester Brothers"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Vampires"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ghosts"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Werewolves"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"MissionStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Complete"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"SecretIdentity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Sam and Dean"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code><button class="button button--copy js-copy-button-1"><i class="fa fa-clipboard"></i></button></pre>
+<p><strong>Fourth item:</strong></p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"SuperHero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Iron Man"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Apocalypse"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doctor Doom"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Villain3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Loki"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"MissionStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"In progress"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"SecretIdentity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tony Stark"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code><button class="button button--copy js-copy-button-2"><i class="fa fa-clipboard"></i></button></pre>
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You learned how to enter data into a DynamoDB table using the AWS Management Console, using two different methods.</p>
+
+
+
+<h2 id="step6">Task 4: Review IAM Policies and Roles</h2>
+
+<p>In this task you will review the two IAM policies that will be used to access your data in the next lab. These policies have already been pre-created for you as part of the lab environment.</p>
+<ol start="17">
+<li><p>On the <span style="background-color:#232f3e;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">Services</span> menu, click <strong>IAM</strong>.</p></li>
+<li><p>In the left navigation pane, click <strong>Roles</strong>.</p></li>
+<li><p>Click the role named <strong>SuperDynamoDBScanRole</strong>.</p></li>
+<li><p>Expand <i class="fas fa-caret-right"></i> <strong>SuperDynamoDBScanPolicy</strong>.</p></li>
+</ol>
+<p>Details of the policy will appear.</p>
+<ol start="21">
+<li>Click <strong>{ } JSON</strong>.</li>
+</ol>
+<p>The policy will look similar to:</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"dynamodb:Scan"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:GetObject"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"s3:PutObject"</span><span class="p">,</span><span class="w">
+                </span><span class="s2">"dynamodb:BatchWriteItem"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"*"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code><button class="button button--copy js-copy-button-3" title="" data-original-title="Copied"><i class="fa fa-clipboard"></i></button></pre>
+<p>This is a simple policy that grants access to the Scan, BatchWriteItem APIs under DynamoDB and GetObject, PutObject APIs under S3 in your account.</p>
+<ol start="22">
+<li><p>In the left navigation pane, click <strong>Roles</strong>.</p></li>
+<li><p>Click the role named <strong>SuperDynamoDBQueryRole</strong>.</p></li>
+<li><p>Expand <i class="fas fa-caret-right"></i> <strong>SuperDynamoDBQueryPolicy</strong>.</p></li>
+</ol>
+<p>Details of the policy will appear.</p>
+
+<p>The policy will look similar to:</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"Version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2012-10-17"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"Statement"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"Condition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="s2">"ForAllValues:StringEquals"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="s2">"dynamodb:Attributes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="s2">"SuperHero"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"MissionStatus"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Villain1"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Villain2"</span><span class="p">,</span><span class="w">
+                        </span><span class="s2">"Villain3"</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="s2">"Action"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"dynamodb:Query"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="s2">"Resource"</span><span class="p">:</span><span class="w"> </span><span class="s2">"*"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"Effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Allow"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code><button class="button button--copy js-copy-button-4"><i class="fa fa-clipboard"></i></button></pre>
+<p>This policy allows the user or entity that assumes the role to perform a Query operation, but only against the specified attributes. This powerful feature enables you to implement column-level security on your DynamoDB tables. You will use this role in the next lab to enable an AWS Lambda function to read data from this table.</p>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You have successfully prepared the infrastructure necessary to complete the tasks in the next lab. You created an Amazon DynamoDB table, learned how to add different types of items to your table, and reviewed IAM policies and roles that you will use later to query the data.</p>
+
+
+
+<h2 id="step7">Conclusion</h2>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You have completed this lab. You now know how to:</p>
+<ul>
+<li>Create an Amazon DynamoDB table</li>
+<li>Create different types of items in the table</li>
+<li>Secure access to your DynamoDB tables using IAM policies and roles</li>
+</ul>
+<h2 id="step8">End Lab</h2>
+
+<p>Follow these steps to close the console, end your lab, and evaluate the experience.</p>
+<ol start="25">
+<li><p>Return to the AWS Management Console.</p></li>
+<li><p>On the navigation bar, click <strong>awsstudent@&lt;AccountNumber&gt;</strong>, and then click <strong>Sign Out</strong>.</p></li>
+<li><p>Click <span style="background-color:#D93025;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#D93025;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">End Lab</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-family:Google Sans;font-weight:bold;font-size:90%;color:#444;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">OK</span></p></li>
+<li><p>(Optional):</p></li>
+</ol><ul>
+<li>Select the applicable number of stars <i class="far fa-star"></i>
+</li>
+<li>Type a comment</li>
+<li>
+<p>Click <strong>Submit</strong></p>
+<ul>
+<li>1 star = Very dissatisfied</li>
+<li>2 stars = Dissatisfied</li>
+<li>3 stars = Neutral</li>
+<li>4 stars = Satisfied</li>
+<li>5 stars = Very satisfied</li>
+</ul>
+</li>
+</ul>
+<p>You may close the dialog if you don't want to provide feedback.</p>
+
+<h3>What Next?</h3>
+
+<p>Now that you have completed the lab, continue your mission to save the world with the next lab in the series with <strong>Serverless Web Apps Using Amazon DynamoDB - Part 2</strong>. In the next lab, you will leverage the DynamoDB table that you created.</p>
+
+<h3>Additional Resources</h3>
+<ul>
+<li><a href="https://aws.amazon.com/documentation/dynamodb/" target="_blank">Amazon DynamoDB Documentation</a></li>
+<li><a href="https://aws.amazon.com/dynamodb/pricing/" target="_blank">Amazon DynamoDB Pricing</a></li>
+<li><a href="https://aws.amazon.com/documentation/iam/" target="_blank">AWS Identity and Access Management Documentation</a></li>
+<li><p><a href="http://docs.aws.amazon.com/lambda/latest/dg/welcome.html" target="_blank">AWS Lambda Developer Guide</a></p></li>
+<li><p>For more information about AWS Training and Certification, see <a href="http://aws.amazon.com/training/" target="_blank"><em>http://aws.amazon.com/training/</em></a>.</p></li>
+<li><p>For more AWS Self-Paced Labs, see <a href="http://amazon.qwiklabs.com/" target="_blank"><em>http://amazon.qwiklabs.com</em></a>.</p></li>
+</ul>
+<p>For feedback, suggestions, or corrections, please email us at <a href="mailto:aws-course-feedback+spl@amazon.com" target="_blank"><em>aws-course-feedback@amazon.com</em></a>.</p>
+
+</div>
+<div class="js-lab-content-outline lab-content__outline is-stuck">
+<a href="https://www.qwiklabs.com/focuses/10916?parent=catalog#step1" class="">Overview</a><a href="https://www.qwiklabs.com/focuses/10916?parent=catalog#step2" class="">Start Lab</a><a href="https://www.qwiklabs.com/focuses/10916?parent=catalog#step3" class="">Task 1: Create Your DynamoDB Table</a><a href="https://www.qwiklabs.com/focuses/10916?parent=catalog#step4" class="">Task 2: Add Items via Tree Method</a><a href="https://www.qwiklabs.com/focuses/10916?parent=catalog#step5" class="">Task 3: Add Items via JSON</a><a href="https://www.qwiklabs.com/focuses/10916?parent=catalog#step6" class="">Task 4: Review IAM Policies and Roles</a><a href="https://www.qwiklabs.com/focuses/10916?parent=catalog#step7" class="">Conclusion</a><a href="https://www.qwiklabs.com/focuses/10916?parent=catalog#step8" class="is-active">End Lab</a>
+</div>
+</div>
+
+</div>
+
+<div class="lab-content__markdown-wrapper">
+<div class="lab-content__markdown">
+<div class="lab-content__recommendation">
+<h4 class="headline-3">
+Ready for more?
+<p>Here's another lab we think you'll like.</p>
+<div class="card-content-wrapper js-content-card" data-id="200" data-level="Introductory" data-name="Introduction to Amazon Virtual Private Cloud (VPC)" data-type="Lab">
+<a class="card card--content elevation-0 content-lab" href="https://www.qwiklabs.com/focuses/279?parent=catalog"><div class="card__image">
+<div class="card__image__inner" style="background-image: url(https://cdn.qwiklabs.com/assets/fractal4-1d205807c54d90fe4382315dbfc0dd665ddb825bbc90f3ca5db7d7170fa0df1b.jpg)"></div>
+</div>
+<div class="card__body">
+<div class="overline card--content__type">
+Hands-On Lab
+</div>
+<h3 class="card--content__title">
+Introduction to Amazon Virtual Private Cloud (VPC)
+</h3>
+<p class="card--content__description body-1">
+This lab introduces you to Amazon Virtual Private Cloud (Amazon VPC). In this lab you will use the Amazon VPC wizard to create a VPC, attach an Internet Gateway, add a subnet and then define routing for the VPC so that traffic can flow between the subnet and the Internet gateway.
+</p>
+</div>
+<div class="card__footer">
+<div class="card__footer__left">
+<span>Introductory</span>
+</div>
+<div class="card__footer__right">
+<div class="rateit" data-rateit-readonly="true" data-rateit-value="4.1311"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 66.0976px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+</div>
+</div>
+</a></div>
+
+</h4>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="lab-introduction js-lab-introduction is-hidden">
+<div class="lab-introduction__inner">
+<h1 class="headline-1">Welcome to Your First Lab!</h1>
+<ql-icon-button class="js-skip-button">close</ql-icon-button>
+<div class="lab-introduction__video">
+<iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" id="lab-introduction" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/yF7EDXKTmoQ.html"></iframe>
+</div>
+<a class="js-skip-button button button--outline">Skip this video</a>
+</div>
+</div>
+
+
+
+</div>
+</main>
+<div class="modal fade" id="lab-details-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<div class="modal-body">
+<p class="l-mbm">
+This is part one of a three-part lab which teaches you how to create a serverless web app with an Amazon DynamoDB backend data store. In this first part of the lab, you will build the infrastructure you will need in subsequent labs. You will create a DynamoDB table and add data, then build the necessary IAM roles and polices. To successfully complete this lab, you should be familiar with DynamoDB and IAM through taking those introductory labs.
+</p>
+<p>
+This lab is included in the quest
+<a href="https://www.qwiklabs.com/quests/21">Serverless Web Apps using Amazon DynamoDB</a>.
+If you complete this lab you'll receive credit for it when you enroll in this quest.
+</p>
+<p class="small-label l-mbs">
+<strong>
+Duration:
+</strong>
+0m setup
+·
+55m access
+·
+55m completion
+</p>
+<p class="small-label l-mbs">
+<strong>AWS Region:</strong>
+[us-east-1] <strong>US East (N. Virginia)</strong>
+</p>
+<p class="small-label l-mbs">
+
+</p>
+<p class="small-label">
+<strong>
+Permalink:
+</strong>
+<a href="https://www.qwiklabs.com/catalog_lab/2608">https://www.qwiklabs.com/catalog_lab/2608</a>
+</p>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Got It
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/saved_resource(1).html"></iframe>
+</div>
+<div class="modal fade" id="lab-review-modal" style="display: none;">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<form class="simple_form js-lab-review-form" id="new_lab_review" action="https://www.qwiklabs.com/lab_reviews" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><div class="modal-body">
+<p class="label">
+How satisfied are you with this lab?*
+</p>
+<div class="rateit js-rateit" data-rateit-max="5" data-rateit-min="0" data-rateit-resetable="false" data-rateit-step="1" data-rateit-value="0"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 16px; display: block;"></div><div class="rateit-hover" style="height: 16px; width: 0px; display: none;"></div></div></div>
+<div class="l-mtm">
+
+<div class="control-group hidden lab_review_user_id"><div class="controls"><input class="hidden" type="hidden" value="743665" name="lab_review[user_id]" id="lab_review_user_id"></div></div>
+<div class="control-group hidden lab_review_classroom_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[classroom_id]" id="lab_review_classroom_id"></div></div>
+<div class="control-group hidden lab_review_lab_id"><div class="controls"><input class="hidden" type="hidden" value="2608" name="lab_review[lab_id]" id="lab_review_lab_id"></div></div>
+<div class="control-group hidden lab_review_focus_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[focus_id]" id="lab_review_focus_id"></div></div>
+<div class="control-group hidden lab_review_rating"><div class="controls"><input class="hidden js-rating-input" type="hidden" name="lab_review[rating]" id="lab_review_rating" value="-2"></div></div>
+<div class="control-group text optional lab_review_comment"><label class="text optional control-label" for="lab_review_comment">Comment</label><div class="controls"><textarea class="text optional" name="lab_review[comment]" id="lab_review_comment"></textarea></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Cancel
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<input type="submit" name="commit" value="Submit" class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary" id="submit" data-disabled="false" data-disable-with="Submit" data-upgraded=",MaterialButton,MaterialRipple"><span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 183.035px; height: 183.035px; transform: translate(-50%, -50%) translate(53px, 22px);"></span></span></input>
+</div>
+</form>
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/saved_resource(2).html"></iframe>
+</div>
+<div class="modal fade" id="lab-access-modal" style="display: none;">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<a class="lab-access-modal-close" data-analytics-action="dismissed_lab_payment_modal" data-dismiss="modal">
+<i class="material-icons">close</i>
+</a>
+<form class="js-lab-access-form" action="https://www.qwiklabs.com/lab_onetime_coupons/activate?parent=catalog" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓">
+<div class="modal-body">
+<div class="lab-access-modal">
+<input type="hidden" name="id" id="id" value="10916">
+<input type="hidden" name="user_id" id="user_id" value="743665">
+<input type="hidden" name="launch_with_credits" id="launch_with_credits" value="0" class="js-launch-with-credits-input">
+<input type="hidden" name="launch_with_subs" id="launch_with_subs" value="1" class="js-launch-with-subscription-input">
+<div class="lab-access-modal__method">
+<p>
+This lab costs
+1 Credit.
+</p>
+<p>
+You have a valid subscription package. Would you like to charge this lab to your subscription?
+
+</p>
+<a class="button js-launch-with-subscription-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_subscription_button">
+Use Subscription
+</a>
+</div>
+<div class="lab-access-modal__method">
+<p>
+Enter Lab Access Code:
+</p>
+<div class="lab-access-modal__code js-access-code">
+<input type="text" name="uuid_1" id="uuid_1" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_2" id="uuid_2" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_3" id="uuid_3" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_4" id="uuid_4" value="" maxlength="4" placeholder="1234">
+</div>
+<a class="button js-launch-with-access-code-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_access_code_button">
+Launch with Access Code
+</a>
+</div>
+</div>
+</div>
+</form>
+
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/saved_resource(3).html"></iframe>
+</div>
+
+<script>
+  $( function() {
+    ql.initMaterialInputs();
+    initChosen();
+    initSearch();
+    initTabs();
+    ql.list.init();
+    ql.favoriting.init();
+    ql.header.myAccount.init();
+    initTooltips();
+    ql.autocomplete.init();
+    ql.modals.init();
+    ql.toggleButtons.init();
+    ql.analytics.init();
+    initLabContent( );
+  ql.labOutline.links.init();
+  ql.labOutline.layout.init();
+  initLabReviewModal();
+  initLabAccessModal();
+  ql.labAssessment.init();
+  ql.labData.init();
+  initLabTranslations( {"are_you_sure":"All done? If you end this lab, you will lose all your work. You may not be able to restart the lab if there is a quota limit. Are you sure you want to end this lab?\n","in_progress":"*In Progress*","ending":"*Ending*","starting":"*Starting, please wait*","end_concurrent_labs":"Sorry, you can only run one lab at a time. To start this lab, please confirm that you want all of your existing labs to end.\n","copied":"Copied","no_resource":"Error retrieving resource.","no_support":"No Support","mac_press":"Press ⌘-C to copy","thanks_review":"Thanks for reviewing this lab.","windows_press":"Press Ctrl-C to copy","days":"days"} );
+  ql.labRun.init();
+  ql.initHeader();
+  ql.navigation.init();
+  ql.navPanel.init();
+  ql.navigation.init();
+  
+  });
+</script>
+<style>
+  .mdl-layout__container {
+    position: static
+  }
+</style>
+
+
+<iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/saved_resource(4).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 1; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px; width: 112px;width: 112px;" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/saved_resource(5).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px; visibility: hidden;" src="./Serverless Web Apps using Amazon DynamoDB - Part 1 _ Qwiklabs_files/saved_resource(6).html"></iframe></div></body></html>
