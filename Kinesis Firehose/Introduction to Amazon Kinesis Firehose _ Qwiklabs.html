@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<!-- saved from url=(0140)https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&parent=catalog -->
+<html lang="en" class="mdl-js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style>body {transition: opacity ease-in 0.2s; } 
+body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relative; } 
+</style>
+<meta content="[]" name="active-experiments">
+<meta content="{&quot;userId&quot;:743665}" name="help-api-product-data">
+<meta name="csrf-param" content="authenticity_token">
+<meta name="csrf-token" content="D/QeIYCrNRu4YrlqQiJJRbtXXKsiFMcSEFlj9l6tjcoqZ/BgGfh4p+OZphCxG7Hk/84rH7a9lrI0TOHjMirsVg==">
+<title>Introduction to Amazon Kinesis Firehose | Qwiklabs</title>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+<meta content="Amazon Kinesis Firehose is the easiest way to load streaming data into AWS. This hand-son lab will demonstrate how Amazon Kinesis Firehose can capture and automatically load streaming data into an Elasticsearch cluster." name="description">
+<meta content="Qwiklabs" name="author">
+<meta content="1rRsY0INj8RvwB5EF5pwdxt2A2P9aDgAlsICaJ0d5w0" name="google-site-verification">
+<meta content="Introduction to Amazon Kinesis Firehose | Qwiklabs" property="og:title">
+<meta content="website" property="og:type">
+<meta content="/favicon-144.png" property="og:image">
+<meta content="Qwiklabs" property="og:site_name">
+<meta content="Amazon Kinesis Firehose is the easiest way to load streaming data into AWS. This hand-son lab will demonstrate how Amazon Kinesis Firehose can capture and automatically load streaming data into an Elasticsearch cluster." property="og:description">
+<meta content="/qwiklabs_logo_900x887.png" property="og:logo" size="900x887">
+<meta content="/qwiklabs_logo_994x187.png" property="og:logo" size="994x187">
+<meta content="#3681E4" property="msapplication-TileColor">
+<meta content="/favicon-144.png" property="msapplication-TileImage">
+<link href="https://run.qwiklabs.com/favicon-32.png" rel="shortcut icon">
+<link color="#3681E4" href="https://run.qwiklabs.com/favicon-svg.svg" rel="mask-icon">
+<link href="https://run.qwiklabs.com/favicon-180.png" rel="apple-touch-icon-precomposed">
+<link rel="stylesheet" media="screen" href="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/css">
+
+
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+<![endif]-->
+<!--[endif]>  <![endif]-->
+<script type="text/javascript" async="" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/js"></script><script type="text/javascript" async="" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/analytics.js.download"></script><script type="text/javascript" async="" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/analytics.min.js.download"></script><script type="text/javascript" id="www-widgetapi-script" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/www-widgetapi.js.download" async=""></script><script>
+//<![CDATA[
+window.gon={};gon.current_user={"firstname":"Selina","lastname":"Ng","fullname":"Selina Ng","company":"Capgemini","email":"n.selina@ymail.com","origin":"google-run, direct","subscriptions":1,"id":"1c340942b6e43ad7908d196db2da6728","qlCreatedAt":"2018-01-21 06:49:32 UTC","optIn":false};gon.segment="j4Im8pqIko0Lxq4wVVZWMPMM0EroHUvb";gon.deployment="run";
+//]]>
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://www.qwiklabs.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.qwiklabs.com/catalog?keywords={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script id="ze-snippet" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/snippet.js.download"></script>
+
+
+
+<link rel="stylesheet" media="all" href="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/application-162ab3877b3a481e7c5b49bf8be464f433c15a21bd2c4d9c870d4197793c85fe.css">
+<script>
+  EVENT_SOURCE_BASE_URL = "https://run.qwiklabs.com/nchan-sub?id=";
+</script>
+<script src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/webcomponents-loader.js.download"></script><script src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/webcomponents-hi.js.download"></script>
+<script src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/hallofmirrors-d8d44acdb268858ff41d169894134efe6aef227326bbd58449c52a66aa3bf8d0.js.download"></script><script async="" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/lazy.min.js.download"></script>
+<script src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/iframe_api"></script>
+<script src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/vendor-45d462772c30000424907184f70c7157e95fb6227698d1671c5051818a6f60d8.js.download"></script>
+<script src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/application-b8f24b563e7f6b4a399091631f253a394e419e33d6c909ef27e223b366f52750.js.download"></script>
+<script src="chrome-extension://mooikfkahbdckldjjndioackbalphokd/assets/prompt.js"></script></head>
+<body class="focuses focuses-show lab-show l-full no-nav">
+<div class="header-container light-theme">
+<div class="header">
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect header__button header__button--nav header__nav-panel-button js-nav-toggle" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">menu</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header__title">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--nav" href="https://run.qwiklabs.com/catalog?cloud%5B%5D=AWS&amp;keywords=&amp;language%5B%5D=en&amp;locale=&amp;page=11" data-upgraded=",MaterialButton,MaterialRipple"><ql-icon>arrow_back</ql-icon><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+
+<h1 class="headline-5">
+Introduction to Amazon Kinesis Firehose
+</h1>
+</div>
+<div class="header__actions">
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button header__button--action header__button--search js-header-search-bar-button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">search</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="toggle-lab-control-panel" href="javascript:;" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">description</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" data-mdl-for="toggle-lab-control-panel" data-upgraded=",MaterialTooltip">
+Toggle Lab Panel
+</div>
+<a class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-favorite-button favorite-button" id="CatalogItem-10403-favorite-button" data-type="CatalogItem" data-id="10403" data-name="Introduction to Amazon Kinesis Firehose" href="https://run.qwiklabs.com/unfavorite.json?item_id=10403&amp;item_type=CatalogItem" data-upgraded=",MaterialButton,MaterialRipple" tabindex="0"><i class="material-icons">favorite</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a><div class="mdl-tooltip js-tooltip" for="CatalogItem-10403-favorite-button" data-upgraded=",MaterialTooltip">
+Remove from favorites
+</div>
+
+
+<ql-help context="lab" productdata="{&quot;userId&quot;:743665}" data-analytics-action="opened_help" data-analytics-label="lab"></ql-help>
+<a class="header-my-account-button mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect js-my-account-button" data-upgraded=",MaterialButton,MaterialRipple">
+<img class="avatar " alt="avatar image" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<div class="header-my-account-menu js-my-account-menu">
+<div class="card elevation-2 no-padding">
+<div class="my-account-menu__top">
+<img class="avatar " alt="avatar image" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/0acadaf23df32662c6fd668f9a8b0155.png">
+<div class="my-account-menu__info">
+<h4 class="subtitle-headline-1">
+Selina Ng
+</h4>
+<p class="body-2 text--gray">
+<span>n.selina@ymail.com</span>
+</p>
+<a class="button" href="https://run.qwiklabs.com/my_account/profile">My Account</a>
+</div>
+</div>
+<div class="my-account-menu__bottom">
+<a class="text--green subtitle-headline-2" href="https://run.qwiklabs.com/my_account/credits">Monthly Subscription
+</a><a data-analytics-action="clicked_sign_out" class="button button--hairline" rel="nofollow" data-method="delete" href="https://run.qwiklabs.com/users/sign_out">Sign Out</a>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="header__search-bar js-header-search-bar">
+<form id="catalog-search-mobile" onsubmit="ql.catalogSearchFilter(); return false;" action="https://run.qwiklabs.com/searches/elasticsearch" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="D/QeIYCrNRu4YrlqQiJJRbtXXKsiFMcSEFlj9l6tjcoqZ/BgGfh4p+OZphCxG7Hk/84rH7a9lrI0TOHjMirsVg==">
+<input type="text" name="keywords" id="keywords" placeholder="Search" maxlength="255" aria-label="catalog search bar">
+</form>
+
+<a class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect header__button" data-upgraded=",MaterialButton,MaterialRipple">
+<i class="material-icons">close</i>
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+</div>
+
+<nav class="nav-bar">
+<a class="nav-bar__item js-navigation-button" href="https://run.qwiklabs.com/"><ql-icon class="nav-bar__item__icon">
+home
+</ql-icon>
+<span class="nav-bar__item__label">
+Home
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button  active" aria-current="page" href="https://run.qwiklabs.com/catalog"><ql-icon class="nav-bar__item__icon">
+school
+</ql-icon>
+<span class="nav-bar__item__label">
+Catalog
+</span>
+</a>
+<a class="nav-bar__item js-navigation-button" href="https://run.qwiklabs.com/my_learning"><ql-icon class="nav-bar__item__icon">
+event_note
+</ql-icon>
+<span class="nav-bar__item__label">
+My Learning
+</span>
+</a>
+</nav>
+
+<nav class="nav-panel js-nav-panel">
+<div class="nav-panel__logo">
+<div class="logo logo--blue"></div>
+</div>
+<a title="Home" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/"><ql-icon class="nav-panel__item__icon">
+home
+</ql-icon>
+<div class="nav-panel__item__label">
+Home
+</div>
+</a>
+<a title="Catalog" tabindex="-1" class="nav-panel__item js-navigation-button active" aria-current="page" href="https://run.qwiklabs.com/catalog"><ql-icon class="nav-panel__item__icon">
+school
+</ql-icon>
+<div class="nav-panel__item__label">
+Catalog
+</div>
+</a>
+<a title="My Learning" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_learning"><ql-icon class="nav-panel__item__icon">
+event_note
+</ql-icon>
+<div class="nav-panel__item__label">
+My Learning
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a title="Profile" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/profile"><ql-icon class="nav-panel__item__icon">
+account_circle
+</ql-icon>
+<div class="nav-panel__item__label">
+Profile
+</div>
+</a>
+<a title="Credits &amp; Subscriptions" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/credits"><ql-icon class="nav-panel__item__icon">
+money
+</ql-icon>
+<div class="nav-panel__item__label">
+Credits &amp; Subscriptions
+</div>
+</a>
+<a title="Security" tabindex="-1" class="nav-panel__item js-navigation-button" href="https://run.qwiklabs.com/my_account/security"><ql-icon class="nav-panel__item__icon">
+security
+</ql-icon>
+<div class="nav-panel__item__label">
+Security
+</div>
+</a>
+<div class="nav-panel__spacer"></div>
+<a class="nav-panel__item" tabindex="-1" href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#"><ql-help>
+<div class="nav-panel__help-item">
+<ql-icon class="nav-panel__item__icon">help</ql-icon>
+<div class="nav-panel__item__label">Help</div>
+</div>
+</ql-help>
+</a><div class="nav-panel__small-links">
+<a tabindex="-1" href="https://run.qwiklabs.com/privacy_policy">Privacy</a>
+<a tabindex="-1" href="https://run.qwiklabs.com/terms_of_service">Terms</a>
+</div>
+</nav>
+<div class="nav-panel__overlay js-nav-toggle"></div>
+
+<main class="js-main">
+<span class="hidden" id="flash-sibling-before"></span>
+
+<div class="l-main-wrapper" id="main-wrapper">
+
+
+
+
+
+
+
+<div class="js-lab-state" data-analytics-payload="{&quot;label&quot;:&quot;Introduction to Amazon Kinesis Firehose&quot;,&quot;lab_name&quot;:&quot;Introduction to Amazon Kinesis Firehose&quot;,&quot;classroom_name&quot;:null,&quot;deployment&quot;:&quot;run&quot;}" data-focus-id="10403" data-lab-billing-limit="0.0" data-lab-duration="3600" data-parent="catalog" data-payment-required=""></div>
+<ql-lab-control-panel class="js-lab-control-panel l-lab-control-panel" connectiondetails="[]" connectionfiles="[]" labcontrolbutton="{&quot;disabled&quot;:false,&quot;pending&quot;:false,&quot;running&quot;:false}" labtimer="{&quot;ticking&quot;:false,&quot;secondsRemaining&quot;:3600}" studentresources="[]"></ql-lab-control-panel>
+<div class="l-lab-main-body">
+<div class="js-lab-content lab-content">
+<div class="alert alert--fake js-alert">
+<p class="alert__message js-alert-message"></p>
+<a class="alert__close js-alert-close">
+<i class="fa fa-times"></i>
+</a>
+<iframe class="l-ie-iframe-fix" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/saved_resource.html"></iframe>
+</div>
+<div class="lab-content__markdown-wrapper">
+<div class="lab-preamble">
+<h1 class="lab-preamble__title">
+Introduction to Amazon Kinesis Firehose
+</h1>
+<div class="lab-preamble__details subtitle-headline-1">
+<span>1 hour </span>
+<span>1 Credit</span>
+<div class="lab__rating">
+<a href="https://run.qwiklabs.com/focuses/10403/reviews?parent=catalog"><div class="rateit" data-rateit-readonly="true" data-rateit-value="3.992"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 63.872px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+
+</a><a data-target="#lab-review-modal" data-toggle="modal">
+Rate Lab
+</a>
+</div>
+</div>
+</div>
+
+<div class="lab-content__inner-wrapper">
+<div class="js-markdown-instructions lab-content__markdown markdown-lab-instructions no-select" id="markdown-lab-instructions">
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/aws-logo.png" alt=""></p>
+
+
+
+<p><strong>SPL-28 Version 2.1.2</strong></p>
+
+<p>© 2020 Amazon Web Services, Inc. and its affiliates. All rights reserved. This work may not be reproduced or redistributed, in whole or in part, without prior written permission from Amazon Web Services, Inc. Commercial copying, lending, or selling is prohibited.</p>
+
+<p>Errors or corrections? Email us at <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a>.</p>
+
+<p>Other questions? Contact us at <a href="https://aws.amazon.com/contact-us/aws-training/" target="_blank">https://aws.amazon.com/contact-us/aws-training/</a></p>
+
+<h2 id="step1">Overview</h2>
+
+<p>This lab demonstrates how Amazon Kinesis Firehose can capture streaming data, transform the data and then send the data to Amazon Elasticsearch Service.</p>
+
+<h2 id="step2">Topics covered</h2>
+
+<p>By the end of this lab you will be able to:</p>
+<ul>
+<li>Create an AWS Lambda data transformation function.</li>
+<li>Create an Amazon Kinesis Firehose delivery stream connected to an Elasticsearch cluster.</li>
+<li>Send data to the delivery stream.</li>
+<li>Visualize streaming data with Kibana.</li>
+</ul>
+
+
+<h2 id="step3">Start Lab</h2>
+<ol start="1">
+<li>At the top of your screen, launch your lab by clicking <span style="background-color:#34A853;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#34A853;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Start Lab</span>
+</li>
+</ol>
+<p>This will start the process of provisioning your lab resources. An estimated amount of time to provision your lab resources will be displayed. You must wait for your resources to be provisioned before continuing.</p>
+
+<p><i class="fas fa-info-circle"></i> If you are prompted for a token, use the one distributed to you (or credits you have purchased). </p>
+<ol start="2">
+<li>Open your lab by clicking <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span>
+</li>
+</ol>
+<p>This will automatically log you into the AWS Management Console. </p>
+
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Please do not change the Region unless instructed</strong>.</p>
+
+
+
+<h3>Common login errors</h3>
+
+<p><strong>Error : Federated login credentials</strong></p>
+
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/federatedloginerror.png" alt=""></p>
+
+<p>If you see this message:</p>
+<ul>
+<li>Close the browser tab to return to your initial lab window</li>
+<li>Wait a few seconds</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+<p>You should now be able to access the AWS Management Console.</p>
+
+
+
+<p><strong>Error: You must first log out</strong></p>
+
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/logouterror.png" alt=""></p>
+
+<p>If you see the message, <strong>You must first log out before logging into a different AWS account:</strong> </p>
+<ul>
+<li>Click <strong>click here</strong>
+</li>
+<li>Close your browser tab to return to your initial Qwiklabs window</li>
+<li>Click <span style="background-color:white;font-family:Google Sans;font-weight:bold;font-size:90%;color:#1a73e8;border-color:#dadce0;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">Open Console</span> again</li>
+</ul>
+
+
+<h2 id="step4">Scenario</h2>
+
+<p>In this lab you will send simulated stock price data to Amazon Kinesis Firehose for capture and processing. The flow is:</p>
+<ul>
+<li>Generate streaming data containing stock quote information</li>
+<li>Send the data to an Amazon Kinesis Firehose delivery stream</li>
+<li>Amazon Kinesis Firehose will then call an AWS Lambda function to <em>transform</em> the data</li>
+<li>Amazon Kinesis Firehose will then collect the data into batches and send the batches to an Amazon Elasticsearch service cluster</li>
+<li>You will use Kibana to visualize the streaming data stored in the Elasticsearch cluster</li>
+</ul>
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/firehose-es.png" alt="Firehose to Elasticsearch"></p>
+
+
+
+<h2 id="step5">Introducing the Technologies</h2>
+
+<p>While you are waiting for the lab environment to setup, here is an overview of the technologies that are used in this lab.</p>
+
+<h3>Amazon Kinesis Firehose</h3>
+
+<p><strong>Amazon Kinesis Firehose</strong> is a fully managed service that delivers real-time streaming data to destinations such as Amazon Simple Storage Service (Amazon S3), Amazon Elasticsearch Service and Amazon Redshift. With Firehose, you do not need to write any applications or manage any resources. You configure your data producers to send data to Firehose and it automatically delivers the data to the specified destination.</p>
+
+<p>In this lab, you will be sending streaming data to Amazon Kinesis Firehose, which will capture, transform and batch the data before sending it to Elasticsearch.</p>
+
+<p>If you are new to Amazon Kinesis Firehose, <a href="https://www.youtube.com/watch?v=814aUb5n_Fk" target="_blank">here is a 2-minute introductory video.</a>.</p>
+
+<h3>AWS Lambda</h3>
+
+<p><strong>AWS Lambda</strong> is a zero-administration compute platform for back-end web developers that runs code in the AWS cloud. AWS Lambda runs your back-end code on its own AWS compute fleet of Amazon Elastic Compute Cloud (Amazon EC2) instances across multiple Availability Zones in a region, which provides the high availability, security, performance, and scalability of the AWS infrastructure.</p>
+
+<p>In this lab, you will be using an AWS Lambda function to <em>transform</em> the incoming data into a format suitable for visualization.</p>
+
+<p><a href="https://www.youtube.com/watch?v=eOBq__h4OJ4" target="_blank">Here is a 3-minute introductory video about AWS Lambda</a></p>
+
+<h3>Amazon Elasticsearch Service &amp; Kibana</h3>
+
+<p><strong>Amazon Elasticsearch Service</strong> is a managed service that makes it easy to deploy, operate, and scale Elasticsearch, a popular open-source search and analytics engine.</p>
+
+<p><strong>Kibana</strong> is an open-source data visualization and exploration tool used for log and time series analytics, application monitoring, and operational intelligence use cases. Kibana offers tight integration with Elasticsearch, which makes Kibana the <strong>default choice for visualizing data stored in Elasticsearch</strong>. Kibana is also popular due to its powerful and easy-to-use features such as histograms, line graphs, pie charts, heat maps and built-in geospatial support.</p>
+
+<p>The end product of this lab will be a stock price chart populated via streaming data:</p>
+
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/kibana-chart.png" alt="Kibana Configuration"></p>
+
+
+
+<h2 id="step6">Task 1: Create your AWS Lambda Transformation Function</h2>
+
+<p>In this task, you will create an <strong>AWS Lambda function</strong> that will <em>transform</em> the incoming stock data into a format suitable for visualization.</p>
+
+<p>It is quite common for data to require modification prior to processing, such as adding/removing fields, combining fields, converting formats and dropping irrelevant records. AWS Lambda enables data transformation <em>on-the-fly</em> when the streaming data arrives for processing in Amazon Kinesis Firehose.</p>
+
+<p>In this lab, incoming stock data will be in JSON format, such as:</p>
+<pre class="highlight plaintext"><code>{"ticker_symbol":"QXZ", "sector":"HEALTHCARE", "change":-0.05, "price":84.51}
+</code><button class="button button--copy js-copy-button-0"><i class="fa fa-clipboard"></i></button></pre>
+<p>To visualize this data, it requires the addition of a <strong>Timestamp</strong> to identify when the record was received. You will configure an AWS Lambda function that will transform the data into:</p>
+<pre class="highlight plaintext"><code>{'timestamp': '2017-07-30T04:33:19.581522', 'ticker_symbol': QXZ', 'price': 84.51}
+</code><button class="button button--copy js-copy-button-1"><i class="fa fa-clipboard"></i></button></pre><ol start="3">
+<li><p>In the <strong>AWS Management Console</strong>, on the <strong>Services</strong> menu, click <strong>Lambda</strong>.</p></li>
+<li><p>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create function</span></p></li>
+</ol>
+<p><i class="fas fa-info-circle"></i> <strong>Blueprints</strong> are code templates for writing Lambda functions. Blueprints are provided for standard Lambda triggers such as creating Alexa skills and processing Amazon Kinesis Firehose streams. This lab provides you with a pre-written Lambda function, so you will <strong>Author from scratch</strong>.</p>
+<ol start="5">
+<li>In the <strong>Author from scratch</strong> section, configure:</li>
+</ol><ul>
+<li>
+<strong>Function name:</strong> <input readonly="" class="copyable-inline-input" size="19" type="text" value="Add-Stock-Timestamp">
+</li>
+<li>
+<strong>Runtime:</strong> <em>Python 2.7</em>
+</li>
+<li>Expand <i class="fa fa-caret-right"></i> <strong>Choose or create an execution role</strong>
+</li>
+<li>
+<strong>Execution role:</strong> <em>Use an existing role</em>
+</li>
+<li>
+<strong>Existing role:</strong> <em>Lab-Lambda-Role</em>
+</li>
+</ul>
+<p>This role gives execution permissions to your Lambda function so it can send log output to Amazon CloudWatch Logs.</p>
+<ol start="6">
+<li>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create function</span>
+</li>
+</ol>
+<p>A page will be displayed with your function configuration.</p>
+<ol start="7">
+<li>Scroll down to the <strong>Function code</strong> section, then configure:</li>
+</ol><ul>
+<li>
+<strong>Runtime:</strong> <em>Python 2.7</em>
+</li>
+<li>
+<strong>Handler:</strong> <input readonly="" class="copyable-inline-input" size="30" type="text" value="lambda_function.lambda_handler">
+</li>
+</ul><ol start="8">
+<li><p>Delete all of the code that appears in <strong>lambda_function</strong> tab.</p></li>
+<li><p>Copy the code below, then paste it into the <strong>lambda_function</strong> tab.</p></li>
+</ol><pre class="highlight plaintext"><code>import base64
+import json
+from datetime import datetime
+
+# Incoming Event
+def lambda_handler(event, context):
+    output = []
+    now = datetime.utcnow().isoformat()
+
+    # Loop through records in incoming Event
+    for record in event['records']:
+
+        # Extract message
+        message = json.loads(base64.b64decode(record['data']))
+
+        # Construct output
+        data_field = {
+                'timestamp': now,
+                'ticker_symbol': message['ticker_symbol'],
+                'price': message['price']
+        }
+        output_record = {
+                'recordId': record['recordId'],
+                'result': 'Ok',
+                'data': base64.b64encode(json.dumps(data_field))
+        }
+        output.append(output_record)
+
+    return {'records': output}
+</code><button class="button button--copy js-copy-button-2"><i class="fa fa-clipboard"></i></button></pre>
+<p>Examine the code. It is performing the following steps:</p>
+<ul>
+<li>Receive an Event, which contains multiple Records</li>
+<li>Loop through each Record</li>
+<li>Create a new output record that contains Timestamp, Ticker Symbol and Price</li>
+</ul><ol start="10">
+<li>In the <strong>Basic settings</strong> section towards the bottom of the page, click <span style="background-color:white;font-weight:bold;font-size:90%;color:#545b64;border-color:#545b64;border-radius:2px;border-width:1px;border-style:solid;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Edit</span> </li>
+</ol><ul>
+<li>
+<strong>Description:</strong> <input readonly="" class="copyable-inline-input" size="29" type="text" value="Add a timestamp to stock data">
+</li>
+<li>
+<strong>Timeout:</strong> <em>1 min</em>
+</li>
+<li>Click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Save</span>
+</li>
+</ul>
+<p>AWS Lambda functions can be triggered automatically by activities such as uploading a file to Amazon S3 or data being updated in an Amazon DynamoDB database. You will configure Amazon Kinesis Firehose to trigger your Lambda function later in the lab, so this can be skipped for now.</p>
+<ol start="11">
+<li>At the top of the screen, click <span style="background-color:#ec7211;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Save</span>
+</li>
+</ol>
+<p>The Lambda function will be used in the next task.</p>
+
+
+
+<h2 id="step7">Task 2: Create your Amazon Kinesis Firehose</h2>
+
+<p>In this task, you will create an Amazon Kinesis Firehose delivery stream. It will <em>transform</em> incoming data by using the AWS Lambda function you just created and will then send the output to Elasticsearch. An Amazon Elasticsearch Service cluster has been created for you automatically as part of the setup of this lab.</p>
+<ol start="12">
+<li><p>On the <strong>Services</strong> menu, click <strong>Kinesis</strong>.</p></li>
+<li><p>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Get started</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create delivery stream</span></p></li>
+<li><p>For <strong>Delivery stream name</strong>, enter <input readonly="" class="copyable-inline-input" size="13" type="text" value="stocks-stream"></p></li>
+</ol>
+<p>The information on the screen explains options for accepting incoming streaming data.</p>
+<ol start="16">
+<li>Scroll to the bottom of the screen, then click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span>
+</li>
+</ol>
+<p>The <strong>Transform source records</strong> page allows a Lambda function to be specified for transforming incoming data. You will be transforming the content of the incoming data to add a timestamp.</p>
+<ol start="17">
+<li><p>For <strong>Data transformation</strong>, click <i class="far fa-dot-circle"></i> <strong>Enabled</strong>.</p></li>
+<li><p>For <strong>Lambda function</strong>, select <em>Add-Stock-Timestamp</em>.</p></li>
+<li><p>Scroll to the bottom of the screen, then click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span></p></li>
+<li><p>For <strong>Destination</strong>, select <i class="far fa-dot-circle"></i> <strong>Amazon Elasticsearch Service</strong>, then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Domain:</strong> <em>stocks</em>
+</li>
+<li>
+<strong>Index:</strong> <input readonly="" class="copyable-inline-input" size="5" type="text" value="stock">
+</li>
+<li>
+<strong>Type:</strong> <input readonly="" class="copyable-inline-input" size="5" type="text" value="stock">
+</li>
+</ul>
+<p>An Amazon S3 bucket has already been created as part of the lab setup. It will be used to store any records that fail to be processed.</p>
+<ol start="21">
+<li>In the <strong>S3 backup</strong> section, for <strong>Backup S3 bucket</strong>, select the bucket that has <em>labbucket</em> in its name.</li>
+</ol>
+<p><i class="fas fa-comment"></i> Hover your mouse over a bucket name to see the full name.</p>
+<ol start="22">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span>
+</li>
+</ol>
+<p>The <strong>Configure settings</strong> page will be displayed. The <strong>Elasticsearch buffer conditions</strong> can be used to specify when Amazon Kinesis Firehose should send data to the Elasticsearch cluster. You will configure data to be sent whenever there is 1 MB of data or when 60 seconds has passed.</p>
+<ol start="23">
+<li><p>For <strong>Buffer size</strong>, enter <input readonly="" class="copyable-inline-input" size="1" type="text" value="1"></p></li>
+<li><p>For <strong>Buffer interval</strong>, enter <input readonly="" class="copyable-inline-input" size="2" type="text" value="60"></p></li>
+</ol>
+<p>You will now specify the permissions assigned to your Firehose. It will be given permission to use Amazon S3, AWS Lambda, Amazon Elasticsearch Service and Amazon CloudWatch Logs.</p>
+<ol start="25">
+<li>Scroll down to <strong>IAM role</strong> and then click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create new, or choose</span> then configure:</li>
+</ol><ul>
+<li>
+<strong>IAM Role:</strong> <em>Lab-Firehose-Role</em>
+</li>
+<li>
+<strong>Policy Name:</strong> <em>Lab-Firehose-Policy</em>
+</li>
+</ul>
+<p><i class="fas fa-comment"></i> You can click <strong>View Policy Document</strong> to view the contents of the IAM policy associated with the Role.</p>
+<ol start="26">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Allow</span>
+</li>
+</ol>
+<p>The tab will close and you will be returned to your <strong>Kinesis Firehose - Create delivery stream</strong> tab. (If a different tab appears, please find your previous Kinesis Firehose tab to continue these instructions.)</p>
+<ol start="27">
+<li>Click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Next</span> then configure:</li>
+</ol><ul>
+<li>Review the settings</li>
+<li>Scroll to the bottom of the screen, then click <span style="background-color:#257ACF;font-weight:bold;font-size:90%;color:white;border-radius:5px;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Create delivery stream</span>
+</li>
+</ul>
+<p>You have now created a Firehose delivery stream.</p>
+
+
+
+<h2 id="step8">Task 3: Access your Elasticsearch Cluster</h2>
+
+<p>An Amazon Elasticsearch Service cluster called <strong>stocks</strong> was created automatically as part of the setup of this lab.</p>
+<ol start="28">
+<li><p>On the <strong>Services</strong> menu, click <strong>Elasticsearch Service</strong>.</p></li>
+<li><p>In the list of <strong>My Elasticsearch domains</strong>, click <strong>stocks</strong>.</p></li>
+</ol>
+<p>Examine the <strong>Domain status</strong>. You will need to wait for the status to be <strong>Active</strong>. If it is not yet <em>Active</em>, please click the <i class="fas fa-sync"></i> icon every 30 seconds until the cluster is ready.</p>
+<ol start="30">
+<li>Click the <strong>Kibana</strong> link.</li>
+</ol>
+<p>A new tab opens with Kibana. <strong>Kibana</strong> is an open-source data visualization and exploration that has tight integration with Elasticsearch, which makes Kibana the default choice for visualizing data stored in Elasticsearch.</p>
+
+<p>You will return to Kibana once data is available to visualize.</p>
+
+
+
+<h2 id="step9">Task 4: Send Data to the Delivery Stream</h2>
+
+<p>You are now ready to send data to the Firehose delivery stream. For this lab, you will use a built-in testing function.</p>
+<ol start="31">
+<li><p>In the <strong>AWS Management Console</strong>, on the <strong>Services</strong> menu, click <strong>Kinesis</strong>.</p></li>
+<li><p>Click the name of your <span style="color:#1166bb;font-weight:bold;">stocks-stream</span>.</p></li>
+<li><p>Expand <i class="fas fa-caret-right"></i> <strong>Test with demo data</strong> section at the top of the page.</p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-weight:bold;font-size:90%;color:#444;border-radius:5px;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;white-space: nowrap;">Start sending demo data</span></p></li>
+</ol>
+<p>This will now start sending random stock data to the delivery stream, such as:</p>
+<pre class="highlight plaintext"><code>{"ticker_symbol":"QXZ", "sector":"HEALTHCARE", "change":-0.05, "price":84.51}
+</code><button class="button button--copy js-copy-button-3"><i class="fa fa-clipboard"></i></button></pre>
+<p>The AWS Lambda function will then transform the data by adding a timestamp and only including fields necessary for visualization, such as:</p>
+<pre class="highlight plaintext"><code>{'timestamp': '2017-07-30T04:33:19.581522', 'ticker_symbol': QXZ', 'price': 84.51}
+</code><button class="button button--copy js-copy-button-4"><i class="fa fa-clipboard"></i></button></pre>
+<p>The data will then be sent to the Elasticsearch cluster, where it will be available for visualization in Kibana.</p>
+
+
+
+<h2 id="step10">Task 5: Visualize the Data in Kibana</h2>
+<ol start="35">
+<li><p>Keep the Kinesis Firehose tab open so that it continues to send data. (Do not close this tab in the next step.)</p></li>
+<li><p>Switch back to the Kibana tab in your web browser.</p></li>
+<li><p>For <strong>Index name or pattern</strong>, replace <em>logstash-*</em> with: <input readonly="" class="copyable-inline-input" size="5" type="text" value="stock"></p></li>
+<li><p>In the <strong>Time-field name</strong> pull-down, select <strong>timestamp</strong>.</p></li>
+</ol>
+<p><i class="fas fa-comment"></i> If <em>timestamp</em> is not available in the <strong>Time-field name</strong> pull-down list, it might be that data has not yet arrived in Kibana. Wait a few minutes, then click <strong>refresh fields</strong> (above the pull-down list) and try the above steps again. Alternatively, refresh the page and try these steps again. It will take a few minutes for the data to be available, so it is just a matter of trying again until the data arrives.</p>
+
+<p>Your Kibana screen should look like this:</p>
+
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/kibana-config1.png" alt="Kibana Configuration"></p>
+<ol start="39">
+<li>Click <span style="background-color:#0079a5;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;border-color:#0079a5;border-radius:2px;white-space: nowrap;">Create</span>
+</li>
+</ol>
+<p>A page showing the <strong>stock</strong> configuration should appear:</p>
+
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/kibana-config2.png" alt="Kibana Configuration"></p>
+<ol start="40">
+<li><p>In the left navigation pane, click <strong>Visualize</strong>.</p></li>
+<li><p>Click <span style="background-color:#0079a5;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;border-color:#0079a5;border-radius:2px;white-space: nowrap;"><i class="fas fa-plus"></i> Create a visualization</span></p></li>
+<li><p>For <strong>Select visualization type</strong>, click <i class="fas fa-chart-line"></i> <strong>Line chart</strong>.</p></li>
+<li><p>Click <strong>stock</strong>.</p></li>
+</ol>
+<p>You will now configure a chart to show stock prices over time.</p>
+<ol start="44">
+<li>Under the <strong>metrics</strong> heading, click the <i class="fas fa-play"></i> arrow beside <strong>Y-Axis</strong>, then configure:</li>
+</ol><ul>
+<li>
+<strong>Aggregation:</strong> <em>Average</em>
+</li>
+<li>
+<strong>Field:</strong> <em>price</em>
+</li>
+</ul><ol start="45">
+<li>Under <strong>buckets</strong>, click <strong>X-Axis</strong>, then configure:</li>
+</ol><ul>
+<li>
+<strong>Aggregation:</strong> <em>Date Histogram</em>
+</li>
+<li>
+<strong>Field:</strong> <em>timestamp</em>
+</li>
+</ul><ol start="46">
+<li><p>At the bottom of the screen, click <span style="background-color:#0079a5;font-weight:bold;font-size:90%;color:white;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;border-color:#0079a5;border-radius:2px;white-space: nowrap;">Add sub-buckets</span></p></li>
+<li><p>Click <strong>Split Lines</strong>, then configure:</p></li>
+</ol><ul>
+<li>
+<strong>Sub Aggregation:</strong> <em>Terms</em>
+</li>
+<li>
+<strong>Field:</strong> <em>ticker_symbol.keyword</em>
+</li>
+</ul><ol start="48">
+<li>Click the <i class="fas fa-play"></i> play button at the top of the screen to view the chart.</li>
+</ol>
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/kibana-config3.png" alt="Kibana Configuration"></p>
+
+<p>The chart will now display stock prices over time. This data is being received in real-time from Amazon Kinesis Firehose. Click <strong>Refresh</strong> above the cart every 30 seconds to update the display. It should look similar to this:</p>
+
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/kibana-chart.png" alt="Kibana Configuration"></p>
+
+
+
+<h2 id="step11">Task 6: Monitor the Delivery Stream with Amazon CloudWatch</h2>
+
+<p>You can monitor information about the Firehose delivery stream by viewing metrics captured by Amazon CloudWatch.</p>
+<ol start="49">
+<li>Return to the browser tab with the <strong>AWS Management Console</strong>.</li>
+</ol>
+<p><i class="fas fa-comment"></i> The tab should still be showing your Firehose console that is sending demo data. If you cannot find it, go the Amazon Kinesis console and open your <em>stocks-stream</em> delivery stream.</p>
+<ol start="50">
+<li>Scroll to the bottom of the screen, then click the <strong>Monitoring</strong> tab.</li>
+</ol>
+<p>You should see metrics for <em>Incoming Records</em> and, lower down, <em>Delivery to Elasticsearch</em>.</p>
+
+<p><img src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/metrics.png" alt="CloudWatch Metrics"></p>
+
+<p>The AWS Lambda transformation function also generates metrics.</p>
+<ol start="51">
+<li><p>Click the <strong>Details</strong> tab.</p></li>
+<li><p>Click the link to the <strong>Lambda function</strong> (Add-Stock-Timestamp).</p></li>
+</ol>
+<p>A new browser tab will open.</p>
+<ol start="53">
+<li>Click the <strong>Monitoring</strong> tab.</li>
+</ol>
+<p>CloudWatch will display the number of times that the Lambda function was <em>invoked</em>, and the <em>duration</em> of function execution.</p>
+
+
+
+<h2 id="step12">Conclusion</h2>
+
+<p><i class="far fa-thumbs-up" style="color:blue;"></i> Congratulations! You have completed the <em>Introduction to Amazon Kinesis Firehose</em> lab.</p>
+
+<p>You have now successfully:</p>
+<ul>
+<li>Created an AWS Lambda data transformation function</li>
+<li>Created an Amazon Kinesis Firehose delivery stream connected to an Elasticsearch cluster</li>
+<li>Sent data to the delivery stream</li>
+<li>Visualized streaming data with Kibana</li>
+</ul>
+<h2 id="step13">End Lab</h2>
+
+<p>Follow these steps to close the console, end your lab, and evaluate the experience.</p>
+<ol start="54">
+<li><p>Return to the AWS Management Console.</p></li>
+<li><p>On the navigation bar, click <strong>awsstudent@&lt;AccountNumber&gt;</strong>, and then click <strong>Sign Out</strong>.</p></li>
+<li><p>Click <span style="background-color:#D93025;font-family:Google Sans;font-weight:bold;font-size:90%;color:white;border-color:#D93025;border-radius:4px;border-width:2px;border-style:solid;padding-top:5px;padding-bottom:5px;padding-left:10px;padding-right:10px;">End Lab</span></p></li>
+<li><p>Click <span style="background-color:#DEDEDE;font-family:Google Sans;font-weight:bold;font-size:90%;color:#444;border-width:1px;border-style:solid;border-color:#444;padding-top:3px;padding-bottom:3px;padding-left:10px;padding-right:10px;">OK</span></p></li>
+<li><p>(Optional):</p></li>
+</ol><ul>
+<li>Select the applicable number of stars <i class="far fa-star"></i>
+</li>
+<li>Type a comment</li>
+<li>
+<p>Click <strong>Submit</strong></p>
+<ul>
+<li>1 star = Very dissatisfied</li>
+<li>2 stars = Dissatisfied</li>
+<li>3 stars = Neutral</li>
+<li>4 stars = Satisfied</li>
+<li>5 stars = Very satisfied</li>
+</ul>
+</li>
+</ul>
+<p>You may close the dialog if you don't want to provide feedback.</p>
+
+<h2 id="step14">Additional Resources</h2>
+<ul>
+<li><a href="https://aws.amazon.com/documentation/kinesis/" target="_blank">Kinesis Services</a></li>
+<li><a href="https://www.elastic.co/products/kibana" target="_blank">Kibana</a></li>
+<li><a href="https://aws.amazon.com/elasticsearch-service/" target="_blank">Amazon Elasticsearch</a></li>
+</ul>
+<p>For feedback, suggestions, or corrections, please email us at: <a href="mailto:aws-course-feedback@amazon.com" target="_blank">aws-course-feedback@amazon.com</a></p>
+
+</div>
+<div class="js-lab-content-outline lab-content__outline is-stuck">
+<a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step1" class="">Overview</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step2" class="">Topics covered</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step3" class="is-active">Start Lab</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step4">Scenario</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step5">Introducing the Technologies</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step6">Task 1: Create your AWS Lambda Transformation Function</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step7">Task 2: Create your Amazon Kinesis Firehose</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step8">Task 3: Access your Elasticsearch Cluster</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step9">Task 4: Send Data to the Delivery Stream</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step10">Task 5: Visualize the Data in Kibana</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step11">Task 6: Monitor the Delivery Stream with Amazon CloudWatch</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step12">Conclusion</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step13">End Lab</a><a href="https://run.qwiklabs.com/focuses/10403?catalog_rank=%7B%22rank%22%3A102%2C%22num_filters%22%3A2%2C%22has_search%22%3Afalse%7D&amp;parent=catalog#step14">Additional Resources</a>
+</div>
+</div>
+
+</div>
+
+<div class="lab-content__markdown-wrapper">
+<div class="lab-content__markdown">
+<div class="lab-content__recommendation">
+<h4 class="headline-3">
+Ready for more?
+<p>Here's another lab we think you'll like.</p>
+<div class="card-content-wrapper js-content-card" data-id="200" data-level="Introductory" data-name="Introduction to Amazon Virtual Private Cloud (VPC)" data-type="Lab">
+<a class="card card--content elevation-0 content-lab" href="https://run.qwiklabs.com/focuses/279?parent=catalog"><div class="card__image">
+<div class="card__image__inner" style="background-image: url(https://cdn.qwiklabs.com/assets/fractal4-1d205807c54d90fe4382315dbfc0dd665ddb825bbc90f3ca5db7d7170fa0df1b.jpg)"></div>
+</div>
+<div class="card__body">
+<div class="overline card--content__type">
+Hands-On Lab
+</div>
+<h3 class="card--content__title">
+Introduction to Amazon Virtual Private Cloud (VPC)
+</h3>
+<p class="card--content__description body-1">
+This lab introduces you to Amazon Virtual Private Cloud (Amazon VPC). In this lab you will use the Amazon VPC wizard to create a VPC, attach an Internet Gateway, add a subnet and then define routing for the VPC so that traffic can flow between the subnet and the Internet gateway.
+</p>
+</div>
+<div class="card__footer">
+<div class="card__footer__left">
+<span>Introductory</span>
+</div>
+<div class="card__footer__right">
+<div class="rateit" data-rateit-readonly="true" data-rateit-value="4.131"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 66.096px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+</div>
+</div>
+</a></div>
+
+</h4>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+<div class="lab-introduction js-lab-introduction is-hidden">
+<div class="lab-introduction__inner">
+<h1 class="headline-1">Welcome to Your First Lab!</h1>
+<ql-icon-button class="js-skip-button">close</ql-icon-button>
+<div class="lab-introduction__video">
+<iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" id="lab-introduction" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/yF7EDXKTmoQ.html"></iframe>
+</div>
+<a class="js-skip-button button button--outline">Skip this video</a>
+</div>
+</div>
+
+
+
+</div>
+</main>
+<div class="modal fade" id="lab-details-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<div class="modal-body">
+<p class="l-mbm">
+Amazon Kinesis Firehose is the easiest way to load streaming data into AWS. This hand-son lab will demonstrate how Amazon Kinesis Firehose can capture and automatically load streaming data into an Elasticsearch cluster.
+</p>
+<p class="small-label l-mbs">
+<strong>
+Duration:
+</strong>
+11m setup
+·
+60m access
+·
+60m completion
+</p>
+<p class="small-label l-mbs">
+<strong>AWS Region:</strong>
+[us-east-1] <strong>US East (N. Virginia)</strong>
+</p>
+<p class="small-label l-mbs">
+
+</p>
+<p class="small-label">
+<strong>
+Permalink:
+</strong>
+<a href="https://run.qwiklabs.com/catalog_lab/2485">https://run.qwiklabs.com/catalog_lab/2485</a>
+</p>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Got It
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+</div>
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/saved_resource(1).html"></iframe>
+</div>
+<div class="modal fade" id="lab-review-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<form class="simple_form js-lab-review-form" id="new_lab_review" action="https://run.qwiklabs.com/lab_reviews" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓"><div class="modal-body">
+<p class="label">
+How satisfied are you with this lab?*
+</p>
+<div class="rateit js-rateit" data-rateit-max="5" data-rateit-min="0" data-rateit-resetable="false" data-rateit-step="1" data-rateit-value="0"><div class="rateit-reset" style="display: none;"></div><div class="rateit-range" style="width: 80px; height: 16px;"><div class="rateit-selected" style="height: 16px; width: 0px;"></div><div class="rateit-hover" style="height:16px"></div></div></div>
+<div class="l-mtm">
+
+<div class="control-group hidden lab_review_user_id"><div class="controls"><input class="hidden" type="hidden" value="743665" name="lab_review[user_id]" id="lab_review_user_id"></div></div>
+<div class="control-group hidden lab_review_classroom_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[classroom_id]" id="lab_review_classroom_id"></div></div>
+<div class="control-group hidden lab_review_lab_id"><div class="controls"><input class="hidden" type="hidden" value="2485" name="lab_review[lab_id]" id="lab_review_lab_id"></div></div>
+<div class="control-group hidden lab_review_focus_id"><div class="controls"><input class="hidden" type="hidden" name="lab_review[focus_id]" id="lab_review_focus_id"></div></div>
+<div class="control-group hidden lab_review_rating"><div class="controls"><input class="hidden js-rating-input" type="hidden" name="lab_review[rating]" id="lab_review_rating"></div></div>
+<div class="control-group text optional lab_review_comment"><label class="text optional control-label" for="lab_review_comment">Comment</label><div class="controls"><textarea class="text optional" name="lab_review[comment]" id="lab_review_comment"></textarea></div></div>
+</div>
+</div>
+<div class="modal-actions">
+<a class="mdl-button mdl-button--primary mdl-js-button mdl-js-ripple-effect" data-dismiss="modal" data-upgraded=",MaterialButton,MaterialRipple">
+Cancel
+<span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></a>
+<input type="submit" name="commit" value="Submit" disabled="disabled" class="btn mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--primary" id="submit" data-disabled="false" data-disable-with="Submit" data-upgraded=",MaterialButton,MaterialRipple"><span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></input>
+</div>
+</form>
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/saved_resource(2).html"></iframe>
+</div>
+<div class="modal fade" id="lab-access-modal">
+<div class="modal-container">
+<div class="mdl-shadow--24dp modal-content">
+<a class="lab-access-modal-close" data-analytics-action="dismissed_lab_payment_modal" data-dismiss="modal">
+<i class="material-icons">close</i>
+</a>
+<form class="js-lab-access-form" action="https://run.qwiklabs.com/lab_onetime_coupons/activate?parent=catalog" accept-charset="UTF-8" data-remote="true" method="post"><input name="utf8" type="hidden" value="✓">
+<div class="modal-body">
+<div class="lab-access-modal">
+<input type="hidden" name="id" id="id" value="10403">
+<input type="hidden" name="user_id" id="user_id" value="743665">
+<input type="hidden" name="launch_with_credits" id="launch_with_credits" value="0" class="js-launch-with-credits-input">
+<input type="hidden" name="launch_with_subs" id="launch_with_subs" value="0" class="js-launch-with-subscription-input">
+<div class="lab-access-modal__method">
+<p>
+This lab costs
+1 Credit.
+</p>
+<p>
+You have a valid subscription package. Would you like to charge this lab to your subscription?
+
+</p>
+<a class="button js-launch-with-subscription-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_subscription_button">
+Use Subscription
+</a>
+</div>
+<div class="lab-access-modal__method">
+<p>
+Enter Lab Access Code:
+</p>
+<div class="lab-access-modal__code js-access-code">
+<input type="text" name="uuid_1" id="uuid_1" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_2" id="uuid_2" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_3" id="uuid_3" value="" maxlength="4" placeholder="1234">
+<input type="text" name="uuid_4" id="uuid_4" value="" maxlength="4" placeholder="1234">
+</div>
+<a class="button js-launch-with-access-code-button js-lab-access-modal-button" data-analytics-action="clicked_launch_with_access_code_button">
+Launch with Access Code
+</a>
+</div>
+</div>
+</div>
+</form>
+
+
+
+</div>
+</div>
+<iframe class="l-ie-iframe-fix" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/saved_resource(3).html"></iframe>
+</div>
+
+<script>
+  $( function() {
+    ql.initMaterialInputs();
+    initChosen();
+    initSearch();
+    initTabs();
+    ql.list.init();
+    ql.favoriting.init();
+    ql.header.myAccount.init();
+    initTooltips();
+    ql.autocomplete.init();
+    ql.modals.init();
+    ql.toggleButtons.init();
+    ql.analytics.init();
+    initLabContent( );
+  ql.labOutline.links.init();
+  ql.labOutline.layout.init();
+  initLabReviewModal();
+  initLabAccessModal();
+  ql.labAssessment.init();
+  ql.labData.init();
+  initLabTranslations( {"are_you_sure":"All done? If you end this lab, you will lose all your work. You may not be able to restart the lab if there is a quota limit. Are you sure you want to end this lab?\n","in_progress":"*In Progress*","ending":"*Ending*","starting":"*Starting, please wait*","end_concurrent_labs":"Sorry, you can only run one lab at a time. To start this lab, please confirm that you want all of your existing labs to end.\n","copied":"Copied","no_resource":"Error retrieving resource.","no_support":"No Support","mac_press":"Press ⌘-C to copy","thanks_review":"Thanks for reviewing this lab.","windows_press":"Press Ctrl-C to copy","days":"days"} );
+  ql.labRun.init();
+  ql.initHeader();
+  ql.navigation.init();
+  ql.navPanel.init();
+  ql.navigation.init();
+  
+  });
+</script>
+<style>
+  .mdl-layout__container {
+    position: static
+  }
+</style>
+
+
+<iframe data-product="web_widget" title="No content" tabindex="-1" aria-hidden="true" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/saved_resource(4).html" style="width: 0px; height: 0px; border: 0px; position: absolute; top: -9999px;"></iframe><div><iframe title="Opens a widget where you can chat to one of our agents" id="launcher" tabindex="0" class="zEWidget-launcher zEWidget-launcher--active" style="border: none; background: transparent; z-index: 999998; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 1; width: 111px; height: 50px; max-height: 551px; min-height: 50px; margin: 10px 20px; right: 0px; bottom: 0px;width: 111px;width: 111px;" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/saved_resource(5).html"></iframe></div><div><iframe title="Find more information here" id="webWidget" tabindex="-1" class="zEWidget-webWidget " style="border: none; background: transparent; z-index: 999999; transform: translateZ(0px); position: fixed; transition-duration: 250ms; transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1); transition-property: opacity, top, bottom; opacity: 0; width: 357px; height: 100%; max-height: 565px; min-height: 150px; margin-left: 8px; margin-right: 8px; top: -9999px; visibility: hidden;" src="./Introduction to Amazon Kinesis Firehose _ Qwiklabs_files/saved_resource(6).html"></iframe></div></body></html>
